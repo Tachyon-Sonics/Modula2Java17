@@ -45,9 +45,9 @@ import ch.pitchtech.modula.converter.transform.Transforms;
  */
 public class Modula2JavaTranslator {
     
-    private final static String SOURCE_DIRECTORY = "modula2";
-    private final static String TARGET_DIRECTORY_MAIN = "../ch.chaos.castle.generated/src";
-    private final static String TARGET_DIRECTORY_LIBRARY = "../ch.chaos.library/src";
+    private final static String SOURCE_DIRECTORY = "../ChaosCastle/modula2";
+    private final static String TARGET_DIRECTORY_MAIN = "../ChaosCastle/src";
+    private final static String TARGET_DIRECTORY_LIBRARY = "../Modula2-Runtime/src";
     
     private final static boolean ALWAYS_OVERRIDE_STUB = false;
     private final static boolean DUMP_ABSTRACT_TREE = false;
@@ -63,7 +63,7 @@ public class Modula2JavaTranslator {
     }
     
     public void parse(Path m2sourceFile) throws IOException {
-        System.out.println("Parsing " + m2sourceFile);
+        System.out.println("Parsing " + m2sourceFile.toAbsolutePath());
         
         CurrentFile.setCurrentFile(m2sourceFile);
         String content = Files.readString(m2sourceFile);
