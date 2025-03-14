@@ -30,7 +30,8 @@ public class OpenArrayTypeGenerator extends Generator {
                 new LiteralTypeGenerator(scopeUnit, literalType).generate(result);
                 result.write("[]");
             }
-        } else if (elementType0 instanceof LiteralType literalType) {
+        } else if (elementType0 instanceof LiteralType) {
+            LiteralType literalType = elementType0;
             new LiteralTypeGenerator(scopeUnit, literalType).generate(result);
             result.write("[]");
         } else {
