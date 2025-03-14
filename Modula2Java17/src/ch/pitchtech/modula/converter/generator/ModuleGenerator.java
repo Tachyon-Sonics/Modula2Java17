@@ -36,13 +36,7 @@ public class ModuleGenerator extends CompilationUnitGenerator {
         result.writeLine("package " + TARGET_PACKAGE + ";");
         result.writeLn();
         List<String> requiredJavaImports = super.getRequiredImports(module, result, TARGET_PACKAGE);
-        if (!requiredJavaImports.isEmpty()) {
-            for (String javaImport : requiredJavaImports) {
-                result.writeLine("import " + javaImport + ";");
-            }
-            result.writeLn();
-            result.writeLn();
-        }
+        ImplementationModuleGenerator.writeImports(result, requiredJavaImports);
         result.writeLine("public class " + module.getName() + " {");
         result.writeLn();
         if (!result.getRequiredModuleInstances().isEmpty()) {

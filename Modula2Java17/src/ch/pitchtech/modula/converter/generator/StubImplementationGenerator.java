@@ -25,12 +25,7 @@ public class StubImplementationGenerator extends CompilationUnitGenerator {
         generateContent(content);
         result.writeLine("package " + TARGET_PACKAGE_LIBRARY + ";");
         result.writeLn();
-        if (!result.getRequiredJavaImports().isEmpty()) {
-            for (String javaImport : result.getRequiredJavaImports()) {
-                result.writeLine("import " + javaImport + ";");
-            }
-            result.writeLn();
-        }
+        ImplementationModuleGenerator.writeImports(result, result.getRequiredJavaImports());
         result.write(content);
     }
     

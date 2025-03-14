@@ -1,6 +1,7 @@
 package ch.pitchtech.modula.converter.generator;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -45,13 +46,7 @@ public class ImplementationModuleGenerator extends CompilationUnitGenerator {
         addRequiredImports(definitionModule, definitionContent, javaImports);
         addRequiredImports(implementationModule, implementationContext, javaImports);
         Collections.sort(javaImports);
-        if (!javaImports.isEmpty()) {
-            for (String javaImport : javaImports) {
-                result.writeLine("import " + javaImport + ";");
-            }
-            result.writeLn();
-            result.writeLn();
-        }
+        writeImports(result, javaImports);
         
         String name = implementationModule.getName();
         result.writeLine("public class " + name + " {");
@@ -129,6 +124,32 @@ public class ImplementationModuleGenerator extends CompilationUnitGenerator {
         }
     }
 
+    static void writeImports(ResultContext result, Collection<String> requiredJavaImports) {
+        if (!requiredJavaImports.isEmpty()) {
+            List<String> javaImports = new ArrayList<>();
+            List<String> otherImports = new ArrayList<>();
+            for (String javaImport : requiredJavaImports) {
+                if (javaImport.startsWith("java.")) {
+                    javaImports.add(javaImport);
+                } else {
+                    otherImports.add(javaImport);
+                }
+            }
+            
+            for (String javaImport : javaImports) {
+                result.writeLine("import " + javaImport + ";");
+            }
+            if (!javaImports.isEmpty() && !otherImports.isEmpty()) {
+                result.writeLn();
+            }
+            for (String javaImport : otherImports) {
+                result.writeLine("import " + javaImport + ";");
+            }
+            result.writeLn();
+            result.writeLn();
+        }
+    }
+    
     private void generateDefinitionContent(ResultContext result) {
         result.incIndent();
         
