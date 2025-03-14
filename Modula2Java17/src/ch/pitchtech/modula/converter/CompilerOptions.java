@@ -8,7 +8,7 @@ public class CompilerOptions {
     private boolean useRecordHelper = false;
     private boolean markSimplifiedWith = false;
     private boolean optimizeUnwrittenByRefArguments = true;
-    private boolean inlineProcedureAsExpression = false;
+    private boolean inlineProcedureAsExpression = true;
     
     
     /**

@@ -45,9 +45,9 @@ import ch.pitchtech.modula.converter.transform.Transforms;
  */
 public class Modula2JavaTranslator {
     
-    private final static String SOURCE_DIRECTORY = "../ChaosCastle/modula2";
-    private final static String TARGET_DIRECTORY_MAIN = "../ChaosCastle/src";
-    private final static String TARGET_DIRECTORY_LIBRARY = "../Modula2-Runtime/src";
+    private final static String SOURCE_DIRECTORY = "../../ChaosCastle/ChaosCastle/modula2";
+    private final static String TARGET_DIRECTORY_MAIN = "../../ChaosCastle/ChaosCastle/src";
+    private final static String TARGET_DIRECTORY_LIBRARY = "../../ChaosCastle/ChaosCastle/src";
     
     private final static boolean ALWAYS_OVERRIDE_STUB = false;
     private final static boolean DUMP_ABSTRACT_TREE = false;
