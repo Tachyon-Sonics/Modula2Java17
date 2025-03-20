@@ -166,6 +166,8 @@ public class Modula2JavaTranslator {
         Path targetLibraryDir = targetDirLibrary.resolve(Generator.TARGET_PACKAGE_LIBRARY.replace(".", File.separator));
         Files.createDirectories(targetLibraryDir);
 
+        // TODO (0) Detect dependences automatically (only main module(s) should be provided)
+        // TODO (1) main module(s) as argument
         translator.parse(Path.of(SOURCE_DIRECTORY, "Memory.def"));
         translator.parse(Path.of(SOURCE_DIRECTORY, "ANSITerm.def"));
         translator.parse(Path.of(SOURCE_DIRECTORY, "Checks.def"));
