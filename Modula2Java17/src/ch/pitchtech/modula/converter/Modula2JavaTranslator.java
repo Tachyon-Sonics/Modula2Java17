@@ -76,6 +76,19 @@ public class Modula2JavaTranslator {
         Lexer lexer = new m2pim4Lexer(CharStreams.fromStream(inputStream));
         TokenStream tokenStream = new CommonTokenStream(lexer);
         m2pim4Parser parser = new m2pim4Parser(tokenStream);
+        
+        // TODO (0) Detect dependences automatically (only main module(s) should be provided)
+//        parser.addParseListener(new m2pim4BaseListener() {
+//
+//            @Override
+//            public void exitImportList(ImportListContext ctx) {
+//                String stmt = ctx.getChild(0).getText();
+//                String name = ctx.getChild(1).getText(); // Could be "SYSTEM"
+//                System.out.println(stmt + " " + name);
+//                super.exitImportList(ctx);
+//            }
+//            
+//        });
         CompilationUnitContext cuContext = parser.compilationUnit();
         
         // Setp 3: abstraction into a model
@@ -166,7 +179,6 @@ public class Modula2JavaTranslator {
         Path targetLibraryDir = targetDirLibrary.resolve(Generator.TARGET_PACKAGE_LIBRARY.replace(".", File.separator));
         Files.createDirectories(targetLibraryDir);
 
-        // TODO (0) Detect dependences automatically (only main module(s) should be provided)
         // TODO (1) main module(s) as argument
         translator.parse(Path.of(SOURCE_DIRECTORY, "Memory.def"));
         translator.parse(Path.of(SOURCE_DIRECTORY, "ANSITerm.def"));
