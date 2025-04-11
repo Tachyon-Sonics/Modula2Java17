@@ -3,7 +3,7 @@ package ch.pitchtech.modula.converter.compiler;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class SourceFileHelper {
+public class SourceFileHelper { // TODO (2) also handle .md and .mi and .m extensions
 
     public static boolean isDefinition(SourceFile sourceFile) {
         return sourceFile.getPath().toString().toLowerCase().endsWith(".def");
