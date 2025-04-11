@@ -9,6 +9,23 @@ import java.util.concurrent.atomic.AtomicLong;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.CompilationUnitContext;
 import ch.pitchtech.modula.converter.model.ICompilationUnit;
 
+/**
+ * Source Modula-2 file.
+ * <p>
+ * Filled progressively during the compilation steps:
+ * <ul>
+ * <li>During the initial parsing, imported DEFINITION files are added to {@link #getDeps()}</li>
+ * <li>At the end of the initial parsing, {@link #setCuContext(CompilationUnitContext)} is set</li>
+ * <li>After abstracting, {@link #setCompilationUnit(ICompilationUnit)} is set</li>
+ * <li>{@link #getCompilationUnit()} is used for the code generation</li>
+ * </ul>
+ * <p>
+ * This class implements {@link Comparable} in such a way any source file is before any other
+ * source file that depends on it. The resulting order corresponds to the order in which the
+ * files must be compiled. The order depends on {@link #getDeps()} and is hence only defined
+ * after all files have been parsed. The order is used for all subsequent compilation steps
+ * after parsing.
+ */
 public class SourceFile implements Comparable<SourceFile> {
     
     private static final AtomicLong counter = new AtomicLong();

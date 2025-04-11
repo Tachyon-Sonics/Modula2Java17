@@ -9,6 +9,12 @@ public class SourceFileHelper { // TODO (2) also handle .md and .mi and .m exten
         return sourceFile.getPath().toString().toLowerCase().endsWith(".def");
     }
     
+    /**
+     * Lookup the source DEFINITION file (*.def) based on the current file being parsed and
+     * the imported module name (FROM ... IMPORT, or IMPORT ...)^
+     * <p>
+     * Returns <tt>null</tt> if importing the SYSTEM module
+     */
     public static SourceFile lookupDefinition(SourceFile currentFile, String importedModuleName) {
         if (importedModuleName.equals("SYSTEM"))
             return null;
@@ -19,6 +25,9 @@ public class SourceFileHelper { // TODO (2) also handle .md and .mi and .m exten
         return new SourceFile(path);
     }
     
+    /**
+     * Given an IMPLEMENTATION source file, lookup the corresponding DEFINITION source file
+     */
     public static SourceFile lookupDefinition(SourceFile implementation) {
         String modName = implementation.getPath().getFileName().toString();
         String defName = modName.replace(".mod", ".def");
@@ -29,6 +38,11 @@ public class SourceFileHelper { // TODO (2) also handle .md and .mi and .m exten
         throw new CompilationException(null, "File not found: {0}, definition for {1}", path, implementation.getPath());
     }
     
+    /**
+     * Given an DEFINITION (*.def) source file, lookup the corresponding IMPLEMENTATION (*.mod) source file.
+     * <p>
+     * Returns <tt>null</tt> if no IMPLEMENTATION (*.mod) is found
+     */
     public static SourceFile lookupImplementation(SourceFile definition) {
         String defName = definition.getPath().getFileName().toString();
         String modName = defName.replace(".def", ".mod");
