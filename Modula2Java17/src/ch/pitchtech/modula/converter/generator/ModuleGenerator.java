@@ -5,8 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import ch.pitchtech.modula.converter.CompilationException;
-import ch.pitchtech.modula.converter.StringUtils;
+import ch.pitchtech.modula.converter.compiler.CompilationException;
 import ch.pitchtech.modula.converter.generator.statement.Statements;
 import ch.pitchtech.modula.converter.model.DefinitionModule;
 import ch.pitchtech.modula.converter.model.ICompilationUnit;
@@ -15,6 +14,7 @@ import ch.pitchtech.modula.converter.model.Import;
 import ch.pitchtech.modula.converter.model.Module;
 import ch.pitchtech.modula.converter.model.source.SourceElement;
 import ch.pitchtech.modula.converter.model.statement.IStatement;
+import ch.pitchtech.modula.converter.utils.StringUtils;
 import ch.pitchtech.modula.runtime.HaltException;
 import ch.pitchtech.modula.runtime.Runtime;
 

@@ -3,7 +3,7 @@ package ch.pitchtech.modula.converter.model.scope;
 import java.util.BitSet;
 import java.util.Collections;
 
-import ch.pitchtech.modula.converter.CompilationException;
+import ch.pitchtech.modula.converter.compiler.CompilationException;
 import ch.pitchtech.modula.converter.model.Application;
 import ch.pitchtech.modula.converter.model.ICompilationUnit;
 import ch.pitchtech.modula.converter.model.builtin.BuiltInType;

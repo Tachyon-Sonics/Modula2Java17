@@ -1,6 +1,6 @@
 package ch.pitchtech.modula.converter.generator.type;
 
-import ch.pitchtech.modula.converter.CompilerOptions;
+import ch.pitchtech.modula.converter.compiler.CompilerOptions;
 import ch.pitchtech.modula.converter.generator.ResultContext;
 import ch.pitchtech.modula.converter.model.block.VariableDefinition;
 import ch.pitchtech.modula.converter.model.builtin.BuiltInType;

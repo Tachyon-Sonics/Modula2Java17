@@ -1,6 +1,6 @@
 package ch.pitchtech.modula.converter.model.expression;
 
-import ch.pitchtech.modula.converter.CompilationException;
+import ch.pitchtech.modula.converter.compiler.CompilationException;
 import ch.pitchtech.modula.converter.model.scope.IScope;
 import ch.pitchtech.modula.converter.model.scope.TypeResolver;
 import ch.pitchtech.modula.converter.model.source.NodeAttachType;

@@ -2,7 +2,7 @@ package ch.pitchtech.modula.converter.model;
 
 import java.util.List;
 
-import ch.pitchtech.modula.converter.CompilerException;
+import ch.pitchtech.modula.converter.compiler.CompilerException;
 import ch.pitchtech.modula.converter.model.source.NodeAttachType;
 import ch.pitchtech.modula.converter.model.statement.Assignement;
 

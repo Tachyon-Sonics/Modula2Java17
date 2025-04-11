@@ -4,7 +4,7 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.function.BiConsumer;
 
-import ch.pitchtech.modula.converter.CompilationException;
+import ch.pitchtech.modula.converter.compiler.CompilationException;
 import ch.pitchtech.modula.converter.model.DefinitionModule;
 import ch.pitchtech.modula.converter.model.ICompilationUnit;
 import ch.pitchtech.modula.converter.model.INode;

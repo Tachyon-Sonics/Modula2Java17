@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
-import ch.pitchtech.modula.converter.CompilerException;
-import ch.pitchtech.modula.converter.CompilerOptions;
+import ch.pitchtech.modula.converter.compiler.CompilerException;
+import ch.pitchtech.modula.converter.compiler.CompilerOptions;
 import ch.pitchtech.modula.converter.model.ICompilationUnit;
 import ch.pitchtech.modula.converter.model.INode;
 import ch.pitchtech.modula.converter.model.ImplementationModule;

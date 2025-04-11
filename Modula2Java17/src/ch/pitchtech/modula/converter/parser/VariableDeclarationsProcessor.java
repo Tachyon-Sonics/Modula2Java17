@@ -7,7 +7,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
-import ch.pitchtech.modula.converter.StringUtils;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.DeclarationContext;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.DefinitionContext;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.IdentContext;
@@ -18,6 +17,7 @@ import ch.pitchtech.modula.converter.generator.type.Types;
 import ch.pitchtech.modula.converter.model.block.VariableDefinition;
 import ch.pitchtech.modula.converter.model.scope.IHasScope;
 import ch.pitchtech.modula.converter.model.type.IType;
+import ch.pitchtech.modula.converter.utils.StringUtils;
 
 public class VariableDeclarationsProcessor extends ProcessorBase {
     

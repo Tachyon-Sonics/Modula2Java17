@@ -1,6 +1,6 @@
 package ch.pitchtech.modula.converter.generator.expression;
 
-import ch.pitchtech.modula.converter.CompilerException;
+import ch.pitchtech.modula.converter.compiler.CompilerException;
 import ch.pitchtech.modula.converter.generator.ResultContext;
 import ch.pitchtech.modula.converter.model.block.VariableDefinition;
 import ch.pitchtech.modula.converter.model.builtin.BuiltInType;

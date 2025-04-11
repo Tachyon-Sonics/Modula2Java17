@@ -3,7 +3,7 @@ package ch.pitchtech.modula.converter.model.builtin;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.pitchtech.modula.converter.CompilationException;
+import ch.pitchtech.modula.converter.compiler.CompilationException;
 import ch.pitchtech.modula.converter.model.scope.IScope;
 
 public enum BuiltInType {

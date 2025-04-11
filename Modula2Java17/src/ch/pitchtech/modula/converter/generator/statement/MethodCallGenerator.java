@@ -5,8 +5,7 @@ import java.util.BitSet;
 import java.util.List;
 import java.util.Set;
 
-import ch.pitchtech.modula.converter.CompilationException;
-import ch.pitchtech.modula.converter.StringUtils;
+import ch.pitchtech.modula.converter.compiler.CompilationException;
 import ch.pitchtech.modula.converter.generator.Generator;
 import ch.pitchtech.modula.converter.generator.ResultContext;
 import ch.pitchtech.modula.converter.generator.TypeCastHelper;
@@ -31,6 +30,7 @@ import ch.pitchtech.modula.converter.model.type.IType;
 import ch.pitchtech.modula.converter.model.type.ProcedureType;
 import ch.pitchtech.modula.converter.transform.NestedProcedureTransform;
 import ch.pitchtech.modula.converter.transform.VariableAsRefMarker;
+import ch.pitchtech.modula.converter.utils.StringUtils;
 
 /**
  * Base class for generating PROCEDURE calls, either as a {@link FunctionCall} or as a {@link ProcedureCall}

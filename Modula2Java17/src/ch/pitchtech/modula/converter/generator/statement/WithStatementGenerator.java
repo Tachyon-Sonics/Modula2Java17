@@ -1,7 +1,6 @@
 package ch.pitchtech.modula.converter.generator.statement;
 
-import ch.pitchtech.modula.converter.CompilationException;
-import ch.pitchtech.modula.converter.StringUtils;
+import ch.pitchtech.modula.converter.compiler.CompilationException;
 import ch.pitchtech.modula.converter.generator.Generator;
 import ch.pitchtech.modula.converter.generator.ResultContext;
 import ch.pitchtech.modula.converter.generator.expression.Expressions;
@@ -14,6 +13,7 @@ import ch.pitchtech.modula.converter.model.statement.IStatement;
 import ch.pitchtech.modula.converter.model.statement.WithStatement;
 import ch.pitchtech.modula.converter.model.type.IType;
 import ch.pitchtech.modula.converter.model.type.RecordType;
+import ch.pitchtech.modula.converter.utils.StringUtils;
 
 
 public class WithStatementGenerator extends Generator {

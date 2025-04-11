@@ -1,6 +1,6 @@
 package ch.pitchtech.modula.converter.model.block;
 
-import ch.pitchtech.modula.converter.CompilerException;
+import ch.pitchtech.modula.converter.compiler.CompilerException;
 import ch.pitchtech.modula.converter.model.INode;
 import ch.pitchtech.modula.converter.model.expression.IExpression;
 import ch.pitchtech.modula.converter.model.scope.IHasScope;

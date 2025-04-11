@@ -2,8 +2,8 @@ package ch.pitchtech.modula.converter.transform;
 
 import java.util.ArrayList;
 
-import ch.pitchtech.modula.converter.CompilerException;
-import ch.pitchtech.modula.converter.CompilerOptions;
+import ch.pitchtech.modula.converter.compiler.CompilerException;
+import ch.pitchtech.modula.converter.compiler.CompilerOptions;
 import ch.pitchtech.modula.converter.model.ICompilationUnit;
 import ch.pitchtech.modula.converter.model.IImplemented;
 import ch.pitchtech.modula.converter.model.INode;

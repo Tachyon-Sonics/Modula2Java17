@@ -1,7 +1,6 @@
 package ch.pitchtech.modula.converter.generator.field;
 
-import ch.pitchtech.modula.converter.CompilerException;
-import ch.pitchtech.modula.converter.StringUtils;
+import ch.pitchtech.modula.converter.compiler.CompilerException;
 import ch.pitchtech.modula.converter.generator.Generator;
 import ch.pitchtech.modula.converter.generator.ResultContext;
 import ch.pitchtech.modula.converter.generator.expression.Expressions;
@@ -23,6 +22,7 @@ import ch.pitchtech.modula.converter.model.type.PointerType;
 import ch.pitchtech.modula.converter.model.type.ProcedureType;
 import ch.pitchtech.modula.converter.model.type.RangeSetType;
 import ch.pitchtech.modula.converter.model.type.RecordType;
+import ch.pitchtech.modula.converter.utils.StringUtils;
 
 public class VariableDefinitionGenerator extends Generator {
     

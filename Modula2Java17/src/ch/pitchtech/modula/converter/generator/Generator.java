@@ -2,7 +2,6 @@ package ch.pitchtech.modula.converter.generator;
 
 import java.util.Set;
 
-import ch.pitchtech.modula.converter.StringUtils;
 import ch.pitchtech.modula.converter.model.Application;
 import ch.pitchtech.modula.converter.model.ICompilationUnit;
 import ch.pitchtech.modula.converter.model.ImplementationModule;
@@ -11,6 +10,7 @@ import ch.pitchtech.modula.converter.model.scope.IHasScope;
 import ch.pitchtech.modula.converter.model.source.CurrentFile;
 import ch.pitchtech.modula.converter.model.source.SourceElement;
 import ch.pitchtech.modula.converter.model.type.IType;
+import ch.pitchtech.modula.converter.utils.StringUtils;
 
 public abstract class Generator {
     // TODO GrotteBonus.mod: rename "clock0" to "clock" and debug / handle proper renaming

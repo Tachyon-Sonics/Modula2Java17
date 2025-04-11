@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import ch.pitchtech.modula.converter.StringUtils;
 import ch.pitchtech.modula.converter.generator.statement.Statements;
 import ch.pitchtech.modula.converter.model.DefinitionModule;
 import ch.pitchtech.modula.converter.model.ICompilationUnit;
@@ -13,6 +12,7 @@ import ch.pitchtech.modula.converter.model.ImplementationModule;
 import ch.pitchtech.modula.converter.model.Import;
 import ch.pitchtech.modula.converter.model.source.SourceElement;
 import ch.pitchtech.modula.converter.model.statement.IStatement;
+import ch.pitchtech.modula.converter.utils.StringUtils;
 
 public class ImplementationModuleGenerator extends CompilationUnitGenerator {
     

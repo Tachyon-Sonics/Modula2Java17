@@ -1,5 +1,6 @@
-package ch.pitchtech.modula.converter;
+package ch.pitchtech.modula.converter.compiler;
 
+import ch.pitchtech.modula.converter.utils.StringUtils;
 
 /**
  * Models a an unexpected internal error while compiling. Usually this is du to a bug

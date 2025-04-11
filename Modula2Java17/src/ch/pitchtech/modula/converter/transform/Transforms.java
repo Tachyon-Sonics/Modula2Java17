@@ -1,6 +1,6 @@
 package ch.pitchtech.modula.converter.transform;
 
-import ch.pitchtech.modula.converter.CompilerOptions;
+import ch.pitchtech.modula.converter.compiler.CompilerOptions;
 import ch.pitchtech.modula.converter.model.ICompilationUnit;
 
 public class Transforms {

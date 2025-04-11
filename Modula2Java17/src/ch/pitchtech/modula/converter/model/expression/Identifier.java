@@ -1,6 +1,6 @@
 package ch.pitchtech.modula.converter.model.expression;
 
-import ch.pitchtech.modula.converter.CompilationException;
+import ch.pitchtech.modula.converter.compiler.CompilationException;
 import ch.pitchtech.modula.converter.model.block.ConstantDefinition;
 import ch.pitchtech.modula.converter.model.block.IDefinition;
 import ch.pitchtech.modula.converter.model.block.IHasName;

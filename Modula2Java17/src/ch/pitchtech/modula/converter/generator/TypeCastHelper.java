@@ -2,9 +2,8 @@ package ch.pitchtech.modula.converter.generator;
 
 import java.util.List;
 
-import ch.pitchtech.modula.converter.CompilationException;
-import ch.pitchtech.modula.converter.CompilerException;
-import ch.pitchtech.modula.converter.StringUtils;
+import ch.pitchtech.modula.converter.compiler.CompilationException;
+import ch.pitchtech.modula.converter.compiler.CompilerException;
 import ch.pitchtech.modula.converter.generator.expression.ArrayAccessGenerator;
 import ch.pitchtech.modula.converter.generator.expression.Expressions;
 import ch.pitchtech.modula.converter.generator.expression.IdentifierGenerator;
@@ -39,6 +38,7 @@ import ch.pitchtech.modula.converter.model.type.OpaqueType;
 import ch.pitchtech.modula.converter.model.type.OpenArrayType;
 import ch.pitchtech.modula.converter.model.type.PointerType;
 import ch.pitchtech.modula.converter.model.type.RecordType;
+import ch.pitchtech.modula.converter.utils.StringUtils;
 import ch.pitchtech.modula.runtime.Runtime;
 import ch.pitchtech.modula.runtime.Runtime.IRef;
 

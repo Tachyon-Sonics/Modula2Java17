@@ -1,6 +1,6 @@
 package ch.pitchtech.modula.converter.transform;
 
-import ch.pitchtech.modula.converter.CompilationException;
+import ch.pitchtech.modula.converter.compiler.CompilationException;
 import ch.pitchtech.modula.converter.model.ICompilationUnit;
 import ch.pitchtech.modula.converter.model.INode;
 import ch.pitchtech.modula.converter.model.block.FormalArgument;

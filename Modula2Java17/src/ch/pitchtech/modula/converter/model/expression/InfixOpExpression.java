@@ -3,8 +3,8 @@ package ch.pitchtech.modula.converter.model.expression;
 
 import java.util.Set;
 
-import ch.pitchtech.modula.converter.CompilationException;
-import ch.pitchtech.modula.converter.CompilerException;
+import ch.pitchtech.modula.converter.compiler.CompilationException;
+import ch.pitchtech.modula.converter.compiler.CompilerException;
 import ch.pitchtech.modula.converter.generator.ResultContext;
 import ch.pitchtech.modula.converter.generator.expression.InfixOpExpressionGenerator;
 import ch.pitchtech.modula.converter.model.builtin.BuiltInType;

@@ -10,8 +10,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
-import ch.pitchtech.modula.converter.CompilerException;
-import ch.pitchtech.modula.converter.StringUtils;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.ArrayTypeContext;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.CaseLabelListContext;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.ConstExpressionContext;
@@ -34,6 +32,7 @@ import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.SubrangeTypeContext;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.TypeDeclarationContext;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.Type_Context;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.VariantContext;
+import ch.pitchtech.modula.converter.compiler.CompilerException;
 import ch.pitchtech.modula.converter.generator.type.Types;
 import ch.pitchtech.modula.converter.model.block.VariableDefinition;
 import ch.pitchtech.modula.converter.model.expression.ConstantLiteral;
@@ -53,6 +52,7 @@ import ch.pitchtech.modula.converter.model.type.RangeSetType;
 import ch.pitchtech.modula.converter.model.type.RecordType;
 import ch.pitchtech.modula.converter.model.type.SubrangeType;
 import ch.pitchtech.modula.converter.model.type.TypeDefinition;
+import ch.pitchtech.modula.converter.utils.StringUtils;
 
 public class TypeDeclarationsProcessor extends ProcessorBase {
     

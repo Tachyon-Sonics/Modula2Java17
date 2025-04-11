@@ -1,4 +1,4 @@
-package ch.pitchtech.modula.converter;
+package ch.pitchtech.modula.converter.compiler;
 
 
 public class CompilerOptions {

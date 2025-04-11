@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import ch.pitchtech.modula.converter.CompilerException;
+import ch.pitchtech.modula.converter.compiler.CompilerException;
 import ch.pitchtech.modula.converter.model.DefinitionModule;
 import ch.pitchtech.modula.converter.model.INode;
 import ch.pitchtech.modula.converter.model.ImplementationModule;

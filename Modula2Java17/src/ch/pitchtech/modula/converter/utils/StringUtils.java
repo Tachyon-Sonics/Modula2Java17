@@ -1,8 +1,7 @@
-package ch.pitchtech.modula.converter;
+package ch.pitchtech.modula.converter.utils;
 
 import java.util.Collection;
 
-// xBR Java: https://github.com/stanio/xbrz-java
 public class StringUtils {
     
     public static String toCamelCase(String text) {

@@ -19,6 +19,7 @@ import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.CompilationUnitContext;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.DefinitionModuleContext;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.ProgramModuleContext;
+import ch.pitchtech.modula.converter.compiler.CompilerOptions;
 import ch.pitchtech.modula.converter.generator.Generator;
 import ch.pitchtech.modula.converter.generator.ImplementationModuleGenerator;
 import ch.pitchtech.modula.converter.generator.ModuleGenerator;
@@ -43,7 +44,7 @@ import ch.pitchtech.modula.converter.transform.Transforms;
  * 
  * TODO (3) Comment in generated Java files: (* Converted from Modula-2 by Modula2Java17 *)
  */
-public class Modula2JavaTranslator {
+public class Modula2JavaTranslator { // TODO (0) convert to a command-line that uses Compiler
     
     private final static String SOURCE_DIRECTORY = "../../ChaosCastle/ChaosCastle/modula2";
     private final static String TARGET_DIRECTORY_MAIN = "../../ChaosCastle/ChaosCastle/src";
@@ -77,18 +78,6 @@ public class Modula2JavaTranslator {
         TokenStream tokenStream = new CommonTokenStream(lexer);
         m2pim4Parser parser = new m2pim4Parser(tokenStream);
         
-        // TODO (0) Detect dependences automatically (only main module(s) should be provided)
-//        parser.addParseListener(new m2pim4BaseListener() {
-//
-//            @Override
-//            public void exitImportList(ImportListContext ctx) {
-//                String stmt = ctx.getChild(0).getText();
-//                String name = ctx.getChild(1).getText(); // Could be "SYSTEM"
-//                System.out.println(stmt + " " + name);
-//                super.exitImportList(ctx);
-//            }
-//            
-//        });
         CompilationUnitContext cuContext = parser.compilationUnit();
         
         // Setp 3: abstraction into a model

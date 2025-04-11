@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
 
-import ch.pitchtech.modula.converter.CompilerOptions;
+import ch.pitchtech.modula.converter.compiler.CompilerOptions;
 import ch.pitchtech.modula.converter.model.expression.IExpression;
 import ch.pitchtech.modula.converter.model.scope.IHasScope;
 import ch.pitchtech.modula.converter.model.scope.IScope;

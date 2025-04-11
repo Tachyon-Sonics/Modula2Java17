@@ -1,9 +1,10 @@
-package ch.pitchtech.modula.converter;
+package ch.pitchtech.modula.converter.compiler;
 
 import ch.pitchtech.modula.converter.generator.Generator;
 import ch.pitchtech.modula.converter.model.INode;
 import ch.pitchtech.modula.converter.model.source.SourceElement;
 import ch.pitchtech.modula.converter.model.source.SourceInfo;
+import ch.pitchtech.modula.converter.utils.StringUtils;
 
 /**
  * Models a compilation error that is the result of incorrect Modula-2 code
