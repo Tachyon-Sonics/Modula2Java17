@@ -172,7 +172,6 @@ public class Modula2JavaTranslator { // TODO (0) convert to a command-line that 
         Path targetLibraryDir = targetDirLibrary.resolve(TARGET_PACKAGE_LIBRARY.replace(".", File.separator));
         Files.createDirectories(targetLibraryDir);
 
-        // TODO (1) main module(s) as argument
         translator.parse(Path.of(SOURCE_DIRECTORY, "Memory.def"));
         translator.parse(Path.of(SOURCE_DIRECTORY, "ANSITerm.def"));
         translator.parse(Path.of(SOURCE_DIRECTORY, "Checks.def"));

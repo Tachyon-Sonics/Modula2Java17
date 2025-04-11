@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -47,23 +48,24 @@ public class Compiler {
 
     // TODO (1) as arguments
     private final static boolean ALWAYS_OVERRIDE_STUB = false;
-    private final static String TARGET_DIRECTORY_MAIN = "../../ChaosCastle/ChaosCastle/src";
-    private final static String TARGET_DIRECTORY_LIBRARY = "../../ChaosCastle/ChaosCastle/src";
 
+    private final FileOptions fileOptions;
     private final CompilerOptions compilerOptions;
     private final Application application;
     private TreeSet<SourceFile> sourceFiles = new TreeSet<>();
     
     
-    public Compiler(CompilerOptions compilerOptions) {
+    public Compiler(FileOptions fileOptions, CompilerOptions compilerOptions) {
+        this.fileOptions = fileOptions;
         this.compilerOptions = compilerOptions;
         application = new Application(compilerOptions);
     }
     
-    public void compile(SourceFile mainModuleFile) throws IOException {
+    // TODO (4) allow non MODULE files, or detect and report an error
+    public void compile(SourceFile... mainModuleFiles) throws IOException {
         Logger.log(1, "P1: Parsing...");
         // Parse
-        parseRecursive(mainModuleFile); // This fills 'sourceFiles'
+        parseRecursive(mainModuleFiles); // This fills 'sourceFiles'
         
         // Abstract
         Logger.log(1, "P2: Abstraction...");
@@ -83,8 +85,8 @@ public class Compiler {
         
         // Generate Java code
         Logger.log(1, "P4: Generate code...");
-        Path targetDirMain = Path.of(TARGET_DIRECTORY_MAIN);
-        Path targetDirLibrary = Path.of(TARGET_DIRECTORY_LIBRARY);
+        Path targetDirMain = fileOptions.getTargetMainDir();
+        Path targetDirLibrary = fileOptions.getTargetLibraryDir();
         Path targetPackageDir = targetDirMain.resolve(compilerOptions.getTargetPackageMain().replace(".", File.separator));
         Files.createDirectories(targetPackageDir);
         Path targetLibraryDir = targetDirLibrary.resolve(compilerOptions.getTargetPackageLib().replace(".", File.separator));
@@ -92,23 +94,26 @@ public class Compiler {
         for (SourceFile sourceFile : sourceFiles) {
             generateCode(sourceFile, targetPackageDir, targetLibraryDir);
         }
+        
+        Logger.log(1, "Done; {0} Java files generated in {1}", sourceFiles.size(), targetPackageDir);
     }
     
     /**
-     * Parse the given source file, usually a MODULE, and recursively parse all imported
+     * Parse the given source file(s), usually a MODULE, and recursively parse all imported
      * DEFINITIONs and their IMPLEMENTATIONs.
      * <p>
      * The {@link #sourceFiles} ordered set will be filled with all parsed files, ordered in such a way
      * each file only depends on file(s) before it.
      */
-    private void parseRecursive(SourceFile mainModuleFile) throws IOException {
+    private void parseRecursive(SourceFile... mainModuleFiles) throws IOException {
         Set<SourceFile> parsed = new HashSet<>();
         List<SourceFile> toParse = new ArrayList<>();
-        toParse.add(mainModuleFile);
+        List<SourceFile> mainModuleFilesList = Arrays.asList(mainModuleFiles);
+        toParse.addAll(mainModuleFilesList);
         while (!toParse.isEmpty()) {
             SourceFile sourceFile = toParse.remove(0);
             parsed.add(sourceFile);
-            if (!SourceFileHelper.isDefinition(sourceFile) && sourceFile != mainModuleFile) {
+            if (!SourceFileHelper.isDefinition(sourceFile) && !mainModuleFilesList.contains(sourceFile)) {
                 // This is an implementation. Make it dependent from its definition
                 SourceFile definitionSourceFile = SourceFileHelper.lookupDefinition(sourceFile);
                 sourceFile.getDeps().add(definitionSourceFile);

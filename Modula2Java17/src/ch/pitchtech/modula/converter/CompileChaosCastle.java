@@ -8,7 +8,7 @@ import ch.pitchtech.modula.converter.compiler.CompilerOptions;
 import ch.pitchtech.modula.converter.compiler.FileOptions;
 import ch.pitchtech.modula.converter.compiler.SourceFile;
 
-public class CompileGrotte {
+public class CompileChaosCastle {
 
     private final static String SOURCE_DIRECTORY = "../../ChaosCastle/ChaosCastle/modula2";
     private final static String TARGET_DIRECTORY_MAIN = "../../ChaosCastle/ChaosCastle/src";
@@ -16,8 +16,8 @@ public class CompileGrotte {
 
     
     public static void main(String[] args) throws IOException {
-        Path grotteMode = Path.of(SOURCE_DIRECTORY, "Grotte.mod");
-        SourceFile grotte = new SourceFile(grotteMode);
+        Path chaosCastleMode = Path.of(SOURCE_DIRECTORY, "ChaosCastle.mod");
+        SourceFile chaosCastle = new SourceFile(chaosCastleMode);
         
         FileOptions fileOptions = new FileOptions(
                 Path.of(SOURCE_DIRECTORY),
@@ -29,7 +29,7 @@ public class CompileGrotte {
         compilerOptions.setTargetPackageLib("ch.chaos.library");
         
         Compiler compiler = new Compiler(fileOptions, compilerOptions);
-        compiler.compile(grotte);
+        compiler.compile(chaosCastle);
     }
     
 }
