@@ -28,7 +28,6 @@ import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.IdentContext;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.IdentListContext;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.ImportListContext;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.ProgramModuleContext;
-import ch.pitchtech.modula.converter.generator.Generator;
 import ch.pitchtech.modula.converter.generator.ImplementationModuleGenerator;
 import ch.pitchtech.modula.converter.generator.ModuleGenerator;
 import ch.pitchtech.modula.converter.generator.ResultContext;
@@ -86,9 +85,9 @@ public class Compiler {
         Logger.log(1, "P4: Generate code...");
         Path targetDirMain = Path.of(TARGET_DIRECTORY_MAIN);
         Path targetDirLibrary = Path.of(TARGET_DIRECTORY_LIBRARY);
-        Path targetPackageDir = targetDirMain.resolve(Generator.TARGET_PACKAGE.replace(".", File.separator));
+        Path targetPackageDir = targetDirMain.resolve(compilerOptions.getTargetPackageMain().replace(".", File.separator));
         Files.createDirectories(targetPackageDir);
-        Path targetLibraryDir = targetDirLibrary.resolve(Generator.TARGET_PACKAGE_LIBRARY.replace(".", File.separator));
+        Path targetLibraryDir = targetDirLibrary.resolve(compilerOptions.getTargetPackageLib().replace(".", File.separator));
         Files.createDirectories(targetLibraryDir);
         for (SourceFile sourceFile : sourceFiles) {
             generateCode(sourceFile, targetPackageDir, targetLibraryDir);
@@ -263,14 +262,6 @@ public class Compiler {
             Path javaImplFile = targetPackageDir.resolve(module.getName() + ".java");
             Files.writeString(javaImplFile, result.toString());
         }
-    }
-    
-    public static void main(String[] args) throws IOException {
-        CompilerOptions compilerOptions = new CompilerOptions();
-        Compiler compiler = new Compiler(compilerOptions);
-        String sourceDirectory = "../../ChaosCastle/ChaosCastle/modula2";
-        SourceFile grotte = new SourceFile(Path.of(sourceDirectory, "ChaosCastle.mod"));
-        compiler.compile(grotte);
     }
     
 }

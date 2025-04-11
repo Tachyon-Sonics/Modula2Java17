@@ -39,7 +39,7 @@ public class ImplementationModuleGenerator extends CompilationUnitGenerator {
         generateBeginEnd(beginEndContext);
         result.popScope();
         
-        result.writeLine("package " + TARGET_PACKAGE + ";");
+        result.writeLine("package " + result.getCompilerOptions().getTargetPackageMain() + ";");
         result.writeLn();
         
         List<String> javaImports = new ArrayList<>();
@@ -116,7 +116,7 @@ public class ImplementationModuleGenerator extends CompilationUnitGenerator {
             if (!fromModule.equals("SYSTEM")) {
                 DefinitionModule definitionModule = context.getScope().resolveModule(fromModule);
                 if (!definitionModule.isImplemented()) {
-                    String javaImport = TARGET_PACKAGE_LIBRARY + "." + fromModule;
+                    String javaImport = context.getCompilerOptions().getTargetPackageLib() + "." + fromModule;
                     if (!result.contains(javaImport))
                         result.add(javaImport);
                 }

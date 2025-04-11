@@ -20,7 +20,6 @@ import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.CompilationUnitContex
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.DefinitionModuleContext;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.ProgramModuleContext;
 import ch.pitchtech.modula.converter.compiler.CompilerOptions;
-import ch.pitchtech.modula.converter.generator.Generator;
 import ch.pitchtech.modula.converter.generator.ImplementationModuleGenerator;
 import ch.pitchtech.modula.converter.generator.ModuleGenerator;
 import ch.pitchtech.modula.converter.generator.ResultContext;
@@ -50,6 +49,9 @@ public class Modula2JavaTranslator { // TODO (0) convert to a command-line that 
     private final static String TARGET_DIRECTORY_MAIN = "../../ChaosCastle/ChaosCastle/src";
     private final static String TARGET_DIRECTORY_LIBRARY = "../../ChaosCastle/ChaosCastle/src";
     
+    private final static String TARGET_PACKAGE = "ch.chaos.castle";
+    private final static String TARGET_PACKAGE_LIBRARY = "ch.chaos.library";
+  
     private final static boolean ALWAYS_OVERRIDE_STUB = false;
     private final static boolean DUMP_ABSTRACT_TREE = false;
             
@@ -60,6 +62,8 @@ public class Modula2JavaTranslator { // TODO (0) convert to a command-line that 
     
     private Modula2JavaTranslator() {
         CompilerOptions compilerOptions = new CompilerOptions();
+        compilerOptions.setTargetPackageMain(TARGET_PACKAGE);
+        compilerOptions.setTargetPackageLib(TARGET_PACKAGE_LIBRARY);
         application = new Application(compilerOptions);
     }
     
@@ -163,9 +167,9 @@ public class Modula2JavaTranslator { // TODO (0) convert to a command-line that 
         Modula2JavaTranslator translator = new Modula2JavaTranslator();
         Path targetDirMain = Path.of(TARGET_DIRECTORY_MAIN);
         Path targetDirLibrary = Path.of(TARGET_DIRECTORY_LIBRARY);
-        Path targetPackageDir = targetDirMain.resolve(Generator.TARGET_PACKAGE.replace(".", File.separator));
+        Path targetPackageDir = targetDirMain.resolve(TARGET_PACKAGE.replace(".", File.separator));
         Files.createDirectories(targetPackageDir);
-        Path targetLibraryDir = targetDirLibrary.resolve(Generator.TARGET_PACKAGE_LIBRARY.replace(".", File.separator));
+        Path targetLibraryDir = targetDirLibrary.resolve(TARGET_PACKAGE_LIBRARY.replace(".", File.separator));
         Files.createDirectories(targetLibraryDir);
 
         // TODO (1) main module(s) as argument

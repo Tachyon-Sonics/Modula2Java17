@@ -10,6 +10,9 @@ public class CompilerOptions {
     private boolean optimizeUnwrittenByRefArguments = true;
     private boolean inlineProcedureAsExpression = false;
     
+    private String targetPackageMain; // Target package for main Java files
+    private String targetPackageLib; // Target package for library Java files
+    
     
     /**
      * Whether to use Euclidean division for "DIV" and "MOD" on INTEGER.
@@ -75,6 +78,22 @@ public class CompilerOptions {
 
     public void setInlineProcedureAsExpression(boolean inlineProcedureAsExpression) {
         this.inlineProcedureAsExpression = inlineProcedureAsExpression;
+    }
+
+    public String getTargetPackageMain() {
+        return targetPackageMain;
+    }
+
+    public void setTargetPackageMain(String targetPackageMain) {
+        this.targetPackageMain = targetPackageMain;
+    }
+    
+    public String getTargetPackageLib() {
+        return targetPackageLib;
+    }
+
+    public void setTargetPackageLib(String targetPackageLib) {
+        this.targetPackageLib = targetPackageLib;
     }
 
 }

@@ -33,9 +33,10 @@ public class ModuleGenerator extends CompilationUnitGenerator {
         result.pushScope(module.getLocalScope());
         ResultContext content = result.subContext();
         generateContent(content);
-        result.writeLine("package " + TARGET_PACKAGE + ";");
+        result.writeLine("package " + result.getCompilerOptions().getTargetPackageMain() + ";");
         result.writeLn();
-        List<String> requiredJavaImports = super.getRequiredImports(module, result, TARGET_PACKAGE);
+        List<String> requiredJavaImports = super.getRequiredImports(module, result, 
+                result.getCompilerOptions().getTargetPackageMain());
         ImplementationModuleGenerator.writeImports(result, requiredJavaImports);
         result.writeLine("public class " + module.getName() + " {");
         result.writeLn();

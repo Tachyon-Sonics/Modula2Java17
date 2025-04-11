@@ -25,10 +25,10 @@ public abstract class CompilationUnitGenerator extends Generator {
     
     protected List<String> getRequiredImports(ICompilationUnit compilationUnit, ResultContext context, String currentPackage) {
         List<String> result = new ArrayList<>();
-        if (!currentPackage.equals(TARGET_PACKAGE_LIBRARY)) {
+        if (!currentPackage.equals(context.getCompilerOptions().getTargetPackageLib())) {
             if (compilationUnit instanceof ch.pitchtech.modula.converter.model.Module) {
                 addRequiredJavaImports(context, result);
-                String javaImport = TARGET_PACKAGE_LIBRARY + ".*";
+                String javaImport = context.getCompilerOptions().getTargetPackageLib() + ".*";
                 result.add(javaImport);
             } else {
                 addRequiredImports(compilationUnit, context, result);
@@ -45,7 +45,7 @@ public abstract class CompilationUnitGenerator extends Generator {
             if (!fromModule.equals("SYSTEM")) {
                 DefinitionModule definitionModule = context.getScope().resolveModule(fromModule);
                 if (!definitionModule.isImplemented()) {
-                    String javaImport = TARGET_PACKAGE_LIBRARY + "." + fromModule;
+                    String javaImport = context.getCompilerOptions().getTargetPackageLib() + "." + fromModule;
                     if (!result.contains(javaImport))
                         result.add(javaImport);
                 }

@@ -25,9 +25,9 @@ public class EnumerationTypeGenerator extends Generator implements ITypeDefiniti
             // Import enum type
             String targetPackage;
             if (declaringUnit.getDefinitionModule().isImplemented())
-                targetPackage = Generator.TARGET_PACKAGE;
+                targetPackage = result.getCompilerOptions().getTargetPackageMain();
             else
-                targetPackage = Generator.TARGET_PACKAGE_LIBRARY;
+                targetPackage = result.getCompilerOptions().getTargetPackageLib();
             result.ensureJavaImport(targetPackage + "." 
                     + declaringUnit.getDefinitionModule().getName() + "."
                     + enumerationType.getName());

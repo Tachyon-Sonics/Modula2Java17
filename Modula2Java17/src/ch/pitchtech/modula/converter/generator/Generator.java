@@ -30,9 +30,6 @@ public abstract class Generator {
             );
 
     
-    public final static String TARGET_PACKAGE = "ch.chaos.castle";
-    public final static String TARGET_PACKAGE_LIBRARY = "ch.chaos.library";
-    
     protected final IHasScope scopeUnit;
     private final ICompilationUnit compilationUnit; // If different than scope's; for 'needQualifier' only
     private static SourceElement lastSourceElement;

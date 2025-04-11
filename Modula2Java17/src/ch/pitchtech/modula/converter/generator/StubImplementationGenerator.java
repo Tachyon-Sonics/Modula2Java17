@@ -23,7 +23,7 @@ public class StubImplementationGenerator extends CompilationUnitGenerator {
         result.pushScope(definitionModule.getLocalScope());
         ResultContext content = result.subContext();
         generateContent(content);
-        result.writeLine("package " + TARGET_PACKAGE_LIBRARY + ";");
+        result.writeLine("package " + result.getCompilerOptions().getTargetPackageLib() + ";");
         result.writeLn();
         ImplementationModuleGenerator.writeImports(result, result.getRequiredJavaImports());
         result.write(content);

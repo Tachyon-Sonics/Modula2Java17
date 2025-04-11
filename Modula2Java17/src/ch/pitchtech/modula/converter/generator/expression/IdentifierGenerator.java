@@ -85,9 +85,9 @@ public class IdentifierGenerator extends Generator implements IAssignGenerator {
                 if (needQualifier(declaringUnit)) {
                     String targetPackage;
                     if (declaringUnit.getDefinitionModule().isImplemented())
-                        targetPackage = Generator.TARGET_PACKAGE;
+                        targetPackage = result.getCompilerOptions().getTargetPackageMain();
                     else
-                        targetPackage = Generator.TARGET_PACKAGE_LIBRARY;
+                        targetPackage = result.getCompilerOptions().getTargetPackageLib();
                     result.ensureJavaImport(targetPackage + "." 
                             + declaringUnit.getDefinitionModule().getName() + "."
                             + enumTypeDefinition.getName());
