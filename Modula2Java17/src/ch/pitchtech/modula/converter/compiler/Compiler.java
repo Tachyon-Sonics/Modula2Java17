@@ -64,7 +64,7 @@ public class Compiler {
         // Parse
         parseRecursive(mainModuleFiles); // This fills 'sourceFiles'
         
-        // Abstract
+        // Abstract into a model
         Logger.log(1, "P2: Abstraction...");
         for (SourceFile sourceFile : sourceFiles) {
             Logger.log(2, "  {0}", sourceFile.getPath().getFileName());

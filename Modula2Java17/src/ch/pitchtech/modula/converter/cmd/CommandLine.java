@@ -11,12 +11,13 @@ import java.util.Set;
 import ch.pitchtech.modula.converter.compiler.Compiler;
 import ch.pitchtech.modula.converter.compiler.CompilerOptions;
 import ch.pitchtech.modula.converter.compiler.FileOptions;
+import ch.pitchtech.modula.converter.compiler.SourceFile;
 
 public class CommandLine {
     
     private final FileOptions fileOptions = new FileOptions();
     private final CompilerOptions compilerOptions = new CompilerOptions();
-    private final List<Path> filesToCompile = new ArrayList<>();
+    private final List<SourceFile> filesToCompile = new ArrayList<>();
 
     
     public CommandLine() { // TODO (1) continue, use
@@ -35,6 +36,15 @@ public class CommandLine {
      * @return <tt>null</tt> on success, the error message else
      */
     public String parse(String[] args) {
+        // Check for help
+        if (args.length == 0) {
+            displayShortHelp();
+            System.exit(1);
+        } else if (args.length == 1 && (args[0].equals("-h") || args[0].equals("--help"))) {
+            displayHelp();
+            System.exit(0);
+        }
+        
         // Parse arguments
         Set<CmdOption> specifiedOptions = new HashSet<>();
         int index = 0;
@@ -77,8 +87,10 @@ public class CommandLine {
                         if (isOption) {
                             return "Value of type '" + option.getValueType().name().toLowerCase() + "' expected after option: " + arg;
                         }
-                        String error = (String) value;
-                        return arg + " " + valueStr + ": " + error;
+                        if (option.getValueType() != OptionType.STRING) {
+                            String error = (String) value;
+                            return arg + " " + valueStr + ": " + error;
+                        }
                     }
                 } else if (valueStr != null) {
                     return "No value expected for option: " + arg;
@@ -91,11 +103,17 @@ public class CommandLine {
                 Path inputFile = Path.of(arg);
                 if (!Files.exists(inputFile))
                     return "File not found: " + arg;
-                else if (Files.isRegularFile(inputFile))
+                else if (!Files.isRegularFile(inputFile))
                     return "'" + arg + "' is not a file";
-                filesToCompile.add(inputFile);
+                filesToCompile.add(new SourceFile(inputFile));
             }
             index++;
+        }
+        
+        // Error if not input file is specified
+        if (filesToCompile.isEmpty()) {
+            displayShortHelp();
+            System.exit(1);
         }
         
         // Warn missing important stuff
@@ -130,18 +148,22 @@ public class CommandLine {
         return compilerOptions;
     }
     
-    public List<Path> getFilesToCompile() {
+    public List<SourceFile> getFilesToCompile() {
         return filesToCompile;
     }
     
-    public void displayHelp() {
-        String appCommandLine = System.getProperty("jpackage.app-path");
-        if (appCommandLine == null) {
-            appCommandLine = "java -jar Modula2JavaTranslator.jar";
-        } else {
-            int lastSep = appCommandLine.lastIndexOf(File.separatorChar);
-            appCommandLine = appCommandLine.substring(lastSep + 1);
-        }
+    private void displayShortHelp() {
+        String appCommandLine = getAppCommandLine();
+        System.out.println("No input file(s) specified.");
+        System.out.println();
+        System.out.println("Usage: " + appCommandLine + " <input file>.mod -o <output directory> -p <java package>");
+        System.out.println("Example: " + appCommandLine + " MainModule.mod -o ./src/java -p org.example.generated");
+        System.out.println("  Only the main MODULE must be specified; dependencies will be compiled automatically.");
+        System.out.println("To show all available options: " + appCommandLine + " -h");
+    }
+    
+    private void displayHelp() {
+        String appCommandLine = getAppCommandLine();
         System.out.println("Usage: " + appCommandLine + " <input file> [<options>...]");
         System.out.println();
         System.out.println("<input file> must be a MODULE file. All required IMPLEMENTATION and DEFINITION modules will be compiled automatically");
@@ -162,9 +184,21 @@ public class CommandLine {
         System.out.println("  " + appCommandLine + " MyModule.mod --output src/java --package org.example");
         System.out.println("    Compiles \"MyModule.mod\" and all files it imports directly or indirectly, write the resulting Java files in the \"src/java\" directory, inside the \"org.example\" package");
     }
+
+    private String getAppCommandLine() {
+        String appCommandLine = System.getProperty("jpackage.app-path");
+        if (appCommandLine == null) {
+            appCommandLine = "java -jar Modula2JavaTranslator.jar";
+        } else {
+            int lastSep = appCommandLine.lastIndexOf(File.separatorChar);
+            appCommandLine = appCommandLine.substring(lastSep + 1);
+        }
+        return appCommandLine;
+    }
     
     public static void main(String[] args) {
         new CommandLine().displayHelp();
+        System.out.println("\n");
         new CommandLine().parse(args);
     }
 
