@@ -64,6 +64,7 @@ public class Modula2JavaTranslator { // TODO (0) convert to a command-line that 
         CompilerOptions compilerOptions = new CompilerOptions();
         compilerOptions.setTargetPackageMain(TARGET_PACKAGE);
         compilerOptions.setTargetPackageLib(TARGET_PACKAGE_LIBRARY);
+        compilerOptions.setAlwaysOverrideStubs(false);
         application = new Application(compilerOptions);
     }
     

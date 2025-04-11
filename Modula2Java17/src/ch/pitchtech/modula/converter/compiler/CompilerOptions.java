@@ -9,6 +9,7 @@ public class CompilerOptions {
     private boolean markSimplifiedWith = false;
     private boolean optimizeUnwrittenByRefArguments = true;
     private boolean inlineProcedureAsExpression = false;
+    private boolean alwaysOverrideStubs = false;
     
     private String targetPackageMain; // Target package for main Java files
     private String targetPackageLib; // Target package for library Java files
@@ -78,6 +79,14 @@ public class CompilerOptions {
 
     public void setInlineProcedureAsExpression(boolean inlineProcedureAsExpression) {
         this.inlineProcedureAsExpression = inlineProcedureAsExpression;
+    }
+    
+    public boolean isAlwaysOverrideStubs() {
+        return alwaysOverrideStubs;
+    }
+    
+    public void setAlwaysOverrideStubs(boolean alwaysOverrideStubs) {
+        this.alwaysOverrideStubs = alwaysOverrideStubs;
     }
 
     public String getTargetPackageMain() {

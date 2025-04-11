@@ -46,9 +46,6 @@ import ch.pitchtech.modula.converter.utils.Logger;
 
 public class Compiler {
 
-    // TODO (1) as arguments
-    private final static boolean ALWAYS_OVERRIDE_STUB = false;
-
     private final FileOptions fileOptions;
     private final CompilerOptions compilerOptions;
     private final Application application;
@@ -251,7 +248,7 @@ public class Compiler {
             if (!Files.isRegularFile(m2implFile)) {
                 // .def file (DEFINITION) has no corresponding .mod file (IMPLEMENTATION)
                 Path javaImplFile = targetLibraryDir.resolve(definitionModule.getName() + ".java");
-                if (!Files.isRegularFile(javaImplFile) || ALWAYS_OVERRIDE_STUB) {
+                if (!Files.isRegularFile(javaImplFile) || compilerOptions.isAlwaysOverrideStubs()) {
                     // Stub implementation does not exist. Create it
                     ResultContext stubImpl = new ResultContext(application.getCompilerOptions());
                     new StubImplementationGenerator(definitionModule).generate(stubImpl);
