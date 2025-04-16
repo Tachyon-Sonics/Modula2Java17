@@ -4,7 +4,7 @@ import java.nio.file.Path;
 
 public class FileOptions {
     
-    private Path m2sourceDir;
+    private Path m2sourceDir; // TODO (2) allow multiple directories, add as command line option (default "./")
     private Path targetMainDir;
     private Path targetLibraryDir;
     

@@ -12,9 +12,9 @@ import ch.pitchtech.modula.converter.compiler.SourceFile;
 
 public class CompileGrotte {
 
-    private final static String SOURCE_DIRECTORY = "../../ChaosCastle/ChaosCastle/modula2";
-    private final static String TARGET_DIRECTORY_MAIN = "../../ChaosCastle/ChaosCastle/src";
-    private final static String TARGET_DIRECTORY_LIBRARY = "../../ChaosCastle/ChaosCastle/src";
+    private final static String SOURCE_DIRECTORY = "../../ChaosCastle/Grotte/modula2";
+    private final static String TARGET_DIRECTORY_MAIN = "../../ChaosCastle/Grotte/src";
+    private final static String TARGET_DIRECTORY_LIBRARY = "../../ChaosCastle/Library/src";
 
     
     public static void main0(String[] args) throws IOException {
@@ -40,7 +40,7 @@ public class CompileGrotte {
                 grotteMod.toString(),
                 "-" + CmdOptions.TARGET_MAIN_DIR.getName(), Path.of(TARGET_DIRECTORY_MAIN).toString(),
                 "-" + CmdOptions.TARGET_LIBRARY_DIR.getName(), Path.of(TARGET_DIRECTORY_LIBRARY).toString(),
-                "-" + CmdOptions.TARGET_PACKAGE_MAIN.getName(), "ch.chaos.castle",
+                "-" + CmdOptions.TARGET_PACKAGE_MAIN.getName(), "ch.chaos.grotte",
                 "-" + CmdOptions.TARGET_PACKAGE_LIB.getName(), "ch.chaos.library"
                 );
         Modula2JavaTranslator.main(args.toArray(String[]::new));

@@ -12,7 +12,7 @@ public class CompileChaosCastle {
 
     private final static String SOURCE_DIRECTORY = "../../ChaosCastle/ChaosCastle/modula2";
     private final static String TARGET_DIRECTORY_MAIN = "../../ChaosCastle/ChaosCastle/src";
-    private final static String TARGET_DIRECTORY_LIBRARY = "../../ChaosCastle/ChaosCastle/src";
+    private final static String TARGET_DIRECTORY_LIBRARY = "../../ChaosCastle/Library/src";
 
     
     public static void main(String[] args) throws IOException {
