@@ -20,7 +20,7 @@ public class CommandLine {
     private final List<SourceFile> filesToCompile = new ArrayList<>();
 
     
-    public CommandLine() { // TODO (1) continue, use
+    public CommandLine() {
         // Fill defaults
         fileOptions.setTargetMainDir(new File("").toPath());
         fileOptions.setTargetLibraryDir(new File("").toPath());
