@@ -110,8 +110,8 @@ public class Runtime {
             return new AdrRef(this);
         }
         
-        public default IRef<byte[]> asByteArray() {
-            return Runtime.asByteArray(this);
+        public default IRef<byte[]> asByteArray(int m2size) {
+            return Runtime.asByteArray(this, m2size);
         }
         
     }
@@ -739,11 +739,11 @@ public class Runtime {
      * An argument of type "ARRAY OF BYTE" is compatible with anything. This method implements the conversion of anything
      * to an array of byte.
      */
-    public static byte[] toByteArray(Object item) {
-        return toByteBuffer(item).array();
+    public static byte[] toByteArray(Object item, int m2size) {
+        return toByteBuffer(item, m2size).array();
     }
 
-    private static ByteBuffer toByteBuffer(Object item) {
+    private static ByteBuffer toByteBuffer(Object item, int m2size) {
         if (item instanceof byte[] bArray) {
             return ByteBuffer.wrap(bArray);
         } else if (item instanceof Long number) {
@@ -785,9 +785,10 @@ public class Runtime {
         } else if (item.getClass().isArray()) {
             ByteArrayOutputStream result = new ByteArrayOutputStream();
             try {
-                for (int i = 0; i < Array.getLength(item); i++) {
+                int length = Array.getLength(item);
+                for (int i = 0; i < length; i++) {
                     Object element = Array.get(item, i);
-                    byte[] elementBytes = toByteArray(element);
+                    byte[] elementBytes = toByteArray(element, m2size / length);
                     result.write(elementBytes);
                 }
                 result.flush();
@@ -829,10 +830,10 @@ public class Runtime {
         }
     }
 
-    public static IRef<byte[]> asByteArray(IRef<?> itemRef) { // TODO (1) pass the Modula-2 type so we can use the correct size
+    public static IRef<byte[]> asByteArray(IRef<?> itemRef, int m2size) { // TODO (1) use the m2size everywhere
         Object value = itemRef.get();
         Class<?> type = value.getClass();
-        byte[] data0 = toByteArray(value);
+        byte[] data0 = toByteArray(value, m2size);
         return new IRef<byte[]>() {
 
             private byte[] data = data0;

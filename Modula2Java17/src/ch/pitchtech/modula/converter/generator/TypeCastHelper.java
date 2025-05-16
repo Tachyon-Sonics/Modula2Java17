@@ -477,21 +477,21 @@ public class TypeCastHelper {
                         ResultContext result = resultContext.subContext();
                         result.write("Runtime.asByteArray("); // XX get value's type size
                         Expressions.getGenerator(scopeUnit, value).generate(result);
-                        result.write(" /* , " + m2Size + "*/");
+                        result.write(", " + m2Size);
                         result.write(")");
                         return result;
                     } else { // TODO X try using only this version, it is more generic and should also work (refactor as necessary)
                         ResultContext result = resultContext.subContext();
                         result.write("Runtime.asByteArray("); // XX get value's type size
                         result.write(getValueTypeReference(scopeUnit, value));
-                        result.write(" /* , " + m2Size + "*/");
+                        result.write(", " + m2Size);
                         result.write(")");
                         return result;
                     }
                 }
                 resultContext.ensureJavaImport(Runtime.class);
                 preValueContext.write("Runtime.toByteArray(");
-                postValueContext.write(" /* , " + m2Size + "*/");
+                postValueContext.write(", " + m2Size);
                 postValueContext.write(")");
             }
         }

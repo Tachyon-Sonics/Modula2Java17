@@ -223,7 +223,7 @@ public abstract class MethodCallGenerator extends Generator {
                         } else if (TypeHelper.isOpenArrayOfBytes(formalType, scopeUnit.getScope())) {
                             // Wrap an IRef<?> into an IRef<byte[]>
                             int m2Size = SizeCalculator.getModulaSizeOf(byRefVariable, result, actualType);
-                            result.write(".asByteArray(/*" + m2Size + "*/)"); // XX size calculated from actualType?
+                            result.write(".asByteArray(" + m2Size + ")"); // XX size calculated from actualType?
                         }
                         return;
                     }
