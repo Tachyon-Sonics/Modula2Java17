@@ -740,7 +740,7 @@ public class Runtime {
      * to an array of byte.
      */
     public static byte[] toByteArray(Object item, int m2size) {
-        return toByteBuffer(item, m2size).array();
+        return toByteBuffer(item, m2size).array(); // TODO (1) crop result here accoring to size
     }
 
     private static ByteBuffer toByteBuffer(Object item, int m2size) {
@@ -842,7 +842,7 @@ public class Runtime {
             @Override
             public void set(byte[] bArr) {
                 this.data = bArr;
-                Object newValue = fromByteArray(ByteBuffer.wrap(bArr), type);
+                Object newValue = fromByteArray(ByteBuffer.wrap(bArr), type); // TODO (1) expand buffer here?
                 ((IRef<Object>) itemRef).set(newValue);
             }
 
