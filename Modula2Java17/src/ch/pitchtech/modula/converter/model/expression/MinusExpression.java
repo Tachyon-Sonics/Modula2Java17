@@ -50,7 +50,7 @@ public class MinusExpression extends SourceElement implements IExpression {
         if (type instanceof LiteralType literalType && literalType.isBuiltIn()) {
             BuiltInType biType = BuiltInType.valueOf(literalType.getName());
             if (biType.isNumeric() && !biType.isDecimal()) {
-                if (biType.getSize() < BuiltInType.javaInt().getSize())
+                if (biType.getJavaSize() < BuiltInType.javaInt().getJavaSize())
                     return new LiteralType(BuiltInType.javaInt()); // Java promotes to at least "int"
             }
         }

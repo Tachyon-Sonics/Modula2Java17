@@ -179,7 +179,7 @@ public class BuiltInFunctionCallGenerator extends Generator {
         }
         
         argumentType = result.resolveType(argumentType);
-        int calculatedSize = SizeCalculator.getSizeOf(functionCall, result, argumentType);
+        int calculatedSize = SizeCalculator.getJavaSizeOf(functionCall, result, argumentType);
         result.write("Runtime.sizeOf(");
         result.write(String.valueOf(calculatedSize));
         result.write(", ");

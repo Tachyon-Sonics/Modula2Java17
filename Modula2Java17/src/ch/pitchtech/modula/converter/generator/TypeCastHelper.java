@@ -7,6 +7,7 @@ import ch.pitchtech.modula.converter.compiler.CompilerException;
 import ch.pitchtech.modula.converter.generator.expression.ArrayAccessGenerator;
 import ch.pitchtech.modula.converter.generator.expression.Expressions;
 import ch.pitchtech.modula.converter.generator.expression.IdentifierGenerator;
+import ch.pitchtech.modula.converter.generator.expression.SizeCalculator;
 import ch.pitchtech.modula.converter.generator.expression.StringLiteralGenerator;
 import ch.pitchtech.modula.converter.generator.field.VariableDefinitionGenerator;
 import ch.pitchtech.modula.converter.generator.statement.WithStatementGenerator;
@@ -83,7 +84,8 @@ public class TypeCastHelper {
         if (result != null)
             return result;
         
-        result = handleCastToArrayOfBytes(targetType, value, varArgument, preValueContext, postValueContext, scopeUnit);
+        result = handleCastToArrayOfBytes(targetType, valueType, value, varArgument, preValueContext, postValueContext, 
+                scopeUnit, value);
         if (result != null)
             return result;
         
@@ -104,8 +106,8 @@ public class TypeCastHelper {
                 BuiltInType btTarget = BuiltInType.valueOf(literalTargetType.getName());
                 BuiltInType btValue = BuiltInType.valueOf(literalValueType.getName());
                 if (!constantAssignment) {
-                    int targetSize = btTarget.getSize();
-                    int valueSize = btValue.getSize();
+                    int targetSize = btTarget.getJavaSize();
+                    int valueSize = btValue.getJavaSize();
                     
 //                    Integer I, J = 0;
 //                    int i, j = 0;
@@ -456,13 +458,14 @@ public class TypeCastHelper {
     /**
      * @param varParameter whether to cast for a VAR argument
      */
-    private ResultContext handleCastToArrayOfBytes(IType targetType, IExpression value, boolean varParameter,
-            ResultContext preValueContext, ResultContext postValueContext, IHasScope scopeUnit) {
+    private ResultContext handleCastToArrayOfBytes(IType targetType, IType valueType, IExpression value, boolean varParameter,
+            ResultContext preValueContext, ResultContext postValueContext, IHasScope scopeUnit, Object sourceElement) {
         // Anything to "ARRAY OF BYTE" 
         // TODO we should probably use IRef<?> instead of byte[] after VAR promotion
         if (targetType instanceof OpenArrayType openArrayType) {
             IType elementType = resultContext.resolveType(openArrayType.getElementType());
             if (elementType.isBuiltInType(BuiltInType.BYTE)) {
+                int m2Size = SizeCalculator.getModulaSizeOf(sourceElement, resultContext, valueType);
                 if (varParameter) {
                     VariableDefinition variableDefinition = null;
                     if (value instanceof Identifier identifier) {
@@ -472,20 +475,23 @@ public class TypeCastHelper {
                         // we should be in an variableDefinition.asRef(...) block already
                         resultContext.ensureJavaImport(Runtime.class);
                         ResultContext result = resultContext.subContext();
-                        result.write("Runtime.asByteArray(");
+                        result.write("Runtime.asByteArray("); // XX get value's type size
                         Expressions.getGenerator(scopeUnit, value).generate(result);
+                        result.write(" /* , " + m2Size + "*/");
                         result.write(")");
                         return result;
                     } else { // TODO X try using only this version, it is more generic and should also work (refactor as necessary)
                         ResultContext result = resultContext.subContext();
-                        result.write("Runtime.asByteArray(");
+                        result.write("Runtime.asByteArray("); // XX get value's type size
                         result.write(getValueTypeReference(scopeUnit, value));
+                        result.write(" /* , " + m2Size + "*/");
                         result.write(")");
                         return result;
                     }
                 }
                 resultContext.ensureJavaImport(Runtime.class);
                 preValueContext.write("Runtime.toByteArray(");
+                postValueContext.write(" /* , " + m2Size + "*/");
                 postValueContext.write(")");
             }
         }

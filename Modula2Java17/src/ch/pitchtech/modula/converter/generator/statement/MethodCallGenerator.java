@@ -10,6 +10,7 @@ import ch.pitchtech.modula.converter.generator.Generator;
 import ch.pitchtech.modula.converter.generator.ResultContext;
 import ch.pitchtech.modula.converter.generator.TypeCastHelper;
 import ch.pitchtech.modula.converter.generator.expression.IdentifierGenerator;
+import ch.pitchtech.modula.converter.generator.expression.SizeCalculator;
 import ch.pitchtech.modula.converter.generator.type.TypeHelper;
 import ch.pitchtech.modula.converter.model.block.ConstantDefinition;
 import ch.pitchtech.modula.converter.model.block.FormalArgument;
@@ -221,7 +222,8 @@ public abstract class MethodCallGenerator extends Generator {
                             result.write(".asAdrRef()"); // TODO there should be similar code if we have an assignment ADDRESS:= POINTER (with both variables by ref)
                         } else if (TypeHelper.isOpenArrayOfBytes(formalType, scopeUnit.getScope())) {
                             // Wrap an IRef<?> into an IRef<byte[]>
-                            result.write(".asByteArray()");
+                            int m2Size = SizeCalculator.getModulaSizeOf(byRefVariable, result, actualType);
+                            result.write(".asByteArray(/*" + m2Size + "*/)"); // XX size calculated from actualType?
                         }
                         return;
                     }

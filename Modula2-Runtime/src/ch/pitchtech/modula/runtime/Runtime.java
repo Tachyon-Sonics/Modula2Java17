@@ -829,7 +829,7 @@ public class Runtime {
         }
     }
 
-    public static IRef<byte[]> asByteArray(IRef<?> itemRef) { // TODO (5) pass the Modula-2 type so we can use the correct size
+    public static IRef<byte[]> asByteArray(IRef<?> itemRef) { // TODO (1) pass the Modula-2 type so we can use the correct size
         Object value = itemRef.get();
         Class<?> type = value.getClass();
         byte[] data0 = toByteArray(value);

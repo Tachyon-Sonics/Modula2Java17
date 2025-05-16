@@ -120,7 +120,7 @@ public class VariableDefinitionGenerator extends Generator {
             if (literalType.isBuiltIn()) {
                 BuiltInType biType = BuiltInType.valueOf(literalType.getName());
                 String value = switch (biType) {
-                    case BYTE, WORD, SHORTINT, SHORTCARD, INTEGER, CARDINAL, LONGINT, LONGCARD, LONGWORD -> (biType.getSize() == 8 ? "0L" : "0");
+                    case BYTE, WORD, SHORTINT, SHORTCARD, INTEGER, CARDINAL, LONGINT, LONGCARD, LONGWORD -> (biType.getJavaSize() == 8 ? "0L" : "0");
                     case REAL -> "0.0f";
                     case LONGREAL -> "0.0";
                     case BOOLEAN -> "false";
@@ -131,7 +131,7 @@ public class VariableDefinitionGenerator extends Generator {
                 };
                 BuiltInType initValueType = switch(biType) {
                     case BYTE, WORD, SHORTINT, SHORTCARD, INTEGER, CARDINAL, LONGINT, LONGCARD, LONGWORD -> {
-                        if (biType.getSize() == 8)
+                        if (biType.getJavaSize() == 8)
                             yield BuiltInType.forJavaSize(8);
                         else
                             yield BuiltInType.forJavaSize(4);
@@ -144,7 +144,7 @@ public class VariableDefinitionGenerator extends Generator {
                     case CHAR -> BuiltInType.CHAR;
                     case STRING -> BuiltInType.STRING;
                 };
-                if (initValueType.isNumeric() && biType.isNumeric() && initValueType.getSize() > biType.getSize() && !assignment) {
+                if (initValueType.isNumeric() && biType.isNumeric() && initValueType.getJavaSize() > biType.getJavaSize() && !assignment) {
                     // Add a down-cast
                     result.write("(" + biType.getJavaType() + ") ");
                 }

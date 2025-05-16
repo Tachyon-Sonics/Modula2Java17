@@ -7,25 +7,26 @@ import ch.pitchtech.modula.converter.compiler.CompilationException;
 import ch.pitchtech.modula.converter.model.scope.IScope;
 
 public enum BuiltInType {
-    INTEGER(2, "short", "Short", true, true, false),
-    SHORTINT(1, "byte", "Byte", true, true, false),
-    LONGINT(4, "int", "Integer", true, true, false),
-    CARDINAL(4, "int", "Integer", true, false, false),
-    SHORTCARD(2, "short", "Short", true, false, false),
-    LONGCARD(8, "long", "Long", true, false, false),
-    REAL(4, "float", "Float", true, true, true),
-    LONGREAL(8, "double", "Double", true, true, true),
-    CHAR(1, "char", "Character"),
-    BOOLEAN(1, "boolean", "Boolean"),
-    BITSET(2, "Runtime.RangSet", "Runtime.RangSet"),
-    ADDRESS(8, "Object", "Object"),
-    PROC(8, "Runnable", "Runnable"),
-    BYTE(1, "byte", "Byte"),
-    WORD(2, "short", "Short"),
-    LONGWORD(4, "int", "Integer"),
-    STRING(8, "String", "String"); // For constants only
+    INTEGER(2, 2, "short", "Short", true, true, false),
+    SHORTINT(1, 1, "byte", "Byte", true, true, false),
+    LONGINT(4, 4, "int", "Integer", true, true, false),
+    CARDINAL(4, 2, "int", "Integer", true, false, false),
+    SHORTCARD(2, 1, "short", "Short", true, false, false),
+    LONGCARD(8, 4, "long", "Long", true, false, false),
+    REAL(4, 4, "float", "Float", true, true, true),
+    LONGREAL(8, 8, "double", "Double", true, true, true),
+    CHAR(1, 1, "char", "Character"),
+    BOOLEAN(1, 1, "boolean", "Boolean"),
+    BITSET(4, 2, "Runtime.RangSet", "Runtime.RangSet"),
+    ADDRESS(8, 4, "Object", "Object"),
+    PROC(8, 4, "Runnable", "Runnable"),
+    BYTE(1, 1, "byte", "Byte"),
+    WORD(2, 2, "short", "Short"),
+    LONGWORD(4, 4, "int", "Integer"),
+    STRING(8, 4, "String", "String"); // For constants only
     
-    private final int size; // TODO differentiate java size and modula-2 size (with eg. LONGCARD = 4)
+    private final int javaSize;
+    private final int modulaSize;
     private final String javaType;
     private final String boxedType;
     private final boolean numeric;
@@ -33,12 +34,13 @@ public enum BuiltInType {
     private final boolean decimal;
     
     
-    private BuiltInType(int size, String javaType, String boxedType) {
-        this(size, javaType, boxedType, false, false, false);
+    private BuiltInType(int javaSize, int modulaSize, String javaType, String boxedType) {
+        this(javaSize, modulaSize, javaType, boxedType, false, false, false);
     }
     
-    private BuiltInType(int size, String javaType, String boxedType, boolean numeric, boolean signed, boolean decimal) {
-        this.size = size;
+    private BuiltInType(int javaSize, int modulaSize, String javaType, String boxedType, boolean numeric, boolean signed, boolean decimal) {
+        this.javaSize = javaSize;
+        this.modulaSize = modulaSize;
         this.javaType = javaType;
         this.boxedType = boxedType;
         this.numeric = numeric;
@@ -46,10 +48,14 @@ public enum BuiltInType {
         this.decimal = decimal;
     }
     
-    public int getSize() {
-        return size;
+    public int getJavaSize() {
+        return javaSize;
     }
     
+    public int getModulaSize() {
+        return modulaSize;
+    }
+
     public String getJavaType() {
         return javaType;
     }
@@ -75,7 +81,7 @@ public enum BuiltInType {
     
     public static BuiltInType forJavaSize(int javaSize) {
         for (BuiltInType bit : BuiltInType.values()) {
-            if (bit.getSize() == javaSize)
+            if (bit.getJavaSize() == javaSize)
                 return bit;
         }
         throw new IllegalArgumentException("No built-in type with Java size " + javaSize);
@@ -84,9 +90,9 @@ public enum BuiltInType {
     public static BuiltInType largestNumeric(IScope scope, BuiltInType t1, BuiltInType t2) {
         if (!t1.isNumeric() || !t2.isNumeric())
             throw new CompilationException(scope, "Types are not both numeric");
-        if (t1.getSize() > t2.getSize()) {
+        if (t1.getJavaSize() > t2.getJavaSize()) {
             return t1;
-        } else if (t1.getSize() < t2.getSize()) {
+        } else if (t1.getJavaSize() < t2.getJavaSize()) {
             return t2;
         } else if (t1.isNumeric()) {
             return t1;
@@ -101,7 +107,7 @@ public enum BuiltInType {
     
     public static BuiltInType javaInfixNumeric(IScope scope, BuiltInType t1, BuiltInType t2) {
         BuiltInType result = largestNumeric(scope, t1, t2);
-        if (result.size < BuiltInType.javaInt().size)
+        if (result.javaSize < BuiltInType.javaInt().javaSize)
             return BuiltInType.javaInt(); // Java casts smaller types to "int" after an operation
         return result;
     }
