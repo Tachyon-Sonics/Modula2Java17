@@ -738,11 +738,35 @@ public class Runtime {
     /**
      * An argument of type "ARRAY OF BYTE" is compatible with anything. This method implements the conversion of anything
      * to an array of byte.
+     * <p>
+     * The resulting byte array contains the value, stored according to the size of the Modula-2 types
      */
     public static byte[] toByteArray(Object item, int m2size) {
-        return toByteBuffer(item, m2size).array(); // TODO (1) crop result here accoring to size
+        ByteBuffer byteBuffer = toByteBuffer(item, m2size);
+        if (byteBuffer.capacity() > m2size) {
+            /*
+             * The Modula-2 size is smaller than the Java size.
+             * Crop to the Modula-2 size, obeying big-endian storage order.
+             */
+            byteBuffer = byteBuffer.slice(byteBuffer.capacity() - m2size, m2size);
+        } else {
+            byteBuffer.position(0);
+        }
+        byte[] result = new byte[m2size];
+        byteBuffer.get(result);
+        return result;
     }
 
+    /**
+     * Convert an arbitrary primitive value or array to a {@link ByteBuffer}.
+     * <p>
+     * This method uses the Java size, except for arrays that recurse to {@link #toByteArray(Object, int)}.
+     * The caller, usually {@link #toByteArray(Object, int)} then crops to the Modula-2 size.
+     * <p>
+     * The {@link ByteBuffer} uses big-endian ordering.
+     * <p>
+     * {@link Character} and {@link Boolean} are converted to a single byte.
+     */
     private static ByteBuffer toByteBuffer(Object item, int m2size) {
         if (item instanceof byte[] bArray) {
             return ByteBuffer.wrap(bArray);
@@ -830,7 +854,14 @@ public class Runtime {
         }
     }
 
-    public static IRef<byte[]> asByteArray(IRef<?> itemRef, int m2size) { // TODO (1) use the m2size everywhere
+    /**
+     * Return a <tt>byte[]</tt> {@link IRef} view of the given reference to an arbitrary value
+     * (primitive type or array). Changing the array in the retured ref will affect the value,
+     * as long as mutations are performed using the setter {@link IRef#set(Object)}.
+     * <p>
+     * This is used to convert anything to a <tt>VAR</tt> argument of type <tt>ARRAY OF CHAR</tt>.
+     */
+    public static IRef<byte[]> asByteArray(IRef<?> itemRef, int m2size) {
         Object value = itemRef.get();
         Class<?> type = value.getClass();
         byte[] data0 = toByteArray(value, m2size);
@@ -842,7 +873,17 @@ public class Runtime {
             @Override
             public void set(byte[] bArr) {
                 this.data = bArr;
-                Object newValue = fromByteArray(ByteBuffer.wrap(bArr), type); // TODO (1) expand buffer here?
+                int javaSize = JavaTypesHelper.getSize(type);
+                if (javaSize > 0 && javaSize > m2size) {
+                    /*
+                     * The Modula-2 size is smaller than the Java size. Expand
+                     * the buffer, obeying big-ending ordering
+                     */
+                    byte[] temp = new byte[javaSize];
+                    System.arraycopy(bArr, 0, temp, javaSize - m2size, m2size);
+                    bArr = temp;
+                }
+                Object newValue = fromByteArray(ByteBuffer.wrap(bArr), type);
                 ((IRef<Object>) itemRef).set(newValue);
             }
 
