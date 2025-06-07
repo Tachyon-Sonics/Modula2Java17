@@ -18,3 +18,6 @@ project(":Modula2Java17").projectDir = File("../../Modula2Java17/Modula2Java17")
 
 include(":Modula2-Runtime")
 project(":Modula2-Runtime").projectDir = File("../../Modula2Java17/Modula2-Runtime")
+
+include(":Modula2-Library")
+project(":Modula2-Library").projectDir = File("../../Modula2Java17/Modula2-Library")

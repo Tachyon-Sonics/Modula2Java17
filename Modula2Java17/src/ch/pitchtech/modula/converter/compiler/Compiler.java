@@ -112,13 +112,13 @@ public class Compiler {
             parsed.add(sourceFile);
             if (!SourceFileHelper.isDefinition(sourceFile) && !mainModuleFilesList.contains(sourceFile)) {
                 // This is an implementation. Make it dependent from its definition
-                SourceFile definitionSourceFile = SourceFileHelper.lookupDefinition(sourceFile);
+                SourceFile definitionSourceFile = SourceFileHelper.lookupDefinition(sourceFile, fileOptions);
                 sourceFile.getDeps().add(definitionSourceFile);
             }
             
             // Parse it
             CompilationUnitContext cuContext = parse(sourceFile, (String dep) -> {
-                SourceFile depFile = SourceFileHelper.lookupDefinition(sourceFile, dep);
+                SourceFile depFile = SourceFileHelper.lookupDefinition(sourceFile, dep, fileOptions);
                 if (depFile != null) {
                     sourceFile.getDeps().add(depFile);
                     if (!parsed.contains(depFile) && !toParse.contains(depFile)) { // Not already parsed
@@ -131,7 +131,7 @@ public class Compiler {
             
             if (SourceFileHelper.isDefinition(sourceFile)) {
                 // This is a DEFINITION. Add the corresponding IMPLEMENTATION to the list of files to compile
-                SourceFile implementationSourceFile = SourceFileHelper.lookupImplementation(sourceFile);
+                SourceFile implementationSourceFile = SourceFileHelper.lookupImplementation(sourceFile, fileOptions);
                 if (implementationSourceFile != null) {
                     toParse.add(implementationSourceFile);
                 }

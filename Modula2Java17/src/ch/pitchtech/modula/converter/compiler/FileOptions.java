@@ -1,10 +1,12 @@
 package ch.pitchtech.modula.converter.compiler;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FileOptions {
     
-    private Path m2sourceDir; // TODO (2) allow multiple directories, add as command line option (default "./")
+    private final List<Path> m2sourceDirs = new ArrayList<>();
     private Path targetMainDir;
     private Path targetLibraryDir;
     
@@ -14,19 +16,19 @@ public class FileOptions {
     }
     
     public FileOptions(Path m2sourceDir, Path targetMainDir, Path targetLibraryDir) {
-        this.m2sourceDir = m2sourceDir;
+        this.m2sourceDirs.add(m2sourceDir);
         this.targetMainDir = targetMainDir;
         this.targetLibraryDir = targetLibraryDir;
     }
+    
+    public void addM2sourceDir(Path m2sourceDir) {
+        m2sourceDirs.add(m2sourceDir);
+    }
+    
+    public List<Path> getM2sourceDirs() {
+        return m2sourceDirs;
+    }
 
-    public Path getM2sourceDir() {
-        return m2sourceDir;
-    }
-    
-    public void setM2sourceDir(Path m2sourceDir) {
-        this.m2sourceDir = m2sourceDir;
-    }
-    
     public Path getTargetMainDir() {
         return targetMainDir;
     }

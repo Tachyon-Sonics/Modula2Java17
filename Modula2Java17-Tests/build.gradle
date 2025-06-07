@@ -9,6 +9,7 @@ dependencies {
 	// Dependency on another Eclipse project (assuming it's a local project)
     implementation project(':Modula2Java17')
     implementation project(':Modula2-Runtime')
+    implementation project(':Modula2-Library')
 
     implementation("junit:junit:4.13.2")
 }

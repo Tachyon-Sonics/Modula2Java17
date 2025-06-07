@@ -31,6 +31,10 @@ public class InOut {
         return instance;
     }
     
+    public void begin() {
+        
+    }
+    
     private BufferedReader reader() {
         if (consoleReader == null) {
             consoleReader = new BufferedReader(new InputStreamReader(System.in));
@@ -97,6 +101,21 @@ public class InOut {
     
     public void WriteLn() {
         System.out.println();
+    }
+    
+    public void WriteInt(int value, long n) {
+        String str = "" + value;
+        if (str.length() < n) {
+            StringBuilder prefix = new StringBuilder();
+            for (int k = 0; k < n - str.length(); k++)
+                prefix.append(' ');
+            str = prefix.toString() + str;
+        }
+        System.out.print(str);
+    }
+    
+    public void close() {
+        
     }
 
 }
