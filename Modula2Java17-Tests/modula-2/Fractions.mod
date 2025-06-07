@@ -9,7 +9,7 @@ CONST  Base = 10;
 VAR    i, j, m, rem       : INTEGER;
        d                  : ARRAY [1..N] OF INTEGER;
        x                  : ARRAY [0..N] OF INTEGER;
-			 
+                         
 
 BEGIN
    FOR i := 2 TO N DO
@@ -18,10 +18,10 @@ BEGIN
       rem := 1;
       REPEAT
          INC (m);
-	 x[rem] := m;	 
+         x[rem] := m;         
          rem := Base * rem;
-	 d[m] := rem DIV i;
-	 rem := rem MOD i
+         d[m] := rem DIV i;
+         rem := rem MOD i
       UNTIL x[rem] # 0;
       WriteInt (i, 6);
       WriteString (" 0.");
