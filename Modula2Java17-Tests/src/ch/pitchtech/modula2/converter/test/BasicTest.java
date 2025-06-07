@@ -15,7 +15,7 @@ import ch.pitchtech.modula.converter.compiler.SourceFile;
 public class BasicTest {
 
 	@Test
-	public void testCompileBasicModule() throws IOException {
+	public void testCompileBasicModule() throws IOException { // TODO (0) create helpers and continue
 		Path targetDir = Files.createTempDirectory("compiled");
 		FileOptions fileOptions = new FileOptions();
 		fileOptions.setM2sourceDir(Path.of("modula-2"));
