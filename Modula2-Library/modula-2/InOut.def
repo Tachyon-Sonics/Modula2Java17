@@ -1,0 +1,98 @@
+DEFINITION MODULE InOut ;
+
+VAR
+   Done  : BOOLEAN ;
+   termCH: CHAR ;
+
+(*
+   Read - reads a single character from the current input file.
+          Done is set to FALSE if end of file is reached or an
+          error occurs.
+*)
+
+PROCEDURE Read (VAR ch: CHAR) ;
+
+
+(*
+   ReadString - reads a sequence of characters. Leading white space
+                is ignored and the string is terminated with a character
+                <= ' '
+*)
+
+PROCEDURE ReadString (VAR s: ARRAY OF CHAR) ;
+
+
+(*
+   WriteString - writes a string to the output file.
+*)
+
+PROCEDURE WriteString (s: ARRAY OF CHAR) ;
+
+
+(*
+   Write - writes out a single character, ch, to the current output file.
+*)
+
+PROCEDURE Write (ch: CHAR) ;
+
+
+(*
+   WriteLn - writes a newline to the output file.
+*)
+
+PROCEDURE WriteLn ;
+
+
+(*
+   ReadInt - reads a string and converts it into an INTEGER, x.
+             Done is set if an INTEGER is read.
+*)
+
+PROCEDURE ReadInt (VAR x: INTEGER) ;
+
+
+(*
+   ReadInt - reads a string and converts it into an INTEGER, x.
+             Done is set if an INTEGER is read.
+*)
+
+PROCEDURE ReadCard (VAR x: CARDINAL) ;
+
+
+(*
+   WriteCard - writes the CARDINAL, x, to the output file. It ensures
+               that the number occupies, n, characters. Leading spaces
+               are added if required.
+*)
+
+PROCEDURE WriteCard (x, n: CARDINAL) ;
+
+
+(*
+   WriteInt - writes the INTEGER, x, to the output file. It ensures
+              that the number occupies, n, characters. Leading spaces
+              are added if required.
+*)
+
+PROCEDURE WriteInt (x: INTEGER; n: CARDINAL) ;
+
+
+(*
+   WriteOct - writes the CARDINAL, x, to the output file in octal.
+              It ensures that the number occupies, n, characters.
+              Leading spaces are added if required.
+*)
+
+PROCEDURE WriteOct (x, n: CARDINAL) ;
+
+
+(*
+   WriteHex - writes the CARDINAL, x, to the output file in hexadecimal.
+              It ensures that the number occupies, n, characters.
+              Leading spaces are added if required.
+*)
+
+PROCEDURE WriteHex (x, n: CARDINAL) ;
+
+
+END InOut.
