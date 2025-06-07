@@ -10,8 +10,11 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
 
-rootProject.name = "Modula2Java17"
+rootProject.name = "Modula2Java17-Tests"
 //include("app")
+
+include(":Modula2Java17")
+project(":Modula2Java17").projectDir = File("../../Modula2Java17/Modula2Java17")
 
 include(":Modula2-Runtime")
 project(":Modula2-Runtime").projectDir = File("../../Modula2Java17/Modula2-Runtime")

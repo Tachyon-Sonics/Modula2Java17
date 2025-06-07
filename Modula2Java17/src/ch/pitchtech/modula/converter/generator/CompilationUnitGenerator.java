@@ -33,6 +33,8 @@ public abstract class CompilationUnitGenerator extends Generator {
             } else {
                 addRequiredImports(compilationUnit, context, result);
             }
+        } else {
+            addRequiredJavaImports(context, result);
         }
         Collections.sort(result);
         return result;
