@@ -6,12 +6,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import generated.test.Basic;
 import generated.test.Fractions;
 import generated.test.Harmonic;
 import generated.test.PowersOf2;
+import generated.test.Primes;
 
 public class BasicTest {
     
@@ -29,9 +31,9 @@ public class BasicTest {
     }
     
     /*
-     * Compile Fraction.mod taken from https://fruttenboel.nl/mhc/ ("Fractions").
-     * It required InOut in the standard library.
+     * Compile various files taken from https://fruttenboel.nl/mhc/.
      */
+
     @Test
     public void testCompileFractions() throws IOException, InvocationTargetException {
         CompilerHelper helper = new CompilerHelper();
@@ -66,6 +68,24 @@ public class BasicTest {
         ExecuteHelper executor = new ExecuteHelper();
         String output = executor.execute(PowersOf2::main);
         executor.assertOutput(getClass(), "PowersOf2.txt", output);
+    }
+    
+    @Test
+    public void testCompilePrimes() throws IOException, InvocationTargetException {
+        CompilerHelper helper = new CompilerHelper();
+        helper.compile("Primes.mod");
+        helper.assertCompilationResult(Primes.class);
+        
+        ExecuteHelper executor = new ExecuteHelper();
+        String output = executor.execute(Primes::main);
+        executor.assertOutput(getClass(), "Primes.txt", output);
+    }
+    
+    @Ignore // TODO (1) Handle qualified procedure call
+    @Test
+    public void testCompileEscapeSeq() throws IOException {
+        CompilerHelper helper = new CompilerHelper();
+        helper.compile("EscapeSeq.mod");
     }
 
 }
