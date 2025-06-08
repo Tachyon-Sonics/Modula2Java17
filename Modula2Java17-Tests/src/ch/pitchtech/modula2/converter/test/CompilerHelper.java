@@ -132,7 +132,7 @@ public class CompilerHelper {
     /**
      * Normalize new lines
      */
-    private static String cleanup(String content) {
+    static String cleanup(String content) {
         content = content.replace("\r\n", "\n").trim();
         return content;
     }

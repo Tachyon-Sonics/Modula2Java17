@@ -1,6 +1,7 @@
 package ch.pitchtech.modula2.converter.test;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -30,12 +31,16 @@ public class BasicTest {
      * It required InOut in the standard library.
      */
     @Test
-    public void testCompileFractions() throws IOException {
-        CompilerHelper helper = new CompilerHelper(); // TODO it shouldn't generate InOut.java skeleton
-        helper.compile("Fractions.mod"); // TODO continue: compare generated result with expected, then run expected result and check output
+    public void testCompileFractions() throws IOException, InvocationTargetException {
+        CompilerHelper helper = new CompilerHelper();
+        helper.compile("Fractions.mod");
         Path unexpectedInOut = helper.getTargetDir().resolve("generated").resolve("test").resolve("InOut.java");
         assert !Files.isRegularFile(unexpectedInOut);
         helper.assertCompilationResult(Fractions.class);
+        
+        ExecuteHelper executor = new ExecuteHelper();
+        String output = executor.execute(Fractions::main);
+        executor.assertOutput(getClass(), "Fractions.txt", output);
     }
 
 }
