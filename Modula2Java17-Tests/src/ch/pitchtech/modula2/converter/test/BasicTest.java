@@ -11,6 +11,7 @@ import org.junit.Test;
 import generated.test.Basic;
 import generated.test.Fractions;
 import generated.test.Harmonic;
+import generated.test.PowersOf2;
 
 public class BasicTest {
     
@@ -54,6 +55,17 @@ public class BasicTest {
         String input = "100\n1000\n10000\nq\n";
         String output = executor.executeWithInput(Harmonic::main, input);
         executor.assertOutput(getClass(), "Harmonic.txt", output);
+    }
+    
+    @Test
+    public void testCompilePowerOf2() throws IOException, InvocationTargetException {
+        CompilerHelper helper = new CompilerHelper();
+        helper.compile("PowersOf2.mod");
+        helper.assertCompilationResult(PowersOf2.class);
+        
+        ExecuteHelper executor = new ExecuteHelper();
+        String output = executor.execute(PowersOf2::main);
+        executor.assertOutput(getClass(), "PowersOf2.txt", output);
     }
 
 }

@@ -110,7 +110,6 @@ public class CompilerHelper {
                 .resolve(packageName.replace('.', File.separatorChar))
                 .resolve(className + ".java");
         String generated = cleanup(Files.readString(generatedFile));
-//        System.out.println(generated);
         
         // Remove any line to ignore
         for (String ignoreLine : ignoreLines) {
@@ -128,6 +127,8 @@ public class CompilerHelper {
         String expected = cleanup(Files.readString(expectedFile));
         
         // Compare
+        if (!expected.equals(generated))
+            System.out.println("*** Generated:\n" + generated);
         Assert.assertEquals(expected, generated);
     }
     
