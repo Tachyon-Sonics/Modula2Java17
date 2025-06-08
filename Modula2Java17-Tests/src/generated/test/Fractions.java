@@ -1,6 +1,6 @@
 package generated.test;
 
-import ch.pitchtech.modula.library.InOut;
+import ch.pitchtech.modula.library.*;
 import ch.pitchtech.modula.runtime.HaltException;
 import ch.pitchtech.modula.runtime.Runtime;
 
