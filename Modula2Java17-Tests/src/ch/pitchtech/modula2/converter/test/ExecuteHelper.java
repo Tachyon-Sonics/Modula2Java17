@@ -1,5 +1,6 @@
 package ch.pitchtech.modula2.converter.test;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,7 +39,34 @@ public class ExecuteHelper {
             System.setOut(previous);
         }
     }
-    
+
+    /**
+     * Execute a class' <tt>main</tt> method, and return its standard output
+     * @param stdIn data to supply to standard input
+     */
+    public String executeWithInput(IMainMethod mainMethod, String stdIn, String... args) throws InvocationTargetException {
+        InputStream previousIn = System.in;
+        PrintStream previousOut = System.out;
+        try {
+            InputStream input = new ByteArrayInputStream(stdIn.getBytes(StandardCharsets.UTF_8));
+            System.setIn(input);
+            
+            ByteArrayOutputStream bOutput = new ByteArrayOutputStream();
+            PrintStream stream = new PrintStream(bOutput, true, StandardCharsets.UTF_8);
+            System.setOut(stream);
+            try {
+                mainMethod.main(args);
+            } catch (Exception ex) {
+                throw new InvocationTargetException(ex);
+            }
+            stream.flush();
+            return new String(bOutput.toByteArray(), StandardCharsets.UTF_8);
+        } finally {
+            System.setOut(previousOut);
+            System.setIn(previousIn);
+        }
+    }
+
     /**
      * Assert the output from {@link #execute(IMainMethod, String...)} matches the expected one.
      * <p>

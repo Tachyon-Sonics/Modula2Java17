@@ -110,6 +110,8 @@ public class CompilerHelper {
                 .resolve(packageName.replace('.', File.separatorChar))
                 .resolve(className + ".java");
         String generated = cleanup(Files.readString(generatedFile));
+//        System.out.println(generated);
+        
         // Remove any line to ignore
         for (String ignoreLine : ignoreLines) {
             if (generated.contains(ignoreLine + "\n")) {

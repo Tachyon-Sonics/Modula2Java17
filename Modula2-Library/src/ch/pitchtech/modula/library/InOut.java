@@ -35,7 +35,7 @@ public class InOut {
         
     }
     
-    private BufferedReader reader() {
+    BufferedReader reader() {
         if (consoleReader == null) {
             consoleReader = new BufferedReader(new InputStreamReader(System.in));
         }
@@ -48,10 +48,10 @@ public class InOut {
             int data = reader().read();
             if (data < 0) {
                 ch.set((char) 0);
-                Done = true;
+                Done = false;
             } else {
                 ch.set((char) data);
-                Done = false;
+                Done = true;
             }
         } catch (IOException ex) {
             throw new RuntimeException(ex);
@@ -64,10 +64,10 @@ public class InOut {
             String line = reader().readLine();
             if (line == null) {
                 s.set("");
-                Done = true;
+                Done = false;
             } else {
                 s.set(line);
-                Done = false;
+                Done = true;
             }
         } catch (IOException ex) {
             throw new RuntimeException(ex);
@@ -99,6 +99,10 @@ public class InOut {
         System.out.print(ch);
     }
     
+    public void WriteBf() {
+        System.out.flush();
+    }
+    
     public void WriteLn() {
         System.out.println();
     }
@@ -112,6 +116,19 @@ public class InOut {
             str = prefix.toString() + str;
         }
         System.out.print(str);
+    }
+    
+    public void ReadLongInt(IRef<Integer> n) {
+        IRef<String> line = new Ref<>();
+        ReadString(line);
+        if (!Done)
+            return;
+        try {
+            int value = Integer.parseInt(line.get());
+            n.set(value);
+        } catch (NumberFormatException ex) {
+            Done = false;
+        }
     }
     
     public void close() {

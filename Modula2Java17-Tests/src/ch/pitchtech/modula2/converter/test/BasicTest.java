@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import generated.test.Basic;
 import generated.test.Fractions;
+import generated.test.Harmonic;
 
 public class BasicTest {
     
@@ -41,6 +42,18 @@ public class BasicTest {
         ExecuteHelper executor = new ExecuteHelper();
         String output = executor.execute(Fractions::main);
         executor.assertOutput(getClass(), "Fractions.txt", output);
+    }
+    
+    @Test
+    public void testCompileHarmonic() throws IOException, InvocationTargetException {
+        CompilerHelper helper = new CompilerHelper();
+        helper.compile("Harmonic.mod");
+        helper.assertCompilationResult(Harmonic.class);
+        
+        ExecuteHelper executor = new ExecuteHelper();
+        String input = "100\n1000\n10000\nq\n";
+        String output = executor.executeWithInput(Harmonic::main, input);
+        executor.assertOutput(getClass(), "Harmonic.txt", output);
     }
 
 }

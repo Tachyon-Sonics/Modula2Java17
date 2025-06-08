@@ -50,6 +50,8 @@ PROCEDURE WriteLn ;
 
 PROCEDURE ReadInt (VAR x: INTEGER) ;
 
+PROCEDURE ReadLongInt (VAR x: LONGINT) ;
+
 
 (*
    ReadInt - reads a string and converts it into an INTEGER, x.
@@ -93,6 +95,8 @@ PROCEDURE WriteOct (x, n: CARDINAL) ;
 *)
 
 PROCEDURE WriteHex (x, n: CARDINAL) ;
+
+PROCEDURE WriteBf;
 
 
 END InOut.
