@@ -21,7 +21,7 @@ public class FunctionCallGenerator extends MethodCallGenerator { // TODO (0) han
 
     @Override
     public void generate(ResultContext result) {
-        super.generate(null, functionCall.getFunctionName(), functionCall.getArguments(), result);
+        super.generate(functionCall.getQualifiedScope(), functionCall.getFunctionName(), functionCall.getArguments(), result);
     }
 
     @Override

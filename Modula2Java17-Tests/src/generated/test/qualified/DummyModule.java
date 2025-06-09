@@ -10,12 +10,27 @@ public class DummyModule {
     private final DummyLibrary dummyLibrary = DummyLibrary.instance();
 
 
+    // VAR
+
+    private int result;
+
+
+    public int getResult() {
+        return this.result;
+    }
+
+    public void setResult(int result) {
+        this.result = result;
+    }
+
+
     // Life Cycle
 
     private void begin() {
         DummyLibrary.instance().begin();
 
         dummyLibrary.DummyProcedure(42);
+        result = dummyLibrary.DummyFunction(42);
     }
 
     private void close() {

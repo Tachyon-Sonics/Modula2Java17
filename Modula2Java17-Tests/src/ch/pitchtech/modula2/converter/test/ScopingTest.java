@@ -11,11 +11,6 @@ import generated.test.qualified.DummyModule;
 
 public class ScopingTest {
 
-    @After
-    public void cleanup() {
-        CompilerHelper.cleanup();
-    }
-
     /**
      * Test compilation of 'DummyModule', using stuff from 'DummyLibrary' in a qualified manner
      * (qualified accesses used to be buggy)
@@ -36,6 +31,19 @@ public class ScopingTest {
         ExecuteHelper executor = new ExecuteHelper();
         String output = executor.execute(DummyModule::main);
         assert output.isEmpty();
+        
+        /*
+         * TODO continue with:
+         * - qualified constant
+         * - qualified type
+         * - qualified var
+         * - qualified call of a var of procedure type ?
+         */
+    }
+
+    @After
+    public void cleanup() {
+        CompilerHelper.cleanup();
     }
 
 }

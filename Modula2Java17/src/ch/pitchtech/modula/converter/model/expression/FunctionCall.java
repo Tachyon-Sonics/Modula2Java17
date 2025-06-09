@@ -87,6 +87,14 @@ public class FunctionCall extends SourceElement implements IExpression, IMethodC
         }
         return false;
     }
+    
+    public IScope getScopeUnit(IScope callerScope) {
+        if (moduleName != null) {
+            return this.scopeUnit.getScope(); // Use qualified scope
+        } else {
+            return callerScope; // Unqualified access: use caller's scope
+        }
+    }
 
     @Override
     public Object evaluateConstant() {
@@ -114,7 +122,7 @@ public class FunctionCall extends SourceElement implements IExpression, IMethodC
 
     @Override
     public IType getType(IScope scope, IType forType) {
-        ProcedureDefinition functionDefinition = scope.full().resolveProcedure(functionName);
+        ProcedureDefinition functionDefinition = getScopeUnit(scope).full().resolveProcedure(functionName);
         if (functionDefinition == null) {
             // Look for a variable of procedure type
             VariableDefinition variableDefinition = scope.full().resolveVariable(functionName);
