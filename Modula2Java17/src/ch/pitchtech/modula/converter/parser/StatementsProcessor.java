@@ -31,6 +31,7 @@ import ch.pitchtech.modula.converter.model.block.ProcedureImplementation;
 import ch.pitchtech.modula.converter.model.builtin.BuiltInProcedure;
 import ch.pitchtech.modula.converter.model.expression.IExpression;
 import ch.pitchtech.modula.converter.model.expression.Identifier;
+import ch.pitchtech.modula.converter.model.expression.QualifiedIdentifier;
 import ch.pitchtech.modula.converter.model.scope.IHasScope;
 import ch.pitchtech.modula.converter.model.scope.IScope;
 import ch.pitchtech.modula.converter.model.scope.ProcedureImplementationScope;
@@ -98,7 +99,7 @@ public class StatementsProcessor extends ProcessorBase {
                 }
             } else if (text.equals("EXIT")) {
                 expectNbChild(statementContext, 1);
-                return new ProcedureCall(loc(terminal), scopeUnit, BuiltInProcedure.EXIT.name());
+                return new ProcedureCall(loc(terminal), scopeUnit, null, BuiltInProcedure.EXIT.name());
             } else {
                 throw new UnexpectedTokenException(terminal);
             }
@@ -385,13 +386,20 @@ public class StatementsProcessor extends ProcessorBase {
     public ProcedureCall processProcedureCall(IHasScope scopeUnit, QualidentContext qualidentContext,
             ActualParametersContext actualParamsContext) {
         IExpression procedureId = new ExpressionsProcessor().processExpression(scopeUnit, qualidentContext);
-        if (!(procedureId instanceof Identifier identifier)) {
+        if (procedureId instanceof Identifier identifier) {
+            String procedureName = identifier.getName();
+            ProcedureCall procedureCall = new ProcedureCall(loc(qualidentContext), scopeUnit, null, procedureName);
+            processProcedureArguments(scopeUnit, actualParamsContext, procedureCall::addArguments);
+            return procedureCall;
+        } else if (procedureId instanceof QualifiedIdentifier qi) {
+            String moduleName = qi.getModule();
+            String procedureName = qi.getName();
+            ProcedureCall procedureCall = new ProcedureCall(loc(qualidentContext), qi.getScopeUnit(), moduleName, procedureName);
+            processProcedureArguments(scopeUnit, actualParamsContext, procedureCall::addArguments);
+            return procedureCall;
+        } else {
             throw new UnexpectedTokenException(qualidentContext, "Expected a procedure name");
         }
-        String procedureName = identifier.getName();
-        ProcedureCall procedureCall = new ProcedureCall(loc(qualidentContext), scopeUnit, procedureName);
-        processProcedureArguments(scopeUnit, actualParamsContext, procedureCall::addArguments);
-        return procedureCall;
     }
     
     public ProcedureExpressionCall processProcedureExpressionCall(IHasScope scopeUnit, QualidentContext qualidentContext,

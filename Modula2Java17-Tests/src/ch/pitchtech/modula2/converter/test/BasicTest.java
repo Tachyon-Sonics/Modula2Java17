@@ -6,10 +6,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import generated.test.Basic;
+import generated.test.EscapeSeq;
 import generated.test.Fractions;
 import generated.test.Harmonic;
 import generated.test.PowersOf2;
@@ -81,11 +81,11 @@ public class BasicTest {
         executor.assertOutput(getClass(), "Primes.txt", output);
     }
     
-    @Ignore // TODO (1) Handle qualified procedure call
     @Test
     public void testCompileEscapeSeq() throws IOException {
         CompilerHelper helper = new CompilerHelper();
         helper.compile("EscapeSeq.mod");
+        helper.assertCompilationResult(EscapeSeq.class);
     }
 
 }

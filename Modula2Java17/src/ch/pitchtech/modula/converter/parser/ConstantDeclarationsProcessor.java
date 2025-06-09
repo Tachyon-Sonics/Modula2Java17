@@ -199,7 +199,7 @@ public class ConstantDeclarationsProcessor extends ProcessorBase {
                     if (!expression.startsWith("(") || !expression.endsWith(")"))
                         throw new UnexpectedTokenException(constFactor);
                     String typeName = expression.substring(1, expression.length() - 1);
-                    FunctionCall functionCall = new FunctionCall(loc(terminal), scopeUnit, functionName);
+                    FunctionCall functionCall = new FunctionCall(loc(terminal), scopeUnit, null, functionName);
                     functionCall.addArgument(new Identifier(loc(constFactor.getChild(k + 1)), scopeUnit, typeName));
                     result = functionCall;
                     k++;

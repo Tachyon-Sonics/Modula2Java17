@@ -19,7 +19,7 @@ public class ProcedureCallGenerator extends MethodCallGenerator {
     @Override
     public void generate(ResultContext result) {
         ResultContext callResult = result.subContext();
-        boolean builtIn = super.generate(procedureCall.getProcedureName(), procedureCall.getArguments(), callResult);
+        boolean builtIn = super.generate(procedureCall.getQualifiedScope(), procedureCall.getProcedureName(), procedureCall.getArguments(), callResult);
         if (!builtIn)
             result.writeIndent();
         result.write(callResult);

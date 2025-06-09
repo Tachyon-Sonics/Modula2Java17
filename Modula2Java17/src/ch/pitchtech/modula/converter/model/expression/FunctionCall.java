@@ -26,21 +26,39 @@ import ch.pitchtech.modula.converter.model.type.ProcedureType;
 
 public class FunctionCall extends SourceElement implements IExpression, IMethodCall {
     
-    private final IHasScope scopeUnit;
+    private final IHasScope scopeUnit; // Defining module if qualified, caller's scope else
+    private final String moduleName;
     private final String functionName;
     private final List<IExpression> arguments = new ArrayList<>();
             
     
-    public FunctionCall(SourceLocation sLoc, IHasScope scopeUnit, String functionName) {
+    /**
+     * @param moduleName optional module name (if qualified access). <tt>null</tt> if this is an unqualified access
+     */
+    public FunctionCall(SourceLocation sLoc, IHasScope scopeUnit, String moduleName, String functionName) {
         super(sLoc);
         this.scopeUnit = scopeUnit;
+        this.moduleName = moduleName;
         this.functionName = functionName;
+    }
+    
+    public String getModuleName() { // TODO test qualified access
+        return moduleName;
     }
 
     public String getFunctionName() {
         return functionName;
     }
 
+    /**
+     * Get the definition module if this call is qualified, or <tt>null</tt> else
+     */
+    public IHasScope getQualifiedScope() {
+        if (moduleName != null)
+            return this.scopeUnit;
+        return null;
+    }
+    
     @Override
     public List<IExpression> getArguments() {
         return Collections.unmodifiableList(arguments);
@@ -153,7 +171,13 @@ public class FunctionCall extends SourceElement implements IExpression, IMethodC
 
     @Override
     public IDefinition resolveDefinition(IHasScope scopeUnit) {
-        return scopeUnit.getScope().resolve(functionName, false, false, true, true);
+        if (moduleName != null) {
+            // Qualified name: use scope of module qualifier
+            return this.scopeUnit.getScope().resolve(functionName, false, false, true, true);
+        } else {
+            // Unqualified access: use supplied caller scope
+            return scopeUnit.getScope().resolve(functionName, false, false, true, true);
+        }
     }
 
     @Override
@@ -174,7 +198,7 @@ public class FunctionCall extends SourceElement implements IExpression, IMethodC
 
     @Override
     public String toString() {
-        return "FunctionCall [functionName=" + functionName + ", arguments=" + arguments + "]";
+        return "FunctionCall [moduleName=" + moduleName + ", functionName=" + functionName + ", arguments=" + arguments + "]";
     }
 
 }

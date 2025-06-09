@@ -22,5 +22,7 @@ PROCEDURE ConvertInteger  (num: INTEGER; len: CARDINAL; VAR str: ARRAY OF CHAR) 
 PROCEDURE ConvertLongInt  (num: LONGINT; len: CARDINAL; VAR str: ARRAY OF CHAR) ;
 PROCEDURE ConvertShortInt (num: SHORTINT; len: CARDINAL; VAR str: ARRAY OF CHAR) ;
 
+PROCEDURE CardToStr(num: CARDINAL; VAR str: ARRAY OF CHAR; VAR ok: BOOLEAN);
+
 
 END Conversions.

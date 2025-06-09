@@ -7,7 +7,7 @@ import ch.pitchtech.modula.converter.model.expression.FunctionCall;
 import ch.pitchtech.modula.converter.model.scope.IHasScope;
 import ch.pitchtech.modula.converter.model.type.IType;
 
-public class FunctionCallGenerator extends MethodCallGenerator {
+public class FunctionCallGenerator extends MethodCallGenerator { // TODO (0) handle qualified scope like ProcedureCall
     
     private final FunctionCall functionCall;
     private final IType expectedReturnType;
@@ -21,7 +21,7 @@ public class FunctionCallGenerator extends MethodCallGenerator {
 
     @Override
     public void generate(ResultContext result) {
-        super.generate(functionCall.getFunctionName(), functionCall.getArguments(), result);
+        super.generate(null, functionCall.getFunctionName(), functionCall.getArguments(), result);
     }
 
     @Override

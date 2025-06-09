@@ -89,16 +89,16 @@ public class ForLoopGenerator extends Generator {
             if (byExpression instanceof MinusExpression minusExpression) {
                 // Simplify " += -<expr>" into "-= <expr>"
                 IExpression posExpression = minusExpression.getTarget();
-                ProcedureCall incCall = new ProcedureCall(forLoop.getSourceLocation(), scopeUnit, BuiltInProcedure.DEC.name());
+                ProcedureCall incCall = new ProcedureCall(forLoop.getSourceLocation(), scopeUnit, null, BuiltInProcedure.DEC.name());
                 incCall.addArguments(List.of(forLoop.getIdentifier(), posExpression));
                 new BuiltInProcedureCallGenerator(scopeUnit, incCall, BuiltInProcedure.DEC).generateIncOrDec(result, true);
             } else {
-                ProcedureCall incCall = new ProcedureCall(forLoop.getSourceLocation(), scopeUnit, BuiltInProcedure.INC.name());
+                ProcedureCall incCall = new ProcedureCall(forLoop.getSourceLocation(), scopeUnit, null, BuiltInProcedure.INC.name());
                 incCall.addArguments(List.of(forLoop.getIdentifier(), byExpression));
                 new BuiltInProcedureCallGenerator(scopeUnit, incCall, BuiltInProcedure.INC).generateIncOrDec(result, true);
             }
         } else {
-            ProcedureCall incCall = new ProcedureCall(forLoop.getSourceLocation(), scopeUnit, BuiltInProcedure.INC.name());
+            ProcedureCall incCall = new ProcedureCall(forLoop.getSourceLocation(), scopeUnit, null, BuiltInProcedure.INC.name());
             incCall.addArguments(List.of(forLoop.getIdentifier()));
             new BuiltInProcedureCallGenerator(scopeUnit, incCall, BuiltInProcedure.INC).generateIncOrDec(result, true);
         }

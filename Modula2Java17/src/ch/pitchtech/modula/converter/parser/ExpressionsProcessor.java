@@ -28,6 +28,8 @@ import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.SimpleConstExprContex
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.SimpleExpressionContext;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.StringContext;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.TermContext;
+import ch.pitchtech.modula.converter.compiler.CompilationException;
+import ch.pitchtech.modula.converter.model.DefinitionModule;
 import ch.pitchtech.modula.converter.model.builtin.BuiltInProcedure;
 import ch.pitchtech.modula.converter.model.expression.ArrayAccess;
 import ch.pitchtech.modula.converter.model.expression.ConstantLiteral;
@@ -39,6 +41,7 @@ import ch.pitchtech.modula.converter.model.expression.Identifier;
 import ch.pitchtech.modula.converter.model.expression.InfixOpExpression;
 import ch.pitchtech.modula.converter.model.expression.MinusExpression;
 import ch.pitchtech.modula.converter.model.expression.ParenthesedExpression;
+import ch.pitchtech.modula.converter.model.expression.QualifiedIdentifier;
 import ch.pitchtech.modula.converter.model.expression.SetExpression;
 import ch.pitchtech.modula.converter.model.expression.SetExpression.SetRange;
 import ch.pitchtech.modula.converter.model.expression.StringLiteral;
@@ -69,15 +72,26 @@ public class ExpressionsProcessor extends ProcessorBase {
     
     public IExpression processExpression(IHasScope scopeUnit, ParseTree expressionContext) {
         IExpression result = null;
+        boolean qualify = false; // Whether a "." was hit
         int i = 0;
         while (i < expressionContext.getChildCount()) {
             ParseTree node = expressionContext.getChild(i);
             if (node instanceof IdentContext identContext) {
                 expectNbChild(identContext, 1);
                 Identifier identifier = new Identifier(loc(identContext), scopeUnit, identContext.getText());
-                if (result != null)
-                    throw new UnexpectedTokenException(identContext, "Identifier not expected after expression " + result);
-                result = identifier;
+                if (result instanceof Identifier prefix) {
+                    if (qualify) {
+                        DefinitionModule definition = scopeUnit.getScope().resolveModule(prefix.getName());
+                        if (definition == null)
+                            throw new CompilationException(identContext, "Cannot resolve module: {0}", prefix.getName());
+                        result = new QualifiedIdentifier(loc(identContext), definition, prefix.getName(), identContext.getText());
+                        qualify = false;
+                    } else {
+                        throw new UnexpectedTokenException(identContext, "Identifier not expected after expression " + result);
+                    }
+                } else {
+                    result = identifier;
+                }
             } else if (node instanceof QualidentContext qualidentContext) {
                 if (result != null)
                     throw new UnexpectedTokenException(qualidentContext, "Identifier not expected after expression " + result);
@@ -182,9 +196,12 @@ public class ExpressionsProcessor extends ProcessorBase {
                     expect(expressionContext, i + 1, ExpressionContext.class);
                     expect(expressionContext, i + 2, ")");
                     IExpression expr = processExpression(scopeUnit, expressionContext.getChild(i + 1));
-                    FunctionCall functionCall = new FunctionCall(loc(expressionContext.getChild(i)), scopeUnit, BuiltInProcedure.ADR.name());
+                    FunctionCall functionCall = new FunctionCall(loc(expressionContext.getChild(i)), scopeUnit, null, BuiltInProcedure.ADR.name());
                     functionCall.addArgument(expr);
                     return functionCall;
+                } else if (text.equals(".")) {
+                    // Qualified access
+                    qualify = true;
                 } else {
                     throw new UnexpectedTokenException(terminal);
                 }
@@ -314,7 +331,7 @@ public class ExpressionsProcessor extends ProcessorBase {
             // NOT <expr>
             expectNbChild(factorContext, 1);
             IExpression argument = processExpression(scopeUnit, factorContext);
-            FunctionCall functionCall = new FunctionCall(loc(terminal), scopeUnit, text);
+            FunctionCall functionCall = new FunctionCall(loc(terminal), scopeUnit, null, text);
             functionCall.addArgument(argument);
             return functionCall;
         } else { // Operation(...)
@@ -323,7 +340,7 @@ public class ExpressionsProcessor extends ProcessorBase {
             expect(factorContext, 2, ")");
             ExpressionContext argumentExpressionContext = (ExpressionContext) factorContext.getChild(1);
             IExpression argument = processExpression(scopeUnit, argumentExpressionContext);
-            FunctionCall functionCall = new FunctionCall(loc(terminal), scopeUnit, text);
+            FunctionCall functionCall = new FunctionCall(loc(terminal), scopeUnit, null, text);
             functionCall.addArgument(argument);
             return functionCall;
         }

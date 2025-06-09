@@ -24,6 +24,7 @@ import ch.pitchtech.modula.converter.model.expression.FunctionCall;
 import ch.pitchtech.modula.converter.model.expression.IExpression;
 import ch.pitchtech.modula.converter.model.expression.Identifier;
 import ch.pitchtech.modula.converter.model.scope.IHasScope;
+import ch.pitchtech.modula.converter.model.scope.IScope;
 import ch.pitchtech.modula.converter.model.source.SourceElement;
 import ch.pitchtech.modula.converter.model.statement.IMethodCall;
 import ch.pitchtech.modula.converter.model.statement.ProcedureCall;
@@ -47,10 +48,12 @@ public abstract class MethodCallGenerator extends Generator {
     }
 
     /**
+     * @param qualifiedScope declaring definition module if qualified access, <tt>null</tt> else
      * @return whether the work was delegated to {@link #handleBuiltInProcedure(BuiltInProcedure, ResultContext)}
      */
-    public boolean generate(String name, List<IExpression> methodArguments, ResultContext result) {
-        IDefinition definition = result.getScope().resolve(name, false, false, true, true);
+    public boolean generate(IHasScope qualifiedScope, String name, List<IExpression> methodArguments, ResultContext result) {
+        IScope scope = (qualifiedScope != null ? qualifiedScope.getScope() : result.getScope());
+        IDefinition definition = scope.resolve(name, false, false, true, true);
         if (definition instanceof VariableDefinition procVariable) {
             IType procType = result.resolveProcedureType(procVariable.getType(), scopeUnit);
             if (procType instanceof ProcedureType procedureType) {

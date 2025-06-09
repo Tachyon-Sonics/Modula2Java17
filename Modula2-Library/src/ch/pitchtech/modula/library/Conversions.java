@@ -26,6 +26,12 @@ public class Conversions {
         str.set(result);
     }
     
+    public void CardToStr(long num, IRef<String> str, IRef<Boolean> ok) {
+        String result = "" + num;
+        str.set(result);
+        ok.set(true);
+    }
+    
     public void begin() {
         
     }

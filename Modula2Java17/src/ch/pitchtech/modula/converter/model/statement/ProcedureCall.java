@@ -19,19 +19,37 @@ import ch.pitchtech.modula.converter.model.type.ProcedureType;
 
 public class ProcedureCall extends SourceElement implements IStatement, IMethodCall {
 
-    private final IHasScope scopeUnit;
+    private final IHasScope scopeUnit; // Defining module if qualified, caller's scope else
+    private final String moduleName;
     private final String procedureName;
     private final List<IExpression> arguments = new ArrayList<>();
             
     
-    public ProcedureCall(SourceLocation sLoc, IHasScope scopeUnit, String procedureName) {
+    /**
+     * @param moduleName optional module name (if qualified access). <tt>null</tt> if this is an unqualified access
+     */
+    public ProcedureCall(SourceLocation sLoc, IHasScope scopeUnit, String moduleName, String procedureName) {
         super(sLoc);
         this.scopeUnit = scopeUnit;
+        this.moduleName = moduleName;
         this.procedureName = procedureName;
+    }
+    
+    public String getModuleName() {
+        return moduleName;
     }
 
     public String getProcedureName() {
         return procedureName;
+    }
+    
+    /**
+     * Get the definition module if this call is qualified, or <tt>null</tt> else
+     */
+    public IHasScope getQualifiedScope() {
+        if (moduleName != null)
+            return this.scopeUnit;
+        return null;
     }
     
     @Override
@@ -45,14 +63,20 @@ public class ProcedureCall extends SourceElement implements IStatement, IMethodC
     }
     
     public FunctionCall asFunction() {
-        FunctionCall result = new FunctionCall(getSourceLocation(), scopeUnit, procedureName);
+        FunctionCall result = new FunctionCall(getSourceLocation(), scopeUnit, moduleName, procedureName);
         result.addArguments(arguments);
         return result;
     }
 
     @Override
     public IDefinition resolveDefinition(IHasScope scopeUnit) {
-        return scopeUnit.getScope().resolve(procedureName, false, false, true, true);
+        if (moduleName != null) {
+            // Qualified name: use scope of module qualifier
+            return this.scopeUnit.getScope().resolve(procedureName, false, false, true, true);
+        } else {
+            // Unqualified access: use supplied caller scope
+            return scopeUnit.getScope().resolve(procedureName, false, false, true, true);
+        }
     }
 
     @Override
@@ -73,7 +97,7 @@ public class ProcedureCall extends SourceElement implements IStatement, IMethodC
 
     @Override
     public String toString() {
-        return "ProcedureCall [procedureName=" + procedureName + ", arguments=" + arguments + "]";
+        return "ProcedureCall [moduleName=" + moduleName + ", procedureName=" + procedureName + ", arguments=" + arguments + "]";
     }
 
 }
