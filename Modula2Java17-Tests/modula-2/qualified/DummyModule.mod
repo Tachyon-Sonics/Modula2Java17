@@ -2,10 +2,8 @@ MODULE DummyModule;
 
     IMPORT DummyLibrary;
     
-    BEGIN
+BEGIN
     
-        DummyLibrary.DummyProcedure();
+    DummyLibrary.DummyProcedure(42);
     
-    END
-
 END DummyModule.

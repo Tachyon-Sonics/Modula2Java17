@@ -92,7 +92,7 @@ public class Compiler {
             generateCode(sourceFile, targetPackageDir, targetLibraryDir);
         }
         
-        Logger.log(1, "Done; {0} Java files generated in {1}", sourceFiles.size(), targetPackageDir);
+        Logger.log(1, "Done; {0} Modula-2 files compiled into {1}", sourceFiles.size(), targetPackageDir);
     }
     
     /**

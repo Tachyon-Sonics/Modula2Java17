@@ -41,15 +41,30 @@ public class CompilerHelper {
      * Sets the Java package for the generated code to "generated.test"
      */
     public CompilerHelper() throws IOException {
+        this(null);
+    }
+    
+    /**
+     * Create a helper. Add the "modula-2/`subDir`" folder from both this "Modula2Java17-Test" project
+     * and from the "Modula2-Library" project as modula2 source folders.
+     * <p>
+     * Sets the target folder as a temporary one, which can be retrieved by {@link #getTargetDir()}.
+     * <p>
+     * Sets the Java package for the generated code to "generated.test"
+     */
+    public CompilerHelper(String subDir) throws IOException {
         targetDir = Files.createTempDirectory("compiled");
         temporaryDirs.add(targetDir);
         fileOptions = new FileOptions();
-        fileOptions.addM2sourceDir(Path.of("modula-2"));
+        Path m2srcDir = Path.of("modula-2");
+        if (subDir != null)
+            m2srcDir = m2srcDir.resolve(subDir);
+        fileOptions.addM2sourceDir(m2srcDir);
         fileOptions.addM2sourceDir(getModulaLibraryPath());
         fileOptions.setTargetMainDir(targetDir);
         fileOptions.setTargetLibraryDir(getJavaLibraryPath());
         compilerOptions = new CompilerOptions();
-        compilerOptions.setTargetPackageMain("generated.test");
+        compilerOptions.setTargetPackageMain("generated.test" + (subDir == null ? "" : "." + subDir));
         compilerOptions.setTargetPackageLib("ch.pitchtech.modula.library");
     }
     
@@ -99,7 +114,7 @@ public class CompilerHelper {
      */
     public void compile(String fileName) throws IOException {
         Compiler compiler = new Compiler(fileOptions, compilerOptions);
-        SourceFile sourceFile = new SourceFile(Path.of("modula-2").resolve(fileName));
+        SourceFile sourceFile = new SourceFile(fileOptions.getM2sourceDirs().get(0).resolve(fileName));
         compiler.compile(sourceFile);
     }
     

@@ -12,4 +12,4 @@ DEFINITION MODULE DummyLibrary;
     
     PROCEDURE DummyFunction(arg: LONGINT): LONGINT;
 
-END DummyLibrary;
+END DummyLibrary.

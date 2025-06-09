@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -143,6 +144,11 @@ public class FullAppTest {
     private static Path getJavaPath(String repositoryName, String projectName) {
         Path projectPath = getProjectPath(repositoryName, projectName);
         return projectPath.resolve("src");
+    }
+
+    @After
+    public void cleanup() {
+        CompilerHelper.cleanup();
     }
 
 }
