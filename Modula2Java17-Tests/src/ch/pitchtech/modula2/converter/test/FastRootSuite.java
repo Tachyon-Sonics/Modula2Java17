@@ -5,9 +5,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    FastRootSuite.class,
-    FullAppTest.class,
+    BasicTest.class,
 })
-public class RootSuite {
+public class FastRootSuite {
 
 }

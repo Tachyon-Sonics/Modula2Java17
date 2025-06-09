@@ -41,7 +41,7 @@ public class CompilerHelper {
      * Sets the Java package for the generated code to "generated.test"
      */
     public CompilerHelper() throws IOException {
-        targetDir = Files.createTempDirectory("compiled"); // TODO delete on exit
+        targetDir = Files.createTempDirectory("compiled");
         temporaryDirs.add(targetDir);
         fileOptions = new FileOptions();
         fileOptions.addM2sourceDir(Path.of("modula-2"));
@@ -51,6 +51,17 @@ public class CompilerHelper {
         compilerOptions = new CompilerOptions();
         compilerOptions.setTargetPackageMain("generated.test");
         compilerOptions.setTargetPackageLib("ch.pitchtech.modula.library");
+    }
+    
+    public CompilerHelper(Path targetDir, FileOptions fileOptions, CompilerOptions compilerOptions) {
+        this.targetDir = targetDir;
+        temporaryDirs.add(targetDir);
+        this.fileOptions = fileOptions;
+        this.compilerOptions = compilerOptions;
+    }
+    
+    public void registerTemporaryDir(Path tempDir) {
+        temporaryDirs.add(tempDir);
     }
     
     // The "modula-2" folder in the "Modula2-Library" project
@@ -89,6 +100,12 @@ public class CompilerHelper {
     public void compile(String fileName) throws IOException {
         Compiler compiler = new Compiler(fileOptions, compilerOptions);
         SourceFile sourceFile = new SourceFile(Path.of("modula-2").resolve(fileName));
+        compiler.compile(sourceFile);
+    }
+    
+    public void compile(Path filePath) throws IOException {
+        Compiler compiler = new Compiler(fileOptions, compilerOptions);
+        SourceFile sourceFile = new SourceFile(filePath);
         compiler.compile(sourceFile);
     }
     

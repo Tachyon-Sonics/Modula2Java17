@@ -1,0 +1,15 @@
+DEFINITION MODULE DummyLibrary;
+
+    CONST DummyConst = 42;
+    
+    TYPE
+        DummyType = RECORD x, y: INTEGER END;
+        
+    VAR
+        DummyVariable : INTEGER;
+        
+    PROCEDURE DummyProcedure(arg: LONGINT);
+    
+    PROCEDURE DummyFunction(arg: LONGINT): LONGINT;
+
+END DummyLibrary;
