@@ -4,7 +4,7 @@ MODULE DummyModule;
     
     VAR
         result: LONGINT;
-        (* temp: INTEGER; *)
+        temp: INTEGER;
         
         (* Qualified type access *)
         (* 
@@ -25,9 +25,7 @@ BEGIN
     *)
     
     (* Qualified var accesses, read, write *)
-    (*
     temp := DummyLibrary.DummyVariable;
-    DummyVariable := temp;
-    *)
+    DummyLibrary.DummyVariable := temp;
     
 END DummyModule.

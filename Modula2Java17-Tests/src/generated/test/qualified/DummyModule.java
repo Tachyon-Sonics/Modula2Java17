@@ -13,6 +13,7 @@ public class DummyModule {
     // VAR
 
     private int result;
+    private short temp;
 
 
     public int getResult() {
@@ -23,6 +24,14 @@ public class DummyModule {
         this.result = result;
     }
 
+    public short getTemp() {
+        return this.temp;
+    }
+
+    public void setTemp(short temp) {
+        this.temp = temp;
+    }
+
 
     // Life Cycle
 
@@ -31,6 +40,8 @@ public class DummyModule {
 
         dummyLibrary.DummyProcedure(42);
         result = dummyLibrary.DummyFunction(42);
+        temp = dummyLibrary.DummyVariable;
+        dummyLibrary.DummyVariable = temp;
     }
 
     private void close() {

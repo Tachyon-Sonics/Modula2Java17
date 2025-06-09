@@ -7,7 +7,7 @@ import ch.pitchtech.modula.converter.model.expression.FunctionCall;
 import ch.pitchtech.modula.converter.model.scope.IHasScope;
 import ch.pitchtech.modula.converter.model.type.IType;
 
-public class FunctionCallGenerator extends MethodCallGenerator { // TODO (0) handle qualified scope like ProcedureCall
+public class FunctionCallGenerator extends MethodCallGenerator {
     
     private final FunctionCall functionCall;
     private final IType expectedReturnType;

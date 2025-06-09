@@ -1,6 +1,9 @@
 package ch.pitchtech.modula.converter.model.expression;
 
 import ch.pitchtech.modula.converter.compiler.CompilationException;
+import ch.pitchtech.modula.converter.compiler.CompilerException;
+import ch.pitchtech.modula.converter.model.DefinitionModule;
+import ch.pitchtech.modula.converter.model.block.IDefinition;
 import ch.pitchtech.modula.converter.model.block.VariableDefinition;
 import ch.pitchtech.modula.converter.model.scope.IScope;
 import ch.pitchtech.modula.converter.model.scope.TypeResolver;
@@ -43,6 +46,27 @@ public class FieldAccess extends SourceElement implements IExpression {
 
     @Override
     public IType getType(IScope scope, IType forType) {
+        if (expression instanceof Identifier identifier) {
+            IDefinition definition = scope.resolve(identifier.getName(), true, false, true, true);
+            if (definition == null) {
+                // Check for definition module name (qualified field access)
+                DefinitionModule definitionModule = scope.resolveModule(identifier.getName());
+                if (definitionModule != null) {
+                    scope = definitionModule.getExportScope();
+                    definition = scope.resolve(field.getName(), true, false, true, true);
+                    if (definition == null) {
+                        throw new CompilationException(this, "Cannot resolve '{0}' in definition module '{1}'", field.getName(), definitionModule.getName());
+                    }
+                    if (definition instanceof VariableDefinition variableDefinition) {
+                        return variableDefinition.getType();
+                    } else {
+                        throw new CompilerException(this, "Unhandled qualified access of a {0}", definition);
+                    }
+                }
+            }
+        }
+        
+        // Unqualified field access
         IType exprType = TypeResolver.resolveType(scope, expression.getType(scope));
         if (exprType instanceof RecordType recordType) {
             VariableDefinition recordItem = recordType.getExElements().stream().filter(
