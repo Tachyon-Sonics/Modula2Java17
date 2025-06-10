@@ -33,7 +33,7 @@ public class ScopingTest {
         assert output.isEmpty();
         
         /*
-         * TODO continue with:
+         * TODO (1) continue with:
          * - qualified constant
          * - qualified type
          * [ok] qualified var
