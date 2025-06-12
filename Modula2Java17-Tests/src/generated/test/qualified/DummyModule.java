@@ -40,6 +40,7 @@ public class DummyModule {
 
         dummyLibrary.DummyProcedure(42);
         result = dummyLibrary.DummyFunction(42);
+        result = DummyLibrary.DummyConst;
         temp = dummyLibrary.DummyVariable;
         dummyLibrary.DummyVariable = temp;
     }

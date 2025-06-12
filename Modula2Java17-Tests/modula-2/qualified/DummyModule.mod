@@ -20,9 +20,7 @@ BEGIN
     result := DummyLibrary.DummyFunction(42);
     
     (* Qualified constant access *)
-    (*
-    result := DummyLibrary.DummyConstant;
-    *)
+    result := DummyLibrary.DummyConst;
     
     (* Qualified var accesses, read, write *)
     temp := DummyLibrary.DummyVariable;

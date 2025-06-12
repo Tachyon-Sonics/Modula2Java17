@@ -3,6 +3,7 @@ package ch.pitchtech.modula.converter.model.expression;
 import ch.pitchtech.modula.converter.compiler.CompilationException;
 import ch.pitchtech.modula.converter.compiler.CompilerException;
 import ch.pitchtech.modula.converter.model.DefinitionModule;
+import ch.pitchtech.modula.converter.model.block.ConstantDefinition;
 import ch.pitchtech.modula.converter.model.block.IDefinition;
 import ch.pitchtech.modula.converter.model.block.VariableDefinition;
 import ch.pitchtech.modula.converter.model.scope.IScope;
@@ -59,6 +60,8 @@ public class FieldAccess extends SourceElement implements IExpression {
                     }
                     if (definition instanceof VariableDefinition variableDefinition) {
                         return variableDefinition.getType();
+                    } else if (definition instanceof ConstantDefinition constantDefinition) {
+                        return constantDefinition.getValue().getType(scope, forType);
                     } else {
                         throw new CompilerException(this, "Unhandled qualified access of a {0}", definition);
                     }
