@@ -52,6 +52,8 @@ public class DummyModule {
         result = DummyLibrary.DummyConst;
         temp = dummyLibrary.DummyVariable;
         dummyLibrary.DummyVariable = temp;
+        test.x = 10;
+        temp = test.x;
     }
 
     private void close() {

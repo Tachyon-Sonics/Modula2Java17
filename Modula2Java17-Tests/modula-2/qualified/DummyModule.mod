@@ -24,4 +24,8 @@ BEGIN
     temp := DummyLibrary.DummyVariable;
     DummyLibrary.DummyVariable := temp;
     
+    (* Access to var of qualified type *)
+    test.x := 10;
+    temp := test.x;
+    
 END DummyModule.
