@@ -10,7 +10,7 @@ import ch.pitchtech.modula.converter.compiler.CompilerOptions;
 import ch.pitchtech.modula.converter.compiler.FileOptions;
 import ch.pitchtech.modula.converter.compiler.SourceFile;
 
-public class CompileGrotte {
+public class CompileGrotte { // TODO (1) move all these utils to test project
 
     private final static String SOURCE_DIRECTORY = "../../ChaosCastle/Grotte/modula2";
     private final static String TARGET_DIRECTORY_MAIN = "../../ChaosCastle/Grotte/src";
