@@ -7,9 +7,7 @@ MODULE DummyModule;
         temp: INTEGER;
         
         (* Qualified type access *)
-        (* 
         test: DummyLibrary.DummyType;
-        *)
     
 BEGIN
     

@@ -14,6 +14,7 @@ import ch.pitchtech.modula.converter.model.type.OpaqueType;
 import ch.pitchtech.modula.converter.model.type.OpenArrayType;
 import ch.pitchtech.modula.converter.model.type.PointerType;
 import ch.pitchtech.modula.converter.model.type.ProcedureType;
+import ch.pitchtech.modula.converter.model.type.QualifiedType;
 import ch.pitchtech.modula.converter.model.type.RangeSetType;
 import ch.pitchtech.modula.converter.model.type.RecordType;
 import ch.pitchtech.modula.converter.model.type.SubrangeType;
@@ -24,6 +25,8 @@ public class Types {
     public static Generator getGenerator(IHasScope scopeUnit, IType type) {
         if (type instanceof LiteralType literalType)
             return new LiteralTypeGenerator(scopeUnit, literalType);
+        else if (type instanceof QualifiedType qualifiedType)
+            throw new CompilerException(qualifiedType, "Unresolved qualified type: ", qualifiedType);
         else if (type instanceof OpaqueType opaqueType)
             return new OpaqueTypeGenerator(scopeUnit, opaqueType);
         else if (type instanceof SubrangeType subrangeType)

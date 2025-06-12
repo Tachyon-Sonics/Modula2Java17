@@ -32,6 +32,7 @@ import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.SubrangeTypeContext;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.TypeDeclarationContext;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.Type_Context;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.VariantContext;
+import ch.pitchtech.modula.converter.compiler.CompilationException;
 import ch.pitchtech.modula.converter.compiler.CompilerException;
 import ch.pitchtech.modula.converter.generator.type.Types;
 import ch.pitchtech.modula.converter.model.block.VariableDefinition;
@@ -48,6 +49,7 @@ import ch.pitchtech.modula.converter.model.type.IType;
 import ch.pitchtech.modula.converter.model.type.LiteralType;
 import ch.pitchtech.modula.converter.model.type.PointerType;
 import ch.pitchtech.modula.converter.model.type.ProcedureType;
+import ch.pitchtech.modula.converter.model.type.QualifiedType;
 import ch.pitchtech.modula.converter.model.type.RangeSetType;
 import ch.pitchtech.modula.converter.model.type.RecordType;
 import ch.pitchtech.modula.converter.model.type.SubrangeType;
@@ -132,13 +134,27 @@ public class TypeDeclarationsProcessor extends ProcessorBase {
     List<IType> processType(String typeName, Type_Context typeContext) {
         if (typeContext.getChild(0) instanceof SimpleTypeContext simpleType) {
             if (simpleType.getChild(0) instanceof QualidentContext qualident) {
-                if (qualident.getChild(0) instanceof IdentContext typeIdent) {
-                    String identName = typeIdent.getText();
-                    // Note: if the name correspond to a built-in type, ScopeResolver will "resolve" it to
-                    // the corresponding built-in type. Hence we set 'builtin' to false here:
-                    return single(new LiteralType(loc(typeIdent), scopeUnit, identName, false));
+                if (qualident.getChildCount() == 1) {
+                    if (qualident.getChild(0) instanceof IdentContext typeIdent) {
+                        String identName = typeIdent.getText();
+                        // Note: if the name correspond to a built-in type, ScopeResolver will "resolve" it to
+                        // the corresponding built-in type. Hence we set 'builtin' to false here:
+                        return single(new LiteralType(loc(typeIdent), scopeUnit, identName, false));
+                    } else {
+                        throw new UnexpectedTokenException(qualident.getChild(0));
+                    }
+                } else if (qualident.getChildCount() == 3) {
+                    // Qualified type "module.type"
+                    expect(qualident, 0, IdentContext.class);
+                    expect(qualident, 1, ".");
+                    expect(qualident, 2, IdentContext.class);
+                    IdentContext moduleIdent = (IdentContext) qualident.getChild(0);
+                    IdentContext typeIdent = (IdentContext) qualident.getChild(2);
+                    QualifiedType qualifiedType = new QualifiedType(loc(qualident), scopeUnit,
+                            moduleIdent.getText(), typeIdent.getText());
+                    return single(qualifiedType);
                 } else {
-                    throw new UnexpectedTokenException(qualident.getChild(0));
+                    throw new CompilationException(qualident, "Unexpected child count: ", qualident.getChildCount());
                 }
             } else if (simpleType.getChild(0) instanceof EnumerationContext enumerationContext) {
                 expect(enumerationContext, 0, "(");

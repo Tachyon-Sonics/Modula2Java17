@@ -14,6 +14,7 @@ public class DummyModule {
 
     private int result;
     private short temp;
+    private DummyLibrary.DummyType test = new DummyLibrary.DummyType();
 
 
     public int getResult() {
@@ -30,6 +31,14 @@ public class DummyModule {
 
     public void setTemp(short temp) {
         this.temp = temp;
+    }
+
+    public DummyLibrary.DummyType getTest() {
+        return this.test;
+    }
+
+    public void setTest(DummyLibrary.DummyType test) {
+        this.test = test;
     }
 
 

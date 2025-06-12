@@ -34,8 +34,8 @@ public class ScopingTest {
         
         /*
          * TODO (1) continue with:
-         * - qualified constant
-         * - qualified type
+         * [ok] qualified constant
+         * [ok] qualified type
          * [ok] qualified var
          * - qualified var of qualified type
          * - qualified record item access: module.recordVar.recordItem

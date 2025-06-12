@@ -12,6 +12,7 @@ import ch.pitchtech.modula.converter.model.type.IType;
 import ch.pitchtech.modula.converter.model.type.LiteralType;
 import ch.pitchtech.modula.converter.model.type.OpaqueType;
 import ch.pitchtech.modula.converter.model.type.ProcedureType;
+import ch.pitchtech.modula.converter.model.type.QualifiedType;
 import ch.pitchtech.modula.converter.model.type.TypeDefinition;
 
 public class TypeResolver {
@@ -27,21 +28,28 @@ public class TypeResolver {
     }
     
     private static IType resolveTypeImpl(IScope scope, IType type) {
-        if (!(scope instanceof ScopeResolver))
-            scope = new ScopeResolver(scope);
         if (type instanceof LiteralType literalType) {
-            TypeDefinition typeDefinition = scope.resolveType(literalType.getName());
-            if (typeDefinition == null)
-                throw new CompilationException(scope, "Could not resolve type: " + literalType.getName());
-            typeDefinition = getRootType(typeDefinition, scope);
-            if (typeDefinition.isOpaque()) {
-                ICompilationUnit cu = (ICompilationUnit) typeDefinition.getParentNode();
-                return new OpaqueType(typeDefinition.getSourceLocation(), cu, typeDefinition.getName());
-            } else {
-                return typeDefinition.getType();
-            }
+            if (!(scope instanceof ScopeResolver))
+                scope = new ScopeResolver(scope);
+            return resolveTypeImpl(scope, literalType.getName());
+        } else if (type instanceof QualifiedType qualifiedType) {
+            IScope qualifiedScope = qualifiedType.getDeclaringModule().getExportScope();
+            return resolveTypeImpl(qualifiedScope, qualifiedType.getName());
         }
         return type;
+    }
+
+    private static IType resolveTypeImpl(IScope scope, String typeName) {
+        TypeDefinition typeDefinition = scope.resolveType(typeName);
+        if (typeDefinition == null)
+            throw new CompilationException(scope, "Could not resolve type: " + typeName);
+        typeDefinition = getRootType(typeDefinition, scope);
+        if (typeDefinition.isOpaque()) {
+            ICompilationUnit cu = (ICompilationUnit) typeDefinition.getParentNode();
+            return new OpaqueType(typeDefinition.getSourceLocation(), cu, typeDefinition.getName());
+        } else {
+            return typeDefinition.getType();
+        }
     }
     
     private static TypeDefinition getRootType(TypeDefinition typeDefinition, IScope scope) {
