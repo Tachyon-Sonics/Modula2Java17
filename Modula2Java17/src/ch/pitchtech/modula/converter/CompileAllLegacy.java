@@ -41,7 +41,9 @@ import ch.pitchtech.modula.converter.transform.Transforms;
  * - examples from https://fruttenboel.nl/mhc/
  * - https://github.com/michelou/m2-examples
  * - https://sourceforge.net/projects/modula2chess/files/
+ * - https://www.modula2.org/freepages/downl.html#sour
  * 
+ * TODO (1) NEW, DISPOSE, ALLOCATE, DEALLOCATE
  * TODO (3) Comment in generated Java files: (* Converted from Modula-2 by Modula2Java17 *)
  */
 public class CompileAllLegacy {
