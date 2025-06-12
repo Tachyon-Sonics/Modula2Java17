@@ -12,6 +12,7 @@ import generated.test.Basic;
 @Suite.SuiteClasses({
     BasicTest.class,
     ScopingTest.class,
+    MemoryTest.class,
 })
 public class FastRootSuite {
 

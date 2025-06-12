@@ -25,5 +25,13 @@ public class Storage {
     public void DEALLOCATE(IRef<?> adr, long size) {
         adr.set(null);
     }
+    
+    public void begin() {
+        
+    }
+    
+    public void close() {
+        
+    }
 
 }

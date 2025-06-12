@@ -17,7 +17,7 @@ public class ScopingTest {
      * @throws InvocationTargetException 
      */
     @Test
-    public void testCompileBasicModule() throws IOException, InvocationTargetException {
+    public void testCompileDummyModule() throws IOException, InvocationTargetException {
         // Compile
         CompilerHelper helper = new CompilerHelper("qualified");
         helper.compile("DummyModule.mod");

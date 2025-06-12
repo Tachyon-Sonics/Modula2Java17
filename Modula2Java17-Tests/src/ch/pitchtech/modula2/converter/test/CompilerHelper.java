@@ -131,7 +131,8 @@ public class CompilerHelper {
      * result is expected to be in this project (usually in the <tt>generated</tt> package)
      * @param expectedClass the expected result, from this project
      * @param ignoreLines full lines of code (without terminating new line character) to drop from the generated
-     * file before comparing. They usually correspond to useless stuff that makes a warning
+     * file or expected file before comparing. They usually correspond to useless stuff that makes a warning,
+     * or a SuppressWarnings clause.
      */
     public void assertCompilationResult(Class<?> expectedClass, String... ignoreLines) throws IOException {
         String className = expectedClass.getSimpleName();
@@ -143,20 +144,22 @@ public class CompilerHelper {
                 .resolve(className + ".java");
         String generated = cleanup(Files.readString(generatedFile));
         
-        // Remove any line to ignore
-        for (String ignoreLine : ignoreLines) {
-            if (generated.contains(ignoreLine + "\n")) {
-                generated = generated.replace(ignoreLine + "\n", "");
-            } else {
-                assert false : "Line to ignore not found:\n" + ignoreLine;
-            }
-        }
-        
         // Retrieve expected file
         Path expectedFile = Path.of("src")
                 .resolve(packageName.replace('.', File.separatorChar))
                 .resolve(className + ".java");
         String expected = cleanup(Files.readString(expectedFile));
+        
+        // Remove any line to ignore
+        for (String ignoreLine : ignoreLines) {
+            if (generated.contains(ignoreLine + "\n")) {
+                generated = generated.replace(ignoreLine + "\n", "");
+            } else if (expected.contains(ignoreLine + "\n")) {
+                expected = expected.replace(ignoreLine + "\n", "");
+            } else {
+                assert false : "Line to ignore not found:\n" + ignoreLine;
+            }
+        }
         
         // Compare
         if (!expected.equals(generated))
