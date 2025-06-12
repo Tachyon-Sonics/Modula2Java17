@@ -1,4 +1,4 @@
-package ch.pitchtech.modula.converter;
+package ch.pitchtech.modula2.converter.tool;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -8,6 +8,17 @@ import ch.pitchtech.modula.converter.compiler.CompilerOptions;
 import ch.pitchtech.modula.converter.compiler.FileOptions;
 import ch.pitchtech.modula.converter.compiler.SourceFile;
 
+//Example of big Java code: https://github.com/pkclsoft/ORCA-Modula-2
+//TODO (A) preserve comments and new lines inside of expressions
+/*
+* TODO various tests, namely:
+* - examples from https://fruttenboel.nl/mhc/
+* - https://github.com/michelou/m2-examples
+* - https://sourceforge.net/projects/modula2chess/files/
+* - https://www.modula2.org/freepages/downl.html#sour
+* 
+* TODO (3) Comment in generated Java files: (* Converted from Modula-2 by Modula2Java17 *)
+*/
 public class CompileChaosCastle {
 
     private final static String SOURCE_DIRECTORY = "../../ChaosCastle/ChaosCastle/modula2";
