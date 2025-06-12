@@ -34,7 +34,7 @@ public class ConstructorGenerator extends Generator {
                 result.write(recordType.getName());
                 result.write("()");
             } else {
-                // TODO (2) handle simple types, arrays, etc
+                // TODO (2) handle simple types, arrays, array of char, etc
                 throw new CompilationException(constructor, "Unimplementer POINTER TO {0}", targetType);
             }
         } else {
