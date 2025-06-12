@@ -27,8 +27,8 @@ public class CompileChaosCastle {
 
     
     public static void main(String[] args) throws IOException {
-        Path chaosCastleMode = Path.of(SOURCE_DIRECTORY, "ChaosCastle.mod");
-        SourceFile chaosCastle = new SourceFile(chaosCastleMode);
+        Path chaosCastleMod = Path.of(SOURCE_DIRECTORY, "ChaosCastle.mod");
+        SourceFile chaosCastle = new SourceFile(chaosCastleMod);
         
         FileOptions fileOptions = new FileOptions(
                 Path.of(SOURCE_DIRECTORY),
