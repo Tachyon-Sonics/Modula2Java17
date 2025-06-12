@@ -54,6 +54,7 @@ public class DummyLibrary {
     // VAR
 
     public short DummyVariable;
+    public DummyType DummyTypeVariable = new DummyType();
 
 
     public short getDummyVariable() {
@@ -62,6 +63,14 @@ public class DummyLibrary {
 
     public void setDummyVariable(short DummyVariable) {
         this.DummyVariable = DummyVariable;
+    }
+
+    public DummyType getDummyTypeVariable() {
+        return this.DummyTypeVariable;
+    }
+
+    public void setDummyTypeVariable(DummyType DummyTypeVariable) {
+        this.DummyTypeVariable = DummyTypeVariable;
     }
 
 

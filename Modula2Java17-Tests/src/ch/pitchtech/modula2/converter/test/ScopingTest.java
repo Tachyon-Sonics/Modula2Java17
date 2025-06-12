@@ -37,8 +37,8 @@ public class ScopingTest {
          * [ok] qualified constant
          * [ok] qualified type
          * [ok] qualified var
-         * - qualified var of qualified type
-         * - qualified record item access: module.recordVar.recordItem
+         * [ok] qualified var of qualified type
+         * [ok] qualified record item access: module.recordVar.recordItem
          * - qualified call of a var of procedure type ?
          */
     }

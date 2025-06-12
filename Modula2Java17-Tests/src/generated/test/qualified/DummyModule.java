@@ -54,6 +54,10 @@ public class DummyModule {
         dummyLibrary.DummyVariable = temp;
         test.x = 10;
         temp = test.x;
+        temp = dummyLibrary.DummyTypeVariable.x;
+        dummyLibrary.DummyTypeVariable.y = temp;
+        dummyLibrary.DummyTypeVariable.copyFrom(test);
+        test.copyFrom(dummyLibrary.DummyTypeVariable);
     }
 
     private void close() {
