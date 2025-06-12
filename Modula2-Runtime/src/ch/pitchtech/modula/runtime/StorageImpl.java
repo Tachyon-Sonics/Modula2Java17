@@ -11,7 +11,7 @@ public class StorageImpl {
         SizeOfData sizeOfData = Runtime.popLastSizeOfData();
         if (sizeOfData == null) {
             throw new IllegalStateException("Cannot implement Storage.ALLOCATE because the type is not known."
-                    + "\n  Make sure the Modula-2 code either use NEW(),"
+                    + "\n  Make sure the Modula-2 code either uses NEW(),"
                     + "\n  or uses SIZE(...) or TSIZE(...) (possibly with a multiplication) as argument."
                     + "\nOr compile with pointer arithmetic support enabled.");
         }

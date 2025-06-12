@@ -16,7 +16,7 @@ public enum BuiltInProcedure {
     HALT(null, false),
     NEW(null, true),
     DISPOSE(null, true),
-    ALLOCATE(null, true), // FROM Storage; (VAR ADDRESS, CARDINAL)
+    ALLOCATE(null, true), // FROM Storage; (VAR ADDRESS, CARDINAL) // TODO (0) try removing
     DEALLOCATE(null, true), // From Storage; (VAR ADDRESS)
     MIN(BuiltInType.javaInt(), false) {
         

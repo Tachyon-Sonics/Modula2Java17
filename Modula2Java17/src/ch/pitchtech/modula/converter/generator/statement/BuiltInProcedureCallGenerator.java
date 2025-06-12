@@ -11,16 +11,20 @@ import ch.pitchtech.modula.converter.model.block.VariableDefinition;
 import ch.pitchtech.modula.converter.model.builtin.BuiltInProcedure;
 import ch.pitchtech.modula.converter.model.builtin.BuiltInType;
 import ch.pitchtech.modula.converter.model.expression.ConstantLiteral;
+import ch.pitchtech.modula.converter.model.expression.Constructor;
 import ch.pitchtech.modula.converter.model.expression.IExpression;
+import ch.pitchtech.modula.converter.model.expression.Identifier;
 import ch.pitchtech.modula.converter.model.expression.InfixOpExpression;
 import ch.pitchtech.modula.converter.model.scope.IHasScope;
 import ch.pitchtech.modula.converter.model.source.SourceElement;
 import ch.pitchtech.modula.converter.model.source.SourceLocation;
+import ch.pitchtech.modula.converter.model.statement.Assignement;
 import ch.pitchtech.modula.converter.model.statement.ProcedureCall;
 import ch.pitchtech.modula.converter.model.type.EnumSetType;
 import ch.pitchtech.modula.converter.model.type.EnumerationType;
 import ch.pitchtech.modula.converter.model.type.IType;
 import ch.pitchtech.modula.converter.model.type.LiteralType;
+import ch.pitchtech.modula.converter.model.type.PointerType;
 import ch.pitchtech.modula.converter.model.type.RangeSetType;
 import ch.pitchtech.modula.runtime.HaltException;
 import ch.pitchtech.modula.runtime.Runtime;
@@ -45,6 +49,8 @@ public class BuiltInProcedureCallGenerator extends Generator {
             case INCL, EXCL -> generateInclOrExcl(result);
             case EXIT -> generateExit(result);
             case HALT -> generateHalt(result);
+            case NEW -> generateNew(result);
+            case DISPOSE -> generateDispose(result);
             default -> throw new CompilerException(procedureCall, "Unhandled " + String.valueOf(builtInProc));
         }
     }
@@ -170,6 +176,42 @@ public class BuiltInProcedureCallGenerator extends Generator {
     private void generateHalt(ResultContext result) {
         result.ensureJavaImport(HaltException.class);
         result.writeLine("throw new HaltException();");
+    }
+    
+    private void generateNew(ResultContext result) {
+        if (procedureCall.getArguments().size() != 1) {
+            throw new CompilationException(procedureCall, "Expected one argument, found: ", procedureCall.getArguments().size());
+        }
+        IExpression argument = procedureCall.getArguments().get(0);
+        IType type = result.resolveType(argument);
+        if (!(type instanceof PointerType)) {
+            throw new CompilationException(procedureCall, "Argument must be of pointer type");
+        }
+        
+        // Generate an assignment: "<expression> := <constructor>"
+        Assignement assignment = new Assignement(
+                procedureCall.getSourceLocation(), 
+                argument, 
+                new Constructor(procedureCall.getSourceLocation(), type));
+        new AssignmentGenerator(scopeUnit, assignment).generate(result);
+    }
+    
+    private void generateDispose(ResultContext result) {
+        if (procedureCall.getArguments().size() != 1) {
+            throw new CompilationException(procedureCall, "Expected one argument, found: ", procedureCall.getArguments().size());
+        }
+        IExpression argument = procedureCall.getArguments().get(0);
+        IType type = result.resolveType(argument);
+        if (!(type instanceof PointerType)) {
+            throw new CompilationException(procedureCall, "Argument must be of pointer type");
+        }
+        
+        // Generate an assignment: "<expression> := NIL"
+        Assignement assignment = new Assignement(
+                procedureCall.getSourceLocation(), 
+                argument,
+                new Identifier(procedureCall.getSourceLocation(), scopeUnit, "NIL"));
+        new AssignmentGenerator(scopeUnit, assignment).generate(result);
     }
 
 }

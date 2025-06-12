@@ -5,6 +5,7 @@ import ch.pitchtech.modula.converter.generator.Generator;
 import ch.pitchtech.modula.converter.model.ICompilationUnit;
 import ch.pitchtech.modula.converter.model.expression.ArrayAccess;
 import ch.pitchtech.modula.converter.model.expression.ConstantLiteral;
+import ch.pitchtech.modula.converter.model.expression.Constructor;
 import ch.pitchtech.modula.converter.model.expression.Dereference;
 import ch.pitchtech.modula.converter.model.expression.FieldAccess;
 import ch.pitchtech.modula.converter.model.expression.FunctionCall;
@@ -39,6 +40,8 @@ public class Expressions {
             return new StringLiteralGenerator(scopeUnit, stringLiteral);
         else if (expression instanceof Identifier identifier)
             return new IdentifierGenerator(scopeUnit, compilationUnit, identifier, expectedType);
+        else if (expression instanceof Constructor constructor)
+            return new ConstructorGenerator(scopeUnit, constructor);
         else if (expression instanceof MinusExpression minusExpression)
             return new MinusExpressionGenerator(scopeUnit, minusExpression);
         else if (expression instanceof FunctionCall functionCall)

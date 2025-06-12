@@ -6,11 +6,10 @@ import ch.pitchtech.modula.runtime.Runtime;
 
 
 @SuppressWarnings("unused")
-public class StorageTest {
+public class NewDisposeTest {
 
     // Imports
     private final InOut inOut = InOut.instance();
-    private final Storage storage = Storage.instance();
 
 
     // TYPE
@@ -117,7 +116,7 @@ public class StorageTest {
         Storage.instance().begin();
         InOut.instance().begin();
 
-        storage.ALLOCATE(new Runtime.FieldRef<>(this::getPoint, this::setPoint).asAdrRef(), Runtime.sizeOf(4, Point.class));
+        point = new Point();
         point.x = 10;
         point.y = 20;
         inOut.Write('(');
@@ -126,8 +125,8 @@ public class StorageTest {
         inOut.WriteInt(point.y, 2);
         inOut.Write(')');
         inOut.WriteLn();
-        storage.DEALLOCATE(new Runtime.FieldRef<>(this::getPoint, this::setPoint).asAdrRef(), Runtime.sizeOf(4, Point.class));
-        storage.ALLOCATE(new Runtime.FieldRef<>(this::getRectangle, this::setRectangle).asAdrRef(), Runtime.sizeOf(12, Rectangle.class));
+        point = null;
+        rectangle = new Rectangle();
         rectangle.topLeft.x = 42;
         rectangle.topLeft.y = 84;
         inOut.Write('(');
@@ -140,9 +139,9 @@ public class StorageTest {
             inOut.WriteString("NIL");
             inOut.WriteLn();
         }
-        storage.ALLOCATE(new Runtime.FieldExprRef<>(rectangle, Rectangle::getBottomRightPtr, Rectangle::setBottomRightPtr).asAdrRef(), Runtime.sizeOf(4, Point.class));
-        storage.DEALLOCATE(new Runtime.FieldExprRef<>(rectangle, Rectangle::getBottomRightPtr, Rectangle::setBottomRightPtr).asAdrRef(), Runtime.sizeOf(4, Point.class));
-        storage.DEALLOCATE(new Runtime.FieldRef<>(this::getRectangle, this::setRectangle).asAdrRef(), Runtime.sizeOf(12, Rectangle.class));
+        rectangle.bottomRightPtr = new Point();
+        rectangle.bottomRightPtr = null;
+        rectangle = null;
     }
 
     private void close() {
@@ -152,7 +151,7 @@ public class StorageTest {
 
     public static void main(String[] args) {
         Runtime.setArgs(args);
-        StorageTest instance = new StorageTest();
+        NewDisposeTest instance = new NewDisposeTest();
         try {
             instance.begin();
         } catch (HaltException ex) {

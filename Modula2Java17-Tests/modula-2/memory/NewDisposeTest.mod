@@ -1,4 +1,4 @@
-MODULE StorageTest;
+MODULE NewDisposeTest;
 
     FROM Storage IMPORT ALLOCATE, DEALLOCATE;
     FROM InOut IMPORT WriteInt, WriteString, Write, WriteLn;
@@ -18,7 +18,7 @@ MODULE StorageTest;
     
 BEGIN
 
-    ALLOCATE(point, SIZE(Point));
+    NEW(point);
     point^.x := 10;
     point^.y := 20;
     Write("(");
@@ -27,9 +27,9 @@ BEGIN
     WriteInt(point^.y, 2);
     Write(")");
     WriteLn;
-    DEALLOCATE(point, SIZE(Point));
+    DISPOSE(point);
     
-    ALLOCATE(rectangle, SIZE(Rectangle));
+    NEW(rectangle);
     rectangle^.topLeft.x := 42;
     rectangle^.topLeft.y := 84;
     Write("(");
@@ -42,8 +42,8 @@ BEGIN
         WriteString("NIL");
         WriteLn;
     END;
-    ALLOCATE(rectangle^.bottomRightPtr, SIZE(Point));
-    DEALLOCATE(rectangle^.bottomRightPtr, SIZE(Point));
-    DEALLOCATE(rectangle, SIZE(Rectangle));
+    NEW(rectangle^.bottomRightPtr);
+    DISPOSE(rectangle^.bottomRightPtr);
+    DISPOSE(rectangle);
 
-END StorageTest.
+END NewDisposeTest.
