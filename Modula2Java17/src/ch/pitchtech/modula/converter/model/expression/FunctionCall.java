@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import ch.pitchtech.modula.converter.compiler.CompilationException;
-import ch.pitchtech.modula.converter.model.block.IDefinition;
+import ch.pitchtech.modula.converter.model.DefinitionModule;
 import ch.pitchtech.modula.converter.model.block.ProcedureDefinition;
 import ch.pitchtech.modula.converter.model.block.VariableDefinition;
 import ch.pitchtech.modula.converter.model.builtin.BuiltInProcedure;
@@ -14,9 +14,9 @@ import ch.pitchtech.modula.converter.model.scope.IHasScope;
 import ch.pitchtech.modula.converter.model.scope.IScope;
 import ch.pitchtech.modula.converter.model.scope.TypeResolver;
 import ch.pitchtech.modula.converter.model.source.NodeAttachType;
-import ch.pitchtech.modula.converter.model.source.SourceElement;
 import ch.pitchtech.modula.converter.model.source.SourceLocation;
 import ch.pitchtech.modula.converter.model.statement.IMethodCall;
+import ch.pitchtech.modula.converter.model.statement.StaticCall;
 import ch.pitchtech.modula.converter.model.type.AdrPointerType;
 import ch.pitchtech.modula.converter.model.type.EnumerationType;
 import ch.pitchtech.modula.converter.model.type.IType;
@@ -24,10 +24,8 @@ import ch.pitchtech.modula.converter.model.type.LiteralType;
 import ch.pitchtech.modula.converter.model.type.PointerType;
 import ch.pitchtech.modula.converter.model.type.ProcedureType;
 
-public class FunctionCall extends SourceElement implements IExpression, IMethodCall {
+public class FunctionCall extends StaticCall implements IExpression, IMethodCall {
     
-    private final IHasScope scopeUnit; // Defining module if qualified, caller's scope else
-    private final String moduleName;
     private final String functionName;
     private final List<IExpression> arguments = new ArrayList<>();
             
@@ -36,17 +34,20 @@ public class FunctionCall extends SourceElement implements IExpression, IMethodC
      * @param moduleName optional module name (if qualified access). <tt>null</tt> if this is an unqualified access
      */
     public FunctionCall(SourceLocation sLoc, IHasScope scopeUnit, String moduleName, String functionName) {
-        super(sLoc);
-        this.scopeUnit = scopeUnit;
-        this.moduleName = moduleName;
+        super(sLoc, scopeUnit, moduleName);
         this.functionName = functionName;
     }
     
-    public String getModuleName() { // TODO test qualified access
+    public String getModuleName() {
         return moduleName;
     }
 
     public String getFunctionName() {
+        return functionName;
+    }
+    
+    @Override
+    public String getName() {
         return functionName;
     }
 
@@ -88,14 +89,6 @@ public class FunctionCall extends SourceElement implements IExpression, IMethodC
         return false;
     }
     
-    public IScope getScopeUnit(IScope callerScope) {
-        if (moduleName != null) {
-            return this.scopeUnit.getScope(); // Use qualified scope
-        } else {
-            return callerScope; // Unqualified access: use caller's scope
-        }
-    }
-
     @Override
     public Object evaluateConstant() {
         ProcedureDefinition functionDefinition = scopeUnit.getScope().resolveProcedure(functionName);
@@ -118,6 +111,22 @@ public class FunctionCall extends SourceElement implements IExpression, IMethodC
             }
         }
         return null;
+    }
+
+    /**
+     * Get the scope for resolving this function. This is either the module's scope
+     * if the access is qualified, or the given caller's scope if the access is unqualified
+     */
+    private IScope getScopeUnit(IScope callerScope) {
+        if (moduleName != null) {
+            if (this.scopeUnit instanceof DefinitionModule definitionModule) {
+                return definitionModule.getExportScope(); // Use qualified scope
+            } else {
+                return this.scopeUnit.getScope(); // Should not happen
+            }
+        } else {
+            return callerScope; // Unqualified access: use caller's scope
+        }
     }
 
     @Override
@@ -174,33 +183,6 @@ public class FunctionCall extends SourceElement implements IExpression, IMethodC
             }
         } else {
             return functionDefinition.getReturnType();
-        }
-    }
-
-    @Override
-    public IDefinition resolveDefinition(IHasScope scopeUnit) {
-        if (moduleName != null) {
-            // Qualified name: use scope of module qualifier
-            return this.scopeUnit.getScope().resolve(functionName, false, false, true, true);
-        } else {
-            // Unqualified access: use supplied caller scope
-            return scopeUnit.getScope().resolve(functionName, false, false, true, true);
-        }
-    }
-
-    @Override
-    public ProcedureType resolveType(IHasScope scopeUnit) {
-        IDefinition definition = resolveDefinition(scopeUnit);
-        if (definition instanceof ProcedureDefinition procedureDefinition)
-            return new ProcedureType(procedureDefinition);
-        else if (definition instanceof VariableDefinition variableDefinition) {
-            IType type = variableDefinition.getType();
-            if (type instanceof ProcedureType procedureType)
-                return procedureType;
-            else
-                throw new CompilationException(this, "Not a procedure: {0}", functionName);
-        } else {
-            throw new CompilationException(this, "Cannot resolve: {0}", functionName);
         }
     }
 
