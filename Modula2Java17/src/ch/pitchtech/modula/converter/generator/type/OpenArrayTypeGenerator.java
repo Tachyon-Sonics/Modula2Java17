@@ -20,7 +20,7 @@ public class OpenArrayTypeGenerator extends Generator {
 
     @Override
     public void generate(ResultContext result) {
-        LiteralType elementType0 = openArrayType.getElementType();
+        IType elementType0 = openArrayType.getElementType();
         IType elementType = result.resolveType(elementType0);
         if (elementType instanceof LiteralType literalType) {
             if (TypeHelper.isCharArrayAsString(openArrayType, result)) {
@@ -29,8 +29,7 @@ public class OpenArrayTypeGenerator extends Generator {
                 new LiteralTypeGenerator(scopeUnit, literalType).generate(result);
                 result.write("[]");
             }
-        } else if (elementType0 instanceof LiteralType) {
-            LiteralType literalType = elementType0;
+        } else if (elementType0 instanceof LiteralType literalType) {
             new LiteralTypeGenerator(scopeUnit, literalType).generate(result);
             result.write("[]");
         } else {

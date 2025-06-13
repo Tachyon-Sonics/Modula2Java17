@@ -18,6 +18,7 @@ import ch.pitchtech.modula.converter.model.scope.IHasScope;
 import ch.pitchtech.modula.converter.model.type.IType;
 import ch.pitchtech.modula.converter.model.type.LiteralType;
 import ch.pitchtech.modula.converter.model.type.OpenArrayType;
+import ch.pitchtech.modula.converter.model.type.QualifiedType;
 
 public class ProcedureDeclarationProcessor extends ProcessorBase {
     
@@ -123,16 +124,28 @@ public class ProcedureDeclarationProcessor extends ProcessorBase {
                             isOpenArray = true;
                             typeIndex = 2;
                         }
-                        expect(formalTypeContext, typeIndex, QualidentContext.class);
+                        expect(formalTypeContext, typeIndex, QualidentContext.class); // TODO recheck all instance of QualidentContext for qualified identifier
                         QualidentContext qualidentContext = (QualidentContext) formalTypeContext.getChild(typeIndex);
-                        expect(qualidentContext, 0, IdentContext.class);
-                        IdentContext identContextType = (IdentContext) qualidentContext.getChild(0);
-                        LiteralType lType = new LiteralType(loc(identContextType), scopeUnit, identContextType.getText(), false);
+                        IType argType;
+                        if (qualidentContext.getChildCount() == 1) {
+                            expect(qualidentContext, 0, IdentContext.class);
+                            IdentContext identContextType = (IdentContext) qualidentContext.getChild(0);
+                            argType = new LiteralType(loc(identContextType), scopeUnit, identContextType.getText(), false);
+                        } else  {
+                            expect(qualidentContext, 0, IdentContext.class);
+                            expect(qualidentContext, 1, ".");
+                            expect(qualidentContext, 2, IdentContext.class);
+                            IdentContext identContextModule = (IdentContext) qualidentContext.getChild(0);
+                            IdentContext identContextType = (IdentContext) qualidentContext.getChild(2);
+                            argType = new QualifiedType(loc(identContextType), scopeUnit, 
+                                    identContextModule.getText(), identContextType.getText());
+                        }
                         IType type;
-                        if (isOpenArray)
-                            type = new OpenArrayType(loc(identContextType), scopeUnit, lType);
-                        else
-                            type = lType;
+                        if (isOpenArray) {
+                            type = new OpenArrayType(loc(qualidentContext), scopeUnit, argType);
+                        } else {
+                            type = argType;
+                        }
                         
                         // Add arguments
                         for (String paramName : paramNames) {

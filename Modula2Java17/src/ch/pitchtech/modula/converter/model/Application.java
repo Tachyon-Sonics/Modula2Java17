@@ -30,6 +30,7 @@ public class Application implements IHasScope {
         DefinitionModule system = new DefinitionModule(dummy, "SYSTEM", this); // TODO SYSTEM
         definitionModules.add(system);
         builtIn = new BuiltInScope();
+        system.setExportScope(builtIn); // Hack... we must separate built-in scope from SYSTEM scope
     }
     
     public CompilerOptions getCompilerOptions() {

@@ -4,13 +4,13 @@ DEFINITION MODULE Storage;
  
 IMPORT SYSTEM;
  
-PROCEDURE ALLOCATE (VAR addr: ADDRESS; amount: CARDINAL);
+PROCEDURE ALLOCATE (VAR addr: SYSTEM.ADDRESS; amount: CARDINAL);
   (* Allocates storage for a variable of size amount and assigns the address of this
      variable to addr. If there is insufficient unallocated storage to do this, the
      value NIL is assigned to addr.
   *)
  
-PROCEDURE DEALLOCATE (VAR addr: ADDRESS; amount: CARDINAL);
+PROCEDURE DEALLOCATE (VAR addr: SYSTEM.ADDRESS; amount: CARDINAL);
   (* Deallocates amount locations allocated by ALLOCATE for the storage of the variable
      addressed by addr and assigns the value NIL to addr.
   *)

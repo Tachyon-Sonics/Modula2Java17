@@ -117,6 +117,7 @@ public class DefinitionModule extends SourceElement implements ICompilationUnit,
     private IScope myScope;
     private IScope definitionScope;
 
+    
     @Override
     public IScope getLocalScope() {
         if (myScope == null)
@@ -134,6 +135,10 @@ public class DefinitionModule extends SourceElement implements ICompilationUnit,
             definitionScope = new CompilationUnitScope(this, application, Collections.emptyList(), constantDefinitions, typeDefinitions,
                     variableDefinitions, procedureDefinitions);
         return definitionScope;
+    }
+    
+    void setExportScope(IScope scope) {
+        this.definitionScope = scope;
     }
 
     @Override
