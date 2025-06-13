@@ -116,6 +116,10 @@ public class VariableDefinitionGenerator extends Generator {
      * For assignments to a constant, some casts can be avoided.
      */
     private void generateInitialValue(IType type, ResultContext result, boolean assignment) {
+        generateInitialValue(variableDefinition, scopeUnit, type, result, assignment);
+    }
+
+    public static void generateInitialValue(Object element, IHasScope scopeUnit, IType type, ResultContext result, boolean assignment) {
         if (type instanceof LiteralType literalType) {
             if (literalType.isBuiltIn()) {
                 BuiltInType biType = BuiltInType.valueOf(literalType.getName());
@@ -150,7 +154,7 @@ public class VariableDefinitionGenerator extends Generator {
                 }
                 result.write(value);
             } else {
-                throw new CompilerException(variableDefinition, "Unhandled default value for type {0}", type);
+                throw new CompilerException(element, "Unhandled default value for type {0}", type);
             }
         } else if (type instanceof ProcedureType || type instanceof OpaqueType || type instanceof PointerType) {
             result.write("null");
@@ -160,10 +164,10 @@ public class VariableDefinitionGenerator extends Generator {
             result.write(enumerationType.getElements().get(0));
         } else if (type instanceof ArrayType) {
             // This cannot happen because ArrayTypeGenerator implements ITypePreInitializerGenerator
-            throw new CompilerException(variableDefinition, "Unexpected default value requested for type {0}", type);
+            throw new CompilerException(element, "Unexpected default value requested for type {0}", type);
         } else if (type instanceof RecordType) {
             // This cannot happen because RecordTypeGenerator implements ITypePreInitializerGenerator
-            throw new CompilerException(variableDefinition, "Unexpected default value requested for type {0}", type);
+            throw new CompilerException(element, "Unexpected default value requested for type {0}", type);
         } else if (type instanceof EnumSetType enumSetType) {
             result.write("EnumSet.noneOf(");
             IType enumerationType = result.resolveType(enumSetType.getEnumerationType());
@@ -171,9 +175,9 @@ public class VariableDefinitionGenerator extends Generator {
             result.write(".class)");
         } else if (type instanceof RangeSetType) {
             // This cannot happen because RangeSetTypeGenerator implements ITypePreInitializerGenerator
-            throw new CompilerException(variableDefinition, "Unexpected default value requested for type {0}", type);
+            throw new CompilerException(element, "Unexpected default value requested for type {0}", type);
         } else {
-            throw new CompilerException(variableDefinition, "Unhandled default value for type {0}", type);
+            throw new CompilerException(element, "Unhandled default value for type {0}", type);
         }
     }
     

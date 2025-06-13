@@ -7,6 +7,7 @@ import org.junit.After;
 import org.junit.Test;
 
 import generated.test.memory.NewDisposeTest;
+import generated.test.memory.NewDisposeTest2;
 import generated.test.memory.StorageTest;
 
 /*
@@ -37,7 +38,8 @@ public class MemoryTest {
     }
     
     /**
-     * Test compilation of NewDisposeTest.mod, that uses NEW and DISPOSE.
+     * Test compilation of NewDisposeTest.mod, that uses NEW and DISPOSE with
+     * RECORD pointers.
      * Output is the same as StorageTest.mod
      */
     @Test
@@ -54,6 +56,22 @@ public class MemoryTest {
         ExecuteHelper executor = new ExecuteHelper();
         String output = executor.execute(NewDisposeTest::main);
         executor.assertOutput(getClass(), "StorageTest.txt", output);
+    }
+    
+    /**
+     * Test compilation of NewDisposeTest.mod, that uses NEW and DISPOSE with
+     * non-record pointers.
+     * @throws IOException 
+     */
+    @Test
+    public void testCompileNewDisposeTest2() throws IOException {
+        // Compile
+        CompilerHelper helper = new CompilerHelper("memory");
+        helper.compile("NewDisposeTest2.mod");
+        
+        // Check compilation result
+        helper.assertCompilationResult(NewDisposeTest2.class,
+                "@SuppressWarnings(\"unused\")");
     }
 
     @After

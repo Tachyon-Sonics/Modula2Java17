@@ -16,6 +16,7 @@ import ch.pitchtech.modula.converter.compiler.SourceFile;
 * - https://github.com/michelou/m2-examples
 * - https://sourceforge.net/projects/modula2chess/files/
 * - https://www.modula2.org/freepages/downl.html#sour
+* - https://www.modula2.org/tutor/chapter11.php
 * 
 * TODO (3) Comment in generated Java files: (* Converted from Modula-2 by Modula2Java17 *)
 */

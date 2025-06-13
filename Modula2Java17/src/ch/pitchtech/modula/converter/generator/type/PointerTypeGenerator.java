@@ -118,6 +118,17 @@ public class PointerTypeGenerator extends Generator implements ITypeDefinitionGe
             } else {
                 result.write("Runtime.IRef<" + targetJavaType + ">");
             }
+        } else if (targetType instanceof PointerType pointerType) {
+            // POINTER TO POINTER
+            result.ensureJavaImport(Runtime.class);
+            if (skipGenerics) {
+                result.write("Runtime.IRef");
+                return true;
+            } else {
+                result.write("Runtime.IRef<");
+                new PointerTypeGenerator(scopeUnit, pointerType).generate(result, skipGenerics);
+                result.write(">");
+            }
         } else {
             throw new CompilerException(pointerType, "Unhandled " + String.valueOf(targetType));
         }

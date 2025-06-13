@@ -11,6 +11,15 @@ public interface ITypePreInitializerGenerator {
      */
     public void generateInitializer(ResultContext beforeResult, ResultContext initResult, boolean force);
     
-    // TODO X default method, with boolean "includesInitialEqual" that delegates and drop the = if requested
-
+    // TODO [X] review, the one with default impl must be the other one
+    public default void generateInitializer(ResultContext beforeResult, ResultContext initResult, boolean force,
+            boolean includesInitialEqual) {
+        ResultContext temp = initResult.subContext();
+        generateInitializer(beforeResult, temp, force);
+        String initStr = temp.toString();
+        if (!includesInitialEqual && initStr.startsWith(" = ")) {
+            initStr = initStr.substring(" = ".length());
+        }
+        initResult.write(initStr);
+    }
 }
