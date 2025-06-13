@@ -51,6 +51,10 @@ public class DereferenceGenerator extends Generator implements IAssignGenerator 
         if (!(targetType instanceof PointerType pointerType))
             throw new CompilationException(dereference, "Not pointer type: " + pointer + "; type: " + targetType);
         IType derefType = result.resolveType(pointerType.getTargetType());
+        // Check for POINTER TO ARRAY OF CHAR promoted to String
+        if (TypeHelper.isCharArrayAsString(derefType, result)) {
+            return false; // POINTER TO ARRAY OF CHAR promoted to String
+        }
         return TypeHelper.isByValueType(derefType, result.getScope(), result.getCompilerOptions());
     }
 

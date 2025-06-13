@@ -47,6 +47,9 @@ public class NewDisposeTest3 {
         arr1 = "";
         arr2 = "";
         arr3 = "";
+        arr1 = Runtime.setChar(arr1, 0, 'x');
+        arr2 = "Test";
+        arr3 = Runtime.copyOf(true, arr2);
         arr3 = null;
         arr2 = null;
         arr1 = null;

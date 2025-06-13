@@ -23,20 +23,34 @@ public class ExecuteHelper {
      * Execute a class' <tt>main</tt> method, and return its standard output
      */
     public String execute(IMainMethod mainMethod, String... args) throws InvocationTargetException {
-        PrintStream previous = System.out;
+        PrintStream previousOut = System.out;
+        PrintStream previousErr = System.err;
         try {
             ByteArrayOutputStream bOutput = new ByteArrayOutputStream();
-            PrintStream stream = new PrintStream(bOutput, true, StandardCharsets.UTF_8);
-            System.setOut(stream);
+            PrintStream outStream = new PrintStream(bOutput, true, StandardCharsets.UTF_8);
+            System.setOut(outStream);
+            ByteArrayOutputStream bError = new ByteArrayOutputStream();
+            PrintStream errStream = new PrintStream(bError, true, StandardCharsets.UTF_8);
+            System.setErr(errStream);
             try {
                 mainMethod.main(args);
             } catch (Exception ex) {
                 throw new InvocationTargetException(ex);
             }
-            stream.flush();
+            outStream.flush();
+            errStream.flush();
+            
+            /*
+             * Exception are catched by main method and output on err. Check for any
+             */
+            String errorContent = new String(bError.toByteArray(), StandardCharsets.UTF_8);
+            previousErr.println(errorContent);
+            assert errorContent.isEmpty() : "Executing main has output stuff on std err:\n" + errorContent;
+            
             return new String(bOutput.toByteArray(), StandardCharsets.UTF_8);
         } finally {
-            System.setOut(previous);
+            System.setErr(previousErr);
+            System.setOut(previousOut);
         }
     }
 

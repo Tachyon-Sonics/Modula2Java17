@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Test;
 
 import generated.test.memory.NewDisposeTest;
@@ -64,7 +65,7 @@ public class MemoryTest {
      * non-record pointers.
      */
     @Test
-    public void testCompileNewDisposeTest2() throws IOException {
+    public void testCompileNewDisposeTest2() throws IOException, InvocationTargetException {
         // Compile
         CompilerHelper helper = new CompilerHelper("memory");
         helper.compile("NewDisposeTest2.mod");
@@ -72,6 +73,11 @@ public class MemoryTest {
         // Check compilation result
         helper.assertCompilationResult(NewDisposeTest2.class,
                 "@SuppressWarnings(\"unused\")");
+        
+        // Check that the resulting Java class runs without errors
+        ExecuteHelper executor = new ExecuteHelper();
+        String output = executor.execute(NewDisposeTest2::main);
+        Assert.assertEquals("", output);
     }
 
     /**
@@ -81,13 +87,19 @@ public class MemoryTest {
      * in NewDisposeTest3.mod
      */
     @Test
-    public void testCompileNewDisposeTest3() throws IOException {
+    public void testCompileNewDisposeTest3() throws IOException, InvocationTargetException {
         // Compile
         CompilerHelper helper = new CompilerHelper("memory");
         helper.compile("NewDisposeTest3.mod");
         
         // Check compilation result
         helper.assertCompilationResult(NewDisposeTest3.class);
+
+        
+        // Check that the resulting Java class runs without errors
+        ExecuteHelper executor = new ExecuteHelper();
+        String output = executor.execute(NewDisposeTest3::main);
+        Assert.assertEquals("", output);
     }
 
     @After

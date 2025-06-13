@@ -1019,6 +1019,12 @@ public class Runtime {
      */
     public static <E> E copyOf(boolean deep, E array) {
         Class<?> type = array.getClass();
+        if (type.equals(String.class)) {
+            // ARRAY OF CHAR promoted to String
+            // String is immutable, hence we can safely return the original one without copying it
+            return array;
+        }
+        
         if (!type.isArray())
             throw new IllegalArgumentException("Argument is not an array");
         Class<?> componentType = type.getComponentType();

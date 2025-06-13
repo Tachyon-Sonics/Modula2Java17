@@ -16,11 +16,10 @@ BEGIN
     NEW(arr1);
     NEW(arr2);
     NEW(arr3);
-    (*
+    
     arr1^[0] := 'x';
     arr2^ := "Test";
     arr3^ := arr2^;
-    *)
 
     DISPOSE(arr3);
     DISPOSE(arr2);
