@@ -23,6 +23,7 @@ public class NewDisposeTest2 {
     private Runtime.IRef<Short> ptr1 /* POINTER */;
     private Runtime.IRef<Short> ptr2 /* POINTER */;
     private Runtime.IRef<Runtime.IRef<Short>> ptrptr /* POINTER */;
+    private Runtime.IRef<short[]> arrptr /* POINTER */;
 
 
     public short[] getArr1() {
@@ -73,6 +74,14 @@ public class NewDisposeTest2 {
         this.ptrptr = ptrptr;
     }
 
+    public Runtime.IRef<short[]> getArrptr() {
+        return this.arrptr;
+    }
+
+    public void setArrptr(Runtime.IRef<short[]> arrptr) {
+        this.arrptr = arrptr;
+    }
+
 
     // Life Cycle
 
@@ -86,6 +95,10 @@ public class NewDisposeTest2 {
         ptr2 = new Runtime.Ref<>((short) 0);
         ptrptr = new Runtime.Ref<>();
         ptrptr.set(new Runtime.Ref<>((short) 0));
+        arrptr = new Runtime.Ref<>();
+        arrptr.set(new short[21]);
+        arrptr.set(null);
+        arrptr = null;
         ptrptr.set(null);
         ptrptr = null;
         ptr2 = null;
