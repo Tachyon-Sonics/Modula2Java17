@@ -83,8 +83,6 @@ public class MemoryTest {
     /**
      * Test compilation of NewDisposeTest3.mod, that uses NEW and DISPOSE with
      * pointers to ARRAY OF CHAR.
-     * TODO (2) generated code does not work, and fails if we uncomment assignments
-     * in NewDisposeTest3.mod
      */
     @Test
     public void testCompileNewDisposeTest3() throws IOException, InvocationTargetException {
