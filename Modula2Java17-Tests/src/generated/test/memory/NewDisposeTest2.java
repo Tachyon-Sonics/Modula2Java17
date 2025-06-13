@@ -23,6 +23,8 @@ public class NewDisposeTest2 {
     private Runtime.IRef<Short> ptr1 /* POINTER */;
     private Runtime.IRef<Short> ptr2 /* POINTER */;
     private Runtime.IRef<Runtime.IRef<Short>> ptrptr /* POINTER */;
+    private Runtime.IRef<Runtime.IRef<Integer>> ptrptr2 /* POINTER */;
+    private Runtime.IRef<Runtime.IRef<Runtime.IRef<Short>>> ptrptrptr /* POINTER */;
     private Runtime.IRef<short[]> arrptr /* POINTER */;
 
 
@@ -74,6 +76,22 @@ public class NewDisposeTest2 {
         this.ptrptr = ptrptr;
     }
 
+    public Runtime.IRef<Runtime.IRef<Integer>> getPtrptr2() {
+        return this.ptrptr2;
+    }
+
+    public void setPtrptr2(Runtime.IRef<Runtime.IRef<Integer>> ptrptr2) {
+        this.ptrptr2 = ptrptr2;
+    }
+
+    public Runtime.IRef<Runtime.IRef<Runtime.IRef<Short>>> getPtrptrptr() {
+        return this.ptrptrptr;
+    }
+
+    public void setPtrptrptr(Runtime.IRef<Runtime.IRef<Runtime.IRef<Short>>> ptrptrptr) {
+        this.ptrptrptr = ptrptrptr;
+    }
+
     public Runtime.IRef<short[]> getArrptr() {
         return this.arrptr;
     }
@@ -95,10 +113,20 @@ public class NewDisposeTest2 {
         ptr2 = new Runtime.Ref<>((short) 0);
         ptrptr = new Runtime.Ref<>();
         ptrptr.set(new Runtime.Ref<>((short) 0));
+        ptrptr2 = new Runtime.Ref<>();
+        ptrptr2.set(new Runtime.Ref<>(0));
         arrptr = new Runtime.Ref<>();
         arrptr.set(new short[21]);
+        ptrptrptr = new Runtime.Ref<>();
+        ptrptrptr.set(new Runtime.Ref<>());
+        ptrptrptr.get().set(new Runtime.Ref<>((short) 0));
+        ptrptrptr.get().set(null);
+        ptrptrptr.set(null);
+        ptrptrptr = null;
         arrptr.set(null);
         arrptr = null;
+        ptrptr2.set(null);
+        ptrptr2 = null;
         ptrptr.set(null);
         ptrptr = null;
         ptr2 = null;

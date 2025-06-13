@@ -14,6 +14,8 @@ MODULE NewDisposeTest2;
         ptr1: IntPtr;
         ptr2: POINTER TO INTEGER;
         ptrptr: POINTER TO IntPtr;
+        ptrptr2: POINTER TO POINTER TO CARDINAL;
+        ptrptrptr: POINTER TO POINTER TO IntPtr;
         arrptr: POINTER TO IntArrPtr;
     
 BEGIN
@@ -25,11 +27,21 @@ BEGIN
     NEW(ptr2);
     NEW(ptrptr);
     NEW(ptrptr^);
+    NEW(ptrptr2);
+    NEW(ptrptr2^);
     NEW(arrptr);
     NEW(arrptr^);
+    NEW(ptrptrptr);
+    NEW(ptrptrptr^);
+    NEW(ptrptrptr^^);
     
+    DISPOSE(ptrptrptr^^);
+    DISPOSE(ptrptrptr^);
+    DISPOSE(ptrptrptr);
     DISPOSE(arrptr^);
     DISPOSE(arrptr);
+    DISPOSE(ptrptr2^);
+    DISPOSE(ptrptr2);
     DISPOSE(ptrptr^);
     DISPOSE(ptrptr);
     DISPOSE(ptr2);

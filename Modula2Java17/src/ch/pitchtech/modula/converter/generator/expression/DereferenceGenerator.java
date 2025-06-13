@@ -12,6 +12,7 @@ import ch.pitchtech.modula.converter.model.scope.IHasScope;
 import ch.pitchtech.modula.converter.model.type.IArrayType;
 import ch.pitchtech.modula.converter.model.type.IType;
 import ch.pitchtech.modula.converter.model.type.LiteralType;
+import ch.pitchtech.modula.converter.model.type.OpaqueType;
 import ch.pitchtech.modula.converter.model.type.PointerType;
 import ch.pitchtech.modula.converter.model.type.RecordType;
 
@@ -38,6 +39,9 @@ public class DereferenceGenerator extends Generator implements IAssignGenerator 
             Expressions.getGenerator(scopeUnit, dereference.getPointer()).generate(result);
         } else if (targetType instanceof LiteralType literalType && literalType.isBuiltIn()) {
             // This was wrapped into an IRef
+            Expressions.getGenerator(scopeUnit, dereference.getPointer()).generate(result);
+            result.write(".get()");
+        } else if (targetType instanceof PointerType || targetType instanceof OpaqueType) {
             Expressions.getGenerator(scopeUnit, dereference.getPointer()).generate(result);
             result.write(".get()");
         } else {

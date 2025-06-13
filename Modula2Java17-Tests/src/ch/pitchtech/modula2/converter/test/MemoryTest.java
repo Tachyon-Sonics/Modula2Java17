@@ -15,6 +15,7 @@ import generated.test.memory.StorageTest;
 /*
  * TODO (2) in Storage.def, replace "ADDRESS" by "SYSTEM.ADDRESS" and fix problems
  * TODO (3) Try replacing SIZE by TSIZE
+ * TODO (3) Try replacing SIZE on type by SIZE on dereferenced pointer
  * TODO (3) NEW on variable of another module (to test qualifier insertion)
  */
 public class MemoryTest {
