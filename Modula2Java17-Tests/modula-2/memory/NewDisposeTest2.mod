@@ -23,7 +23,9 @@ BEGIN
     NEW(ptr1);
     NEW(ptr2);
     NEW(ptrptr);
+    NEW(ptrptr^);
     
+    DISPOSE(ptrptr^);
     DISPOSE(ptrptr);
     DISPOSE(ptr2);
     DISPOSE(ptr1);

@@ -1,6 +1,5 @@
 package ch.pitchtech.modula.converter.generator.expression;
 
-import ch.pitchtech.modula.converter.compiler.CompilationException;
 import ch.pitchtech.modula.converter.compiler.CompilerException;
 import ch.pitchtech.modula.converter.generator.Generator;
 import ch.pitchtech.modula.converter.generator.ResultContext;
@@ -53,23 +52,22 @@ public class ConstructorGenerator extends Generator {
                 
                 result.write(")");
             } else if (targetType instanceof PointerType) {
-                // Although PointerType implements ITypePreInitializerGenerator, its default value is null
-                // Here we need to create a non-null pointer
+                // Although PointerType implements ITypePreInitializerGenerator, its default value is null.
+                // Here we need to create a non-null pointer instead using Runtime.Ref
                 result.ensureJavaImport(Runtime.class);
                 result.write("new Runtime.Ref<>()");
             } else if (targetTypeGenerator instanceof ITypePreInitializerGenerator initializerGenerator) {
                 /*
                  * NEW is similar to the logic of giving the default value to a variable of the pointed type.
-                 * Reuse the same logic if available
+                 * Reuse the same logic:
                  */
                 ResultContext initResult = result.subContext();
                 ResultContext beforeResult = result.subContext();
                 initializerGenerator.generateInitializer(beforeResult, initResult, true, false);
-//                result.write(beforeResult); // TODO review
-//                result.write("new ");
+//                result.write(beforeResult); // TODO review, what do we do with that if non-empty?
                 result.write(initResult);
             } else {
-                throw new CompilationException(constructor, "Unimplemented POINTER TO {0}", targetType);
+                throw new CompilerException(constructor, "Unimplemented POINTER TO {0}", targetType);
             }
         } else {
             throw new CompilerException(constructor, "Pointer type expected for constructor");

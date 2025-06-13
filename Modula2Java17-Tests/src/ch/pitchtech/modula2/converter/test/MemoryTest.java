@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import generated.test.memory.NewDisposeTest;
 import generated.test.memory.NewDisposeTest2;
+import generated.test.memory.NewDisposeTest3;
 import generated.test.memory.StorageTest;
 
 /*
@@ -59,9 +60,8 @@ public class MemoryTest {
     }
     
     /**
-     * Test compilation of NewDisposeTest.mod, that uses NEW and DISPOSE with
+     * Test compilation of NewDisposeTest2.mod, that uses NEW and DISPOSE with
      * non-record pointers.
-     * @throws IOException 
      */
     @Test
     public void testCompileNewDisposeTest2() throws IOException {
@@ -72,6 +72,22 @@ public class MemoryTest {
         // Check compilation result
         helper.assertCompilationResult(NewDisposeTest2.class,
                 "@SuppressWarnings(\"unused\")");
+    }
+
+    /**
+     * Test compilation of NewDisposeTest3.mod, that uses NEW and DISPOSE with
+     * pointers to ARRAY OF CHAR.
+     * TODO (2) generated code does not work, and fails if we uncomment assignments
+     * in NewDisposeTest3.mod
+     */
+    @Test
+    public void testCompileNewDisposeTest3() throws IOException {
+        // Compile
+        CompilerHelper helper = new CompilerHelper("memory");
+        helper.compile("NewDisposeTest3.mod");
+        
+        // Check compilation result
+        helper.assertCompilationResult(NewDisposeTest3.class);
     }
 
     @After

@@ -85,6 +85,8 @@ public class NewDisposeTest2 {
         ptr1 = new Runtime.Ref<>((short) 0);
         ptr2 = new Runtime.Ref<>((short) 0);
         ptrptr = new Runtime.Ref<>();
+        ptrptr.set(new Runtime.Ref<>((short) 0));
+        ptrptr.set(null);
         ptrptr = null;
         ptr2 = null;
         ptr1 = null;

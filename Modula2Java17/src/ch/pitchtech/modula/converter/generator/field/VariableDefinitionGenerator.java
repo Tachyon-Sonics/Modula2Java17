@@ -119,6 +119,15 @@ public class VariableDefinitionGenerator extends Generator {
         generateInitialValue(variableDefinition, scopeUnit, type, result, assignment);
     }
 
+    /**
+     * Generate the default value for the given type, like <tt>0</tt> for integers, <tt>false</tt> for boolean, etc.
+     * @param element the element being compiled
+     * @param scopeUnit current scope unit
+     * @param type the type for which the default value must be generated
+     * @param result where to generate the result
+     * @param assignment whether the result is used in an assignment (and not as an argument) - This changes the
+     * necessity of some type casts in the generated Java code
+     */
     public static void generateInitialValue(Object element, IHasScope scopeUnit, IType type, ResultContext result, boolean assignment) {
         if (type instanceof LiteralType literalType) {
             if (literalType.isBuiltIn()) {
