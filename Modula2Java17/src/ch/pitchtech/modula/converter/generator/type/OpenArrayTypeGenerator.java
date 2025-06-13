@@ -3,7 +3,6 @@ package ch.pitchtech.modula.converter.generator.type;
 import ch.pitchtech.modula.converter.compiler.CompilerException;
 import ch.pitchtech.modula.converter.generator.Generator;
 import ch.pitchtech.modula.converter.generator.ResultContext;
-import ch.pitchtech.modula.converter.model.builtin.BuiltInType;
 import ch.pitchtech.modula.converter.model.scope.IHasScope;
 import ch.pitchtech.modula.converter.model.type.IType;
 import ch.pitchtech.modula.converter.model.type.LiteralType;
@@ -24,7 +23,7 @@ public class OpenArrayTypeGenerator extends Generator {
         LiteralType elementType0 = openArrayType.getElementType();
         IType elementType = result.resolveType(elementType0);
         if (elementType instanceof LiteralType literalType) {
-            if (literalType.isBuiltInType(BuiltInType.CHAR) && result.getCompilerOptions().isConvertArrayOfCharToString()) {
+            if (TypeHelper.isCharArrayAsString(openArrayType, result)) {
                 result.write("String");
             } else {
                 new LiteralTypeGenerator(scopeUnit, literalType).generate(result);

@@ -174,7 +174,7 @@ public class TypeCastHelper {
                     preValueContext.write("(" + castContext.toString() + ") ");
                 } else if (derefType instanceof LiteralType literalType && literalType.isBuiltIn()) {
                     BuiltInType biType = BuiltInType.valueOf(literalType.getName());
-                    if (biType == BuiltInType.CHAR && resultContext.getCompilerOptions().isConvertArrayOfCharToString())
+                    if (TypeHelper.isElementTypeCharArrayAsString(literalType, postValueContext))
                         biType = BuiltInType.STRING;
                     preValueContext.ensureJavaImport(Runtime.class);
                     preValueContext.write("Runtime.castToRef(");

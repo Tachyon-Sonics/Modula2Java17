@@ -40,7 +40,7 @@ public class ArrayAccessGenerator extends Generator {
         while (elementType instanceof IArrayType arrayType) {
             elementType = result.resolveType(arrayType.getElementType());
         }
-        if (elementType.isBuiltInType(BuiltInType.CHAR) && result.getCompilerOptions().isConvertArrayOfCharToString()) {
+        if (TypeHelper.isElementTypeCharArrayAsString(elementType, result)) {
             return true;
         }
         return false;

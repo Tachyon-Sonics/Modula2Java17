@@ -206,7 +206,7 @@ public class BuiltInFunctionCallGenerator extends Generator {
             String boundsStr = boundsContext.toString();
             
             // Type
-            if (currentType.isBuiltInType(BuiltInType.CHAR) && result.getCompilerOptions().isConvertArrayOfCharToString()) {
+            if (TypeHelper.isElementTypeCharArrayAsString(currentType, result)) {
                 result.write("String");
                 
                 // Drop last bound
@@ -301,7 +301,6 @@ public class BuiltInFunctionCallGenerator extends Generator {
         IType type = result.resolveType(expression);
         if (!(type instanceof OpenArrayType openArrayType))
             throw new CompilationException(functionCall, "HIGH only allowed on open array type. Found: {0}", type);
-        IType elementType = result.resolveType(openArrayType.getElementType());
         
         result.write("(");
         if (expression.isComplex(result))
@@ -309,7 +308,7 @@ public class BuiltInFunctionCallGenerator extends Generator {
         Expressions.getGenerator(scopeUnit, expression).generate(result);
         if (expression.isComplex(result))
             result.write(")");
-        if (elementType.isBuiltInType(BuiltInType.CHAR) && result.getCompilerOptions().isConvertArrayOfCharToString()) {
+        if (TypeHelper.isCharArrayAsString(openArrayType, result)) {
             result.write(".length() - 1)");
         } else {
             result.write(".length - 1)");

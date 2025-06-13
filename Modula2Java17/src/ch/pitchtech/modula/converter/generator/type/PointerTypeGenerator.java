@@ -41,8 +41,7 @@ public class PointerTypeGenerator extends Generator implements ITypeDefinitionGe
                 BuiltInType builtInType = BuiltInType.valueOf(literalType.getName());
                 String javaBoxedType = builtInType.getBoxedType();
                 String javaType = "Runtime.Ref<" + javaBoxedType + ">";
-                if (BuiltInType.valueOf(literalType.getName()) == BuiltInType.CHAR 
-                        && result.getCompilerOptions().isConvertArrayOfCharToString()) {
+                if (TypeHelper.isElementTypeCharArrayAsString(literalType, result)) {
                     // POINTER TO ARRAY OF CHAR
                     return; // Do not generate a type definition. It will be replaced by 'String' wherever used
                 }
@@ -155,7 +154,7 @@ public class PointerTypeGenerator extends Generator implements ITypeDefinitionGe
                 targetJavaType = builtInType.getBoxedType();
             else
                 targetJavaType = builtInType.getJavaType();
-            if (literalType.isBuiltInType(BuiltInType.CHAR) && result.getCompilerOptions().isConvertArrayOfCharToString()) {
+            if (TypeHelper.isElementTypeCharArrayAsString(literalType, result)) {
                 // POINTER TO ARRAY OF CHAR
                 // TODO if the pointer is never dereferenced with write access, we could use String instead of Ref<String>
                 targetJavaType = "String";

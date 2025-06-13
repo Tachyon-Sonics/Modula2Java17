@@ -21,18 +21,30 @@ import ch.pitchtech.modula.runtime.Runtime.IRef;
 
 public class TypeHelper {
 
+    public static boolean isCharArrayAsString(IType type, ResultContext context) {
+        return isCharArrayAsString(type, context.getScope(), context.getCompilerOptions());
+    }
+    
     public static boolean isCharArrayAsString(IType type, IScope scope, CompilerOptions compilerOptions) {
         if (type instanceof IArrayType arrayType) {
             IType elementType = TypeResolver.resolveType(scope, arrayType.getElementType());
-            if (elementType.isBuiltInType(BuiltInType.CHAR) && compilerOptions.isConvertArrayOfCharToString()) {
+            if (isElementTypeCharArrayAsStringImpl(elementType, compilerOptions)) {
                 return true;
             }
         }
         return false;
     }
     
-    public static boolean isCharArrayAsString(IType type, ResultContext context) {
-        return isCharArrayAsString(type, context.getScope(), context.getCompilerOptions());
+    public static boolean isElementTypeCharArrayAsString(IType elementType, ResultContext result) {
+        elementType = TypeResolver.resolveType(result.getScope(), elementType);
+        return isElementTypeCharArrayAsStringImpl(elementType, result.getCompilerOptions());
+    }
+
+    private static boolean isElementTypeCharArrayAsStringImpl(IType elementType, CompilerOptions compilerOptions) {
+        if (elementType.isBuiltInType(BuiltInType.CHAR) && compilerOptions.isConvertArrayOfCharToString()) {
+            return true;
+        }
+        return false;
     }
     
     /**

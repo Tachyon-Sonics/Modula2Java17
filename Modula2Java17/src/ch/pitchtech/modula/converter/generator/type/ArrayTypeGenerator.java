@@ -31,11 +31,11 @@ public class ArrayTypeGenerator extends Generator implements ITypePreInitializer
 
     @Override
     public void generate(ResultContext result) {
-        IType elementType0 = arrayType.getElementType();
-        IType elementType = result.resolveType(elementType0);
-        if (elementType.isBuiltInType(BuiltInType.CHAR) && result.getCompilerOptions().isConvertArrayOfCharToString()) {
+        if (TypeHelper.isCharArrayAsString(arrayType, result)) {
             result.write("String");
         } else {
+            IType elementType0 = arrayType.getElementType();
+            IType elementType = result.resolveType(elementType0);
             Types.getGenerator(scopeUnit, elementType).generate(result);
             result.write("[]");
         }
@@ -49,7 +49,7 @@ public class ArrayTypeGenerator extends Generator implements ITypePreInitializer
         while (elementType instanceof ArrayType subArrayType)
             elementType = result.resolveType(subArrayType.getElementType());
         
-        if (elementType.isBuiltInType(BuiltInType.CHAR) && result.getCompilerOptions().isConvertArrayOfCharToString()) {
+        if (TypeHelper.isElementTypeCharArrayAsString(elementType, result)) {
             init.write("\"\"");
         } else if (elementType instanceof PointerType || elementType instanceof OpaqueType || elementType instanceof ProcedureType) {
             suppressWarnings = generateInitializer(result, elementType);
