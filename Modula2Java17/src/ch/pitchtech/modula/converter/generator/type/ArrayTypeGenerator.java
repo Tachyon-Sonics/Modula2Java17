@@ -71,7 +71,13 @@ public class ArrayTypeGenerator extends Generator implements ITypePreInitializer
         result.ensureJavaImport(ch.pitchtech.modula.runtime.Runtime.class);
         result.write("Runtime.initArray(");
         result.write(initContext);
-        if (elementType instanceof RecordType) { // FIXME huh?
+        if (elementType instanceof RecordType) {
+            /*
+             * The folowing is not necessary, because Runtime.initArray() defaults to using the empty constructor,
+             * which is always valid for creating a record.
+             * However, we could uncomment it if we want to prevent introspection of the empty constructor,
+             * resulting is slightly more complex calling code.
+             */
 //            result.write(", ");
 //            new RecordTypeGenerator(scopeUnit, recordType).generate(result);
 //            result.write("::new");
