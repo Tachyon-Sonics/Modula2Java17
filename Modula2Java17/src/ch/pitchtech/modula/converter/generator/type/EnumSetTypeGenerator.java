@@ -45,7 +45,6 @@ public class EnumSetTypeGenerator extends Generator implements ITypePreInitializ
 
     @Override
     public void generateInitializer(ResultContext beforeResult, ResultContext result, boolean force) {
-        result.write(" = ");
         result.write("EnumSet.noneOf(");
         EnumerationType enumerationType = (EnumerationType) result.resolveType(enumSetType.getEnumerationType());
         new EnumerationTypeGenerator(scopeUnit, enumerationType).generate(result);

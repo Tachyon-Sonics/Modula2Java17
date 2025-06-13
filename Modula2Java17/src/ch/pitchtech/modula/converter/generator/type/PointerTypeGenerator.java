@@ -59,10 +59,22 @@ public class PointerTypeGenerator extends Generator implements ITypeDefinitionGe
     }
 
     @Override
-    public void generateInitializer(ResultContext before, ResultContext result, boolean force) {
+    public void generateInitializer(ResultContext beforeResult, ResultContext initResult, boolean force) {
+        generateInitializer(beforeResult, initResult, force, false);
+    }
+
+    @Override
+    public void generateInitializer(ResultContext before, ResultContext result, boolean force, boolean includesInitialEqual) {
         if (force) {
-            result.write(" = null");
+            if (includesInitialEqual) {
+                result.write(" = ");
+            }
+            result.write("null");
         } else {
+            /*
+             * Because we do not specify any value, we also never prefix with
+             * " = ", regardless of 'includesInitialEqual'
+             */
             result.write(" /* POINTER */");
         }
     }

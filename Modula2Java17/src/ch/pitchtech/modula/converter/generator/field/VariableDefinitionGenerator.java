@@ -96,7 +96,7 @@ public class VariableDefinitionGenerator extends Generator {
             init.write(" ");
             init.write(name(variableDefinition));
             if (typeGenerator instanceof ITypePreInitializerGenerator preInitializerGenerator) {
-                preInitializerGenerator.generateInitializer(before, init, forceInitialValue);
+                preInitializerGenerator.generateInitializer(before, init, forceInitialValue, true);
             } else if (forceInitialValue) {
                 init.write(" = ");
                 generateInitialValue(type, init, true);
@@ -199,7 +199,7 @@ public class VariableDefinitionGenerator extends Generator {
         result.write(" ");
         result.write(variableDefinition.getName());
         if (typeGenerator instanceof ITypePreInitializerGenerator preInitializerGenerator)
-            preInitializerGenerator.generateInitializer(result.subContext(), result, false);
+            preInitializerGenerator.generateInitializer(result.subContext(), result, false, true);
         result.write("; // ");
         Expressions.getGenerator(scopeUnit, caseExpr).generate(result);
         result.writeLn();

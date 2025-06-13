@@ -130,7 +130,7 @@ public class RecordTypeGenerator extends Generator implements ITypeDefinitionGen
     @Override
     public void generateInitializer(ResultContext beforeResult, ResultContext initResult, boolean force) {
         String typeName = recordType.getName();
-        initResult.write(" = new ");
+        initResult.write("new ");
         qualifyIfNecessary(recordType, initResult);
         initResult.write(typeName);
         initResult.write("()");

@@ -54,7 +54,6 @@ public class RangeSetTypeGenerator extends Generator implements ITypeDefinitionG
 
     @Override
     public void generateInitializer(ResultContext before, ResultContext result, boolean force) {
-        result.write(" = ");
         generateInitialValue(result);
     }
 

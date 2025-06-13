@@ -50,7 +50,7 @@ public class ArrayTypeGenerator extends Generator implements ITypePreInitializer
             elementType = result.resolveType(subArrayType.getElementType());
         
         if (elementType.isBuiltInType(BuiltInType.CHAR) && result.getCompilerOptions().isConvertArrayOfCharToString()) {
-            init.write(" = \"\"");
+            init.write("\"\"");
         } else if (elementType instanceof PointerType || elementType instanceof OpaqueType || elementType instanceof ProcedureType) {
             suppressWarnings = generateInitializer(result, elementType);
         } else if (elementType instanceof LiteralType literalType) {
@@ -69,9 +69,9 @@ public class ArrayTypeGenerator extends Generator implements ITypePreInitializer
         boolean suppressWarnings = generateInitializerExpr(initContext, elementType);
         
         result.ensureJavaImport(ch.pitchtech.modula.runtime.Runtime.class);
-        result.write(" = Runtime.initArray(");
+        result.write("Runtime.initArray(");
         result.write(initContext);
-        if (elementType instanceof RecordType) {
+        if (elementType instanceof RecordType) { // FIXME huh?
 //            result.write(", ");
 //            new RecordTypeGenerator(scopeUnit, recordType).generate(result);
 //            result.write("::new");
@@ -82,8 +82,7 @@ public class ArrayTypeGenerator extends Generator implements ITypePreInitializer
                 ResultContext itemBeforeContext = result.subContext();
                 preInitializerGenerator.generateInitializer(itemBeforeContext, itemInitContext, false);
                 String javaInit = itemInitContext.toString();
-                if (!javaInit.isBlank() && javaInit.startsWith(" = ")) {
-                    javaInit = javaInit.substring(" = ".length());
+                if (!javaInit.isBlank()) {
                     result.write(", ");
                     result.write("() -> " + javaInit);
                     if (!itemBeforeContext.toString().isBlank())
@@ -98,7 +97,6 @@ public class ArrayTypeGenerator extends Generator implements ITypePreInitializer
     private static record Bounds(String lowerBound, String upperBound) {}
 
     private boolean generateInitializer(ResultContext result, IType elementType) {
-        result.write(" = ");
         return generateInitializerExpr(result, elementType);
     }
     
