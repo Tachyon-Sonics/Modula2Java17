@@ -8,11 +8,11 @@ Do not expect miracles. I only did this tool to convert two existing Modula-2 ga
 The translator generates Java source code that requires at least Java 17. The translator itself also requires at least Java 17.
 
 There are four sub-projects (these are Eclipse project, with gradle support):
-- Modula2Java17: this is the Modula-2 to Java translator. It is also referred as the "compiler" as it is implemented like a compiler behind the scene.
-- Modula2-Runtime: a small runtime written in Java, that provides support for some Modula-2 constructs. Both the compiler and the produced Java code require it
-- Modula2-Library: a very incomplete set of standard Modula-2 libraries (both Modula-2 .def files and the corresponding Java implementations)
+- **Modula2Java17**: this is the Modula-2 to Java translator. It is also referred to as the "compiler" as it is implemented like a compiler behind the scene.
+- **Modula2-Runtime**: a small runtime written in Java, that provides support for some Modula-2 constructs. Both the compiler and the produced Java code require it
+- **Modula2-Library**: a very incomplete set of standard Modula-2 libraries (both Modula-2 .def files and the corresponding Java implementations)
     - Only the minumum to run the tests is provided. This can be used as a starting point though.
-- Modula2Java17-Tests: tests (JUnit 4)
+- **Modula2Java17-Tests**: tests (JUnit 4)
 
 ## Limitations
 
