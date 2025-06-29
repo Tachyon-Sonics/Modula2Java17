@@ -3,11 +3,11 @@
 
 This is a command-line tool that translates (or "compiles") working Modula-2 sources (PIM4) into Java sources (.java files).
 
-Do not expect miracles. I only did this tool to convert two existing Modula-2 games I wrote years ago. As such, the translator will handle any Modula-2 construct that appear in the sources of these games, but any other constructs are very likely *not* to work properly. This project does in no way attempt to achieve full compatibility or to implement any extensions like GNU m2c for instance.
+Do not expect miracles. I only did this tool to convert two existing Modula-2 games I wrote years ago ([www.github.com/ChaosCastle/ChaosCastle](https://github.com/Tachyon-Sonics/ChaosCastle)). As such, the translator will handle any Modula-2 construct that appear in the sources of these games, but any other constructs are very likely *not* to work properly. This project does in no way attempt to achieve full compatibility or to implement any extensions like GNU m2c for instance.
 
 The translator generates Java source code that requires at least Java 17. The translator itself also requires at least Java 17.
 
-There are four sub-projects (these are Eclipse project, with gradle support):
+There are four sub-projects (these are Eclipse projects, with gradle support):
 - **Modula2Java17**: this is the Modula-2 to Java translator. It is also referred to as the "compiler" as it is implemented like a compiler behind the scene.
 - **Modula2-Runtime**: a small runtime written in Java, that provides support for some Modula-2 constructs. Both the compiler and the produced Java code require it
 - **Modula2-Library**: a very incomplete set of standard Modula-2 libraries (both Modula-2 .def files and the corresponding Java implementations)
@@ -51,19 +51,20 @@ There are four sub-projects (these are Eclipse project, with gradle support):
 
 The main class of the compiler / translator is `ch.pitchtech.modula.converter.Modula2JavaTranslator`.
 
-It accepts zero or more options, and a Modula-2 source file. In general you provide only the main Modula-2 module (as a `.mod` file) and all dependences will be detected and compiled automatically.
+This is a command-line tool. It accepts zero or more options, and a Modula-2 source file. In general you provide only the main Modula-2 module (as a `.mod` file) and all dependences will be detected and compiled automatically.
 
 Options:
 
 - `-p` or `--package` <package>: name of the Java package to use for the generated Java source files. Default `org.modula2.generated`
 - `-o` or `--output` <dir>: target directory in which to generate Java code. Defaults to current directory. Note that the Java package structure will be created inside of that directory
-- `-pl` or `package-library`: name of the Java package to use for the Java source files that are part of the "library" (Default `org.modula2.generated.library`)
+- `-pl` or `--package-library`: name of the Java package to use for the Java source files that are part of the "library" (Default `org.modula2.generated.library`)
     - The "library" corresponds to any .def files that have no corresponding .mod files. The assumption is that the implementation will be done manually in Java for these definitions.
     - If the Java files do not exist yet, the compiler will generate stub files (with method bodies that throw an `UnsupportedOperationException`) so that they can be completed manually.
     - If the Java files already exist, there are not modified.
-- `-ol` or `output-library`: target directory for the Java files of the "library". Default to the same as `-o`, but another value can be specified, for instance if you want to put them in a different Java project.
+- `-ol` or `--output-library`: target directory for the Java files of the "library". Default to the same as `-o`, but another value can be specified, for instance if you want to put them in a different Java project.
+- `-s` or `--source` <dir>: specify an additional directory in which to look for Modula-2 source files. This options can be specified multiple times to add multiple source directories.
 
-Note: by specifying `-ol` with the path of the "Modula2-Library/src" project and `-pl ch.pitchtech.modula.library` (the corresponding package), you can compile code using the existing standard library. Note however that it is *very* incomplete. In practice you may want to write your own version from scratch...
+Note: by specifying `-s` with the path to `Modula2-Library/modula-2`, `-ol` with the path to "Modula2-Library/src" and `-pl ch.pitchtech.modula.library` (the corresponding package), you can compile code using the existing standard library. Note however that it is *very* incomplete. In practice you may want to write your own version from scratch...
 
 
 ## Invoking the compiler prgrammatically
