@@ -3,7 +3,7 @@
 
 This is a command-line tool that translates (or "compiles") working Modula-2 sources (PIM4) into Java sources (.java files).
 
-Do not expect miracles. I only did this tool to convert two existing Modula-2 games I wrote years ago ([www.github.com/ChaosCastle/ChaosCastle](https://github.com/Tachyon-Sonics/ChaosCastle)). As such, the translator will handle any Modula-2 construct that appear in the sources of these games, but any other constructs are very likely *not* to work properly. This project does in no way attempt to achieve full compatibility or to implement any extensions like GNU m2c for instance.
+Do not expect miracles. I only created this tool to convert two existing Modula-2 games I wrote years ago ([www.github.com/ChaosCastle/ChaosCastle](https://github.com/Tachyon-Sonics/ChaosCastle)). As such, the translator will handle any Modula-2 construct that appear in the sources of these games, but any other constructs are very likely *not* to work properly. This project does in no way attempt to achieve full compatibility or to implement any extensions like GNU gm2 for instance.
 
 The translator generates Java source code that requires at least Java 17. The translator itself also requires at least Java 17.
 
