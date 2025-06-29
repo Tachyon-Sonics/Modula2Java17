@@ -20,7 +20,7 @@ public class ScopingTest {
     public void testCompileDummyModule() throws IOException, InvocationTargetException {
         // Compile
         CompilerHelper helper = new CompilerHelper("qualified");
-        helper.compile("DummyModule.mod");
+        helper.compile("DummyModule.mi");
         
         // Check compilation result
         helper.assertCompilationResult(DummyLibrary.class);

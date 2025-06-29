@@ -2,11 +2,21 @@ package ch.pitchtech.modula.converter.compiler;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Set;
 
-public class SourceFileHelper { // TODO (2) also handle .md and .mi and .m extensions
+public class SourceFileHelper {
+    
+    private final static Set<String> DEFINITION_EXTENSIONS = Set.of(".def", ".md");
+    private final static Set<String> IMPLEMENTATION_EXTENSIONS = Set.of(".mod", ".mi");
+    
 
     public static boolean isDefinition(SourceFile sourceFile) {
-        return sourceFile.getPath().toString().toLowerCase().endsWith(".def");
+        for (String extension : DEFINITION_EXTENSIONS) {
+            if (sourceFile.getPath().toString().toLowerCase().endsWith(extension)) {
+                return true;
+            }
+        }
+        return false;
     }
     
     /**
@@ -14,17 +24,22 @@ public class SourceFileHelper { // TODO (2) also handle .md and .mi and .m exten
      * in {@link FileOptions#getM2sourceDirs()} and return the first one that match. Else return the
      * given path unmodified.
      */
-    private static Path lookup(Path path, FileOptions fileOptions) {
-        if (Files.isRegularFile(path)) {
-            return path;
-        }
-        for (Path directory : fileOptions.getM2sourceDirs()) {
-            Path altPath = directory.resolve(path.getFileName());
-            if (Files.isRegularFile(altPath)) {
-                return altPath;
+    private static Path lookup(Path dir, String fileName, FileOptions fileOptions, Set<String> extensions) {
+        for (String extension : extensions) {
+            Path path = dir.resolve(fileName + extension);
+            if (Files.isRegularFile(path)) {
+                return path;
             }
         }
-        return path;
+        for (String extension : extensions) {
+            for (Path directory : fileOptions.getM2sourceDirs()) {
+                Path altPath = directory.resolve(fileName + extension);
+                if (Files.isRegularFile(altPath)) {
+                    return altPath;
+                }
+            }
+        }
+        return null;
     }
     
     /**
@@ -36,11 +51,10 @@ public class SourceFileHelper { // TODO (2) also handle .md and .mi and .m exten
     public static SourceFile lookupDefinition(SourceFile currentFile, String importedModuleName, FileOptions fileOptions) {
         if (importedModuleName.equals("SYSTEM"))
             return null;
-        Path path = currentFile.getPath().getParent().resolve(importedModuleName + ".def");
-        path = lookup(path, fileOptions);
-        if (!Files.isRegularFile(path)) {
-            throw new CompilationException(null, "File {0} not found in {1}, imported by {2}", 
-                    path.getFileName(), fileOptions.getM2sourceDirs(), currentFile.getPath());
+        Path path = lookup(currentFile.getPath().getParent(), importedModuleName, fileOptions, DEFINITION_EXTENSIONS);
+        if (path == null || !Files.isRegularFile(path)) {
+            throw new CompilationException(null, "File {0}.def (or .md) not found in {1}, imported by {2}", 
+                    importedModuleName, fileOptions.getM2sourceDirs(), currentFile.getPath());
         }
         return new SourceFile(path);
     }
@@ -50,13 +64,16 @@ public class SourceFileHelper { // TODO (2) also handle .md and .mi and .m exten
      */
     public static SourceFile lookupDefinition(SourceFile implementation, FileOptions fileOptions) {
         String modName = implementation.getPath().getFileName().toString();
-        String defName = modName.replace(".mod", ".def");
-        Path path = implementation.getPath().getParent().resolve(defName);
-        path = lookup(path, fileOptions);
-        if (Files.isRegularFile(path)) {
+        String baseName = null;
+        for (String extension : IMPLEMENTATION_EXTENSIONS) {
+            if (modName.endsWith(extension))
+                baseName = modName.substring(0, modName.length() - extension.length());
+        }
+        Path path = lookup(implementation.getPath().getParent(), baseName, fileOptions, DEFINITION_EXTENSIONS);
+        if (path != null && Files.isRegularFile(path)) {
             return new SourceFile(path);
         }
-        throw new CompilationException(null, "File not found: {0}, definition for {1}", path, implementation.getPath());
+        throw new CompilationException(null, "File not found: {0}.def (or .md), definition for {1}", baseName, implementation.getPath());
     }
     
     /**
@@ -66,10 +83,13 @@ public class SourceFileHelper { // TODO (2) also handle .md and .mi and .m exten
      */
     public static SourceFile lookupImplementation(SourceFile definition, FileOptions fileOptions) {
         String defName = definition.getPath().getFileName().toString();
-        String modName = defName.replace(".def", ".mod");
-        Path path = definition.getPath().getParent().resolve(modName);
-        path = lookup(path, fileOptions);
-        if (Files.isRegularFile(path)) {
+        String baseName = null;
+        for (String extension : DEFINITION_EXTENSIONS) {
+            if (defName.endsWith(extension))
+                baseName = defName.substring(0, defName.length() - extension.length());
+        }
+        Path path = lookup(definition.getPath().getParent(), baseName, fileOptions, IMPLEMENTATION_EXTENSIONS);
+        if (path != null && Files.isRegularFile(path)) {
             return new SourceFile(path);
         }
         return null;
