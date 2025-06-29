@@ -39,7 +39,8 @@ public class SourceFileHelper { // TODO (2) also handle .md and .mi and .m exten
         Path path = currentFile.getPath().getParent().resolve(importedModuleName + ".def");
         path = lookup(path, fileOptions);
         if (!Files.isRegularFile(path)) {
-            throw new CompilationException(null, "File not found: {0}, imported by {1}", path, currentFile.getPath());
+            throw new CompilationException(null, "File {0} not found in {1}, imported by {2}", 
+                    path.getFileName(), fileOptions.getM2sourceDirs(), currentFile.getPath());
         }
         return new SourceFile(path);
     }

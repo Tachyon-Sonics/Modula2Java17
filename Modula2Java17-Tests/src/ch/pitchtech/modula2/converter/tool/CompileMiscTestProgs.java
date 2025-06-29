@@ -7,20 +7,9 @@ import ch.pitchtech.modula.converter.compiler.Compiler;
 import ch.pitchtech.modula.converter.compiler.CompilerOptions;
 import ch.pitchtech.modula.converter.compiler.FileOptions;
 import ch.pitchtech.modula.converter.compiler.SourceFile;
+import ch.pitchtech.modula.converter.utils.Logger;
 
-//Example of big Java code: https://github.com/pkclsoft/ORCA-Modula-2
-//TODO (A) preserve comments and new lines inside of expressions
-/*
-* TODO various tests, namely:
-* - examples from https://fruttenboel.nl/mhc/
-* - https://github.com/michelou/m2-examples
-* - https://sourceforge.net/projects/modula2chess/files/
-* - https://www.modula2.org/freepages/downl.html#sour
-* - https://www.modula2.org/tutor/chapter11.php
-* 
-* TODO (3) Comment in generated Java files: (* Converted from Modula-2 by Modula2Java17 *)
-*/
-public class CompileChaosCastle {
+public class CompileMiscTestProgs {
 
     private final static String SOURCE_DIRECTORY_MAIN = "../../ChaosCastle/ChaosCastle/modula2";
     private final static String SOURCE_DIRECTORY_LIBRARY = "../../ChaosCastle/Library/modula2";
@@ -28,20 +17,11 @@ public class CompileChaosCastle {
     private final static String TARGET_DIRECTORY_MAIN = "../../ChaosCastle/ChaosCastle/src";
     private final static String TARGET_DIRECTORY_LIBRARY = "../../ChaosCastle/Library/src";
 
-    
+
     /**
-     * Compile the "ChaosCastle" project. Modula-2 source are expected to be in the
-     * "modula2" folder of the "ChaosCastle" Eclipse project. Generated Java source 
-     * are put in the "src" folder of the same project, overwriting any existing files.
-     * <p>
-     * Library .def files are assumed to be in the "modula2" folder of the "Library"
-     * Eclipse project. Skeleton Java files are placed in the "src" folder of the same
-     * project, but only if they do not already exist.
+     * Compile GraphTest.mod and DialogTest.mod
      */
     public static void main(String[] args) throws IOException {
-        Path chaosCastleMod = Path.of(SOURCE_DIRECTORY_MAIN, "ChaosCastle.mod");
-        SourceFile chaosCastle = new SourceFile(chaosCastleMod);
-        
         FileOptions fileOptions = new FileOptions();
         fileOptions.addM2sourceDir(Path.of(SOURCE_DIRECTORY_MAIN));
         fileOptions.addM2sourceDir(Path.of(SOURCE_DIRECTORY_LIBRARY));
@@ -52,8 +32,19 @@ public class CompileChaosCastle {
         compilerOptions.setTargetPackageMain("ch.chaos.castle");
         compilerOptions.setTargetPackageLib("ch.chaos.library");
         
-        Compiler compiler = new Compiler(fileOptions, compilerOptions);
-        compiler.compile(chaosCastle);
+        {
+            Compiler compiler = new Compiler(fileOptions, compilerOptions);
+            Path mainModulePath = Path.of(SOURCE_DIRECTORY_MAIN, "GraphTest.mod");
+            SourceFile mainModule = new SourceFile(mainModulePath);
+            compiler.compile(mainModule);
+        }
+        {
+            Logger.setVerboseLevel(2);
+            Compiler compiler = new Compiler(fileOptions, compilerOptions);
+            Path mainModulePath = Path.of(SOURCE_DIRECTORY_MAIN, "DialogTest.mod");
+            SourceFile mainModule = new SourceFile(mainModulePath);
+            compiler.compile(mainModule);
+        }
     }
     
 }

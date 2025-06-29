@@ -13,19 +13,25 @@ import ch.pitchtech.modula.converter.compiler.SourceFile;
 
 public class CompileGrotte {
 
-    private final static String SOURCE_DIRECTORY = "../../ChaosCastle/Grotte/modula2";
+    private final static String SOURCE_DIRECTORY_MAIN = "../../ChaosCastle/Grotte/modula2";
+    private final static String SOURCE_DIRECTORY_LIBRARY = "../../ChaosCastle/Library/modula2";
+    
     private final static String TARGET_DIRECTORY_MAIN = "../../ChaosCastle/Grotte/src";
     private final static String TARGET_DIRECTORY_LIBRARY = "../../ChaosCastle/Library/src";
 
     
+    /**
+     * Compile the "Grotte" Modula-2 project using a {@link Compiler} instance
+     */
     public static void main0(String[] args) throws IOException {
-        Path grotteMod = Path.of(SOURCE_DIRECTORY, "Grotte.mod");
+        Path grotteMod = Path.of(SOURCE_DIRECTORY_MAIN, "Grotte.mod");
         SourceFile grotte = new SourceFile(grotteMod);
         
-        FileOptions fileOptions = new FileOptions(
-                Path.of(SOURCE_DIRECTORY),
-                Path.of(TARGET_DIRECTORY_MAIN), 
-                Path.of(TARGET_DIRECTORY_LIBRARY));
+        FileOptions fileOptions = new FileOptions();
+        fileOptions.addM2sourceDir(Path.of(SOURCE_DIRECTORY_MAIN));
+        fileOptions.addM2sourceDir(Path.of(SOURCE_DIRECTORY_LIBRARY));
+        fileOptions.setTargetMainDir(Path.of(TARGET_DIRECTORY_MAIN));
+        fileOptions.setTargetLibraryDir(Path.of(TARGET_DIRECTORY_LIBRARY));
         
         CompilerOptions compilerOptions = new CompilerOptions();
         compilerOptions.setTargetPackageMain("ch.chaos.castle");
@@ -35,10 +41,16 @@ public class CompileGrotte {
         compiler.compile(grotte);
     }
     
+    /**
+     * Compile the "Grotte" Modula-2 project by simulating a command-line
+     * (calling {@link Modula2JavaTranslator#main(String[])} with command-line args)
+     */
     public static void main(String[] unused) throws IOException {
-        Path grotteMod = Path.of(SOURCE_DIRECTORY, "Grotte.mod");
+        Path grotteMod = Path.of(SOURCE_DIRECTORY_MAIN, "Grotte.mod");
         List<String> args = List.of(
                 grotteMod.toString(),
+                "-" + CmdOptions.SOURCE_DIR.getName(), Path.of(SOURCE_DIRECTORY_MAIN).toString(),
+                "-" + CmdOptions.SOURCE_DIR.getName(), Path.of(SOURCE_DIRECTORY_LIBRARY).toString(),
                 "-" + CmdOptions.TARGET_MAIN_DIR.getName(), Path.of(TARGET_DIRECTORY_MAIN).toString(),
                 "-" + CmdOptions.TARGET_LIBRARY_DIR.getName(), Path.of(TARGET_DIRECTORY_LIBRARY).toString(),
                 "-" + CmdOptions.TARGET_PACKAGE_MAIN.getName(), "ch.chaos.grotte",

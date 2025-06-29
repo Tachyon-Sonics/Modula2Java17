@@ -15,12 +15,6 @@ public class FileOptions {
         
     }
     
-    public FileOptions(Path m2sourceDir, Path targetMainDir, Path targetLibraryDir) {
-        this.m2sourceDirs.add(m2sourceDir);
-        this.targetMainDir = targetMainDir;
-        this.targetLibraryDir = targetLibraryDir;
-    }
-    
     public void addM2sourceDir(Path m2sourceDir) {
         m2sourceDirs.add(m2sourceDir);
     }

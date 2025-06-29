@@ -5,8 +5,19 @@ import java.util.List;
 
 import ch.pitchtech.modula.converter.compiler.CompilerOptions;
 import ch.pitchtech.modula.converter.compiler.FileOptions;
+import ch.pitchtech.modula.converter.utils.Logger;
 
 public class CmdOptions {
+    
+    public final static CmdOption SOURCE_DIR = new CmdOption("s", "source", OptionType.DIRECTORY,
+            "<directory>", "Additional source directory (can be specified multiple times)") {
+        
+        @Override
+        public void apply(Object value, FileOptions fileOptions, CompilerOptions compilerOptions) {
+            Path inputDir = (Path) value;
+            fileOptions.addM2sourceDir(inputDir);
+        }
+    };
 
     public final static CmdOption TARGET_MAIN_DIR = new CmdOption("o", "output", OptionType.DIRECTORY,
             "<directory>", "Output directory for generated Java code") {
@@ -51,8 +62,19 @@ public class CmdOptions {
         
     };
     
+    public final static CmdOption VERBOSE = new CmdOption("v", "verbose", OptionType.INTEGER,
+            "<level>", "Set verbose level between 0 and 2") {
+        
+        @Override
+        public void apply(Object value, FileOptions fileOptions, CompilerOptions compilerOptions) {
+            int verboseLevel = (int) value;
+            Logger.setVerboseLevel(verboseLevel);
+        }
+    };
+    
     public final static List<CmdOption> getAllOptions() {
-        return List.of(TARGET_MAIN_DIR, TARGET_LIBRARY_DIR, TARGET_PACKAGE_MAIN, TARGET_PACKAGE_LIB);
+        return List.of(SOURCE_DIR, TARGET_MAIN_DIR, TARGET_LIBRARY_DIR, TARGET_PACKAGE_MAIN, TARGET_PACKAGE_LIB,
+                VERBOSE);
     }
 
 }

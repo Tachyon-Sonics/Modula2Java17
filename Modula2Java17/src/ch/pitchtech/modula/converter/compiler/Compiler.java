@@ -68,6 +68,7 @@ public class Compiler {
         Logger.log(1, "P2: Abstraction...");
         for (SourceFile sourceFile : sourceFiles) {
             Logger.log(2, "  {0}", sourceFile.getPath().getFileName());
+            CurrentFile.setCurrentFile(sourceFile.getPath());
             ICompilationUnit cu = createCompilationUnit(sourceFile.getCuContext());
             sourceFile.setCompilationUnit(cu);
         }
@@ -75,6 +76,7 @@ public class Compiler {
         // Analyze + Transform
         Logger.log(1, "P3: Analyze & Transform...");
         for (SourceFile sourceFile : sourceFiles) {
+            CurrentFile.setCurrentFile(sourceFile.getPath());
             ICompilationUnit compilationUnit = sourceFile.getCompilationUnit();
             Logger.log(2, "  {0}", compilationUnit.getName());
             Transforms.applyTransforms(compilationUnit, compilerOptions);
