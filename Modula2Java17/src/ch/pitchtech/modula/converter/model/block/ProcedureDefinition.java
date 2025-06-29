@@ -12,7 +12,7 @@ import ch.pitchtech.modula.converter.model.scope.IHasScope;
 import ch.pitchtech.modula.converter.model.source.NodeAttachType;
 import ch.pitchtech.modula.converter.model.source.SourceElement;
 import ch.pitchtech.modula.converter.model.source.SourceLocation;
-import ch.pitchtech.modula.converter.model.type.LiteralType;
+import ch.pitchtech.modula.converter.model.type.IType;
 import ch.pitchtech.modula.converter.model.type.ProcedureType;
 
 public class ProcedureDefinition extends SourceElement implements INode, IDefinition {
@@ -20,12 +20,12 @@ public class ProcedureDefinition extends SourceElement implements INode, IDefini
     private final IHasScope parent;
     private final String name;
     private final List<FormalArgument> arguments = new ArrayList<>();
-    private final LiteralType returnType; // null if void
+    private final IType returnType; // null if void
     private final boolean builtIn;
     Set<ProcedureType> usedAsExprTypes = new LinkedHashSet<>();
     
     
-    public ProcedureDefinition(SourceLocation sLoc, IHasScope parent, String name, LiteralType returnType, boolean builtIn) {
+    public ProcedureDefinition(SourceLocation sLoc, IHasScope parent, String name, IType returnType, boolean builtIn) {
         super(sLoc);
         this.parent = parent;
         this.name = name;
@@ -68,7 +68,7 @@ public class ProcedureDefinition extends SourceElement implements INode, IDefini
         return result;
     }
     
-    public LiteralType getReturnType() {
+    public IType getReturnType() {
         return returnType;
     }
     

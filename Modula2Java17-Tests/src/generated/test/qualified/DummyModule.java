@@ -42,6 +42,13 @@ public class DummyModule {
     }
 
 
+    // PROCEDURE
+
+    private DummyLibrary.DummyType TestProc(DummyLibrary.DummyType arg) {
+        return arg;
+    }
+
+
     // Life Cycle
 
     private void begin() {
@@ -58,6 +65,7 @@ public class DummyModule {
         dummyLibrary.DummyTypeVariable.y = temp;
         dummyLibrary.DummyTypeVariable.copyFrom(test);
         test.copyFrom(dummyLibrary.DummyTypeVariable);
+        test.copyFrom(TestProc(test));
     }
 
     private void close() {

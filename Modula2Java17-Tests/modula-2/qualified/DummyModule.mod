@@ -8,6 +8,11 @@ MODULE DummyModule;
         
         (* Qualified type access *)
         test: DummyLibrary.DummyType;
+        
+    PROCEDURE TestProc(arg: DummyLibrary.DummyType): DummyLibrary.DummyType;
+    BEGIN
+        RETURN arg;
+    END TestProc;
     
 BEGIN
     
@@ -33,5 +38,8 @@ BEGIN
     DummyLibrary.DummyTypeVariable.y := temp;
     DummyLibrary.DummyTypeVariable := test;
     test := DummyLibrary.DummyTypeVariable;
+    
+    (* Qualified arg and result *)
+    test := TestProc(test);
     
 END DummyModule.

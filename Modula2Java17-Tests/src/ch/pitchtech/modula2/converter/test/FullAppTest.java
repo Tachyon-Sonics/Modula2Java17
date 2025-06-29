@@ -37,21 +37,29 @@ public class FullAppTest {
         // Compile "Grotte" project
         Path targetDir = Files.createTempDirectory("compiled");
         FileOptions fileOptions = new FileOptions();
-        Path modulaPath = getModulaPath("ChaosCastle", "Grotte");
-        if (!Files.isDirectory(modulaPath)) {
+        Path appModulaPath = getAppModulaPath("ChaosCastle", "Grotte");
+        if (!Files.isDirectory(appModulaPath)) {
             throw new UnsupportedOperationException(
-                    "The 'Grotte' project from the 'ChaosCastle' repository cannot be found at " + modulaPath.toString()
+                    "The 'Grotte' project from the 'ChaosCastle' repository cannot be found at " + appModulaPath.toString()
                     + "\nMake sure you checkout this repo/project in order to run this test."
                     + "\nOr launch the FastRootSuite instead of the RootSuite to skip tests requiring other projects.");
         }
-        fileOptions.addM2sourceDir(modulaPath);
+        Path libModulaPath = getLibModulaPath("ChaosCastle");
+        if (!Files.isDirectory(libModulaPath)) {
+            throw new UnsupportedOperationException(
+                    "The 'Library' project from the 'ChaosCastle' repository cannot be found at " + libModulaPath.toString()
+                    + "\nMake sure you checkout this repo/project in order to run this test."
+                    + "\nOr launch the FastRootSuite instead of the RootSuite to skip tests requiring other projects.");
+        }
+        fileOptions.addM2sourceDir(appModulaPath);
+        fileOptions.addM2sourceDir(libModulaPath);
         fileOptions.setTargetMainDir(targetDir);
         fileOptions.setTargetLibraryDir(targetDir);
         CompilerOptions compilerOptions = new CompilerOptions();
         compilerOptions.setTargetPackageMain("ch.chaos.grotte");
         compilerOptions.setTargetPackageLib("ch.chaos.library");
         CompilerHelper helper = new CompilerHelper(targetDir, fileOptions, compilerOptions);
-        helper.compile(modulaPath.resolve("Grotte.mod"));
+        helper.compile(appModulaPath.resolve("Grotte.mod"));
         
         // Compare each generated files with actual ones
         Path generatedCodePath = targetDir.resolve("ch").resolve("chaos").resolve("grotte");
@@ -86,21 +94,29 @@ public class FullAppTest {
         // Compile "ChaosCastle" project
         Path targetDir = Files.createTempDirectory("compiled");
         FileOptions fileOptions = new FileOptions();
-        Path modulaPath = getModulaPath("ChaosCastle", "ChaosCastle");
-        if (!Files.isDirectory(modulaPath)) {
+        Path appModulaPath = getAppModulaPath("ChaosCastle", "ChaosCastle");
+        if (!Files.isDirectory(appModulaPath)) {
             throw new UnsupportedOperationException(
-                    "The 'ChaosCastle' project from the 'ChaosCastle' repository cannot be found at " + modulaPath.toString()
+                    "The 'ChaosCastle' project from the 'ChaosCastle' repository cannot be found at " + appModulaPath.toString()
                     + "\nMake sure you checkout this repo/project in order to run this test."
                     + "\nOr launch the FastRootSuite instead of the RootSuite to skip tests requiring other projects.");
         }
-        fileOptions.addM2sourceDir(modulaPath);
+        Path libModulaPath = getLibModulaPath("ChaosCastle");
+        if (!Files.isDirectory(libModulaPath)) {
+            throw new UnsupportedOperationException(
+                    "The 'Library' project from the 'ChaosCastle' repository cannot be found at " + libModulaPath.toString()
+                    + "\nMake sure you checkout this repo/project in order to run this test."
+                    + "\nOr launch the FastRootSuite instead of the RootSuite to skip tests requiring other projects.");
+        }
+        fileOptions.addM2sourceDir(appModulaPath);
+        fileOptions.addM2sourceDir(libModulaPath);
         fileOptions.setTargetMainDir(targetDir);
         fileOptions.setTargetLibraryDir(targetDir);
         CompilerOptions compilerOptions = new CompilerOptions();
         compilerOptions.setTargetPackageMain("ch.chaos.castle");
         compilerOptions.setTargetPackageLib("ch.chaos.library");
         CompilerHelper helper = new CompilerHelper(targetDir, fileOptions, compilerOptions);
-        helper.compile(modulaPath.resolve("ChaosCastle.mod"));
+        helper.compile(appModulaPath.resolve("ChaosCastle.mod"));
         
         // Compare each generated files with actual ones
         Path generatedCodePath = targetDir.resolve("ch").resolve("chaos").resolve("castle");
@@ -135,8 +151,14 @@ public class FullAppTest {
     }
     
     // The "modula-2" folder in the given project
-    private static Path getModulaPath(String repositoryName, String projectName) {
+    private static Path getAppModulaPath(String repositoryName, String projectName) {
         Path projectPath = getProjectPath(repositoryName, projectName);
+        return projectPath.resolve("modula2");
+    }
+
+    // The "modula-2" folder in the given project
+    private static Path getLibModulaPath(String repositoryName) {
+        Path projectPath = getProjectPath(repositoryName, "Library");
         return projectPath.resolve("modula2");
     }
 

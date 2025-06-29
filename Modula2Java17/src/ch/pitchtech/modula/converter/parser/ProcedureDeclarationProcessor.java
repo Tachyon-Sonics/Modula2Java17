@@ -42,7 +42,7 @@ public class ProcedureDeclarationProcessor extends ProcessorBase {
         boolean hasReturnType = false;
         boolean hasArguments = false;
         
-        LiteralType returnType = null;
+        IType returnType = null;
         List<FormalArgument> formalArguments = new ArrayList<>();
         
         if (hasParentheses) {
@@ -77,6 +77,7 @@ public class ProcedureDeclarationProcessor extends ProcessorBase {
                     lastArgumentIndex = fpcSize - 2;
                 }
             }
+            
             // Arguments
             if (hasArguments) {
                 for (int i = 1; i <= lastArgumentIndex; i++) {
@@ -158,9 +159,19 @@ public class ProcedureDeclarationProcessor extends ProcessorBase {
             if (hasReturnType) {
                 // TODO all QualidentContext can be "x" or "x.x" or "x.x.x", etc
                 QualidentContext returnQualidentContext = (QualidentContext) formalParametersContext.getChild(fpcSize - 1);
-                expect(returnQualidentContext, 0, IdentContext.class);
-                IdentContext returnIdent = (IdentContext) returnQualidentContext.getChild(0);
-                returnType = new LiteralType(loc(returnIdent), scopeUnit, returnIdent.getText(), false);
+                if (returnQualidentContext.getChildCount() == 1) {
+                    expect(returnQualidentContext, 0, IdentContext.class);
+                    IdentContext returnIdent = (IdentContext) returnQualidentContext.getChild(0);
+                    returnType = new LiteralType(loc(returnIdent), scopeUnit, returnIdent.getText(), false);
+                } else {
+                    expect(returnQualidentContext, 0, IdentContext.class);
+                    expect(returnQualidentContext, 1, ".");
+                    expect(returnQualidentContext, 2, IdentContext.class);
+                    IdentContext identContextModule = (IdentContext) returnQualidentContext.getChild(0);
+                    IdentContext identContextType = (IdentContext) returnQualidentContext.getChild(2);
+                    returnType = new QualifiedType(loc(identContextType), scopeUnit, 
+                            identContextModule.getText(), identContextType.getText());
+                }
             }
         }
         

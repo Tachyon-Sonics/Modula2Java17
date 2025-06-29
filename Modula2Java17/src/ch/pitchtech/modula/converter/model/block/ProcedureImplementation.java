@@ -20,7 +20,7 @@ import ch.pitchtech.modula.converter.model.source.NodeAttachType;
 import ch.pitchtech.modula.converter.model.source.SourceElement;
 import ch.pitchtech.modula.converter.model.source.SourceLocation;
 import ch.pitchtech.modula.converter.model.statement.IStatement;
-import ch.pitchtech.modula.converter.model.type.LiteralType;
+import ch.pitchtech.modula.converter.model.type.IType;
 import ch.pitchtech.modula.converter.model.type.ProcedureType;
 import ch.pitchtech.modula.converter.model.type.TypeDefinition;
 
@@ -29,7 +29,7 @@ public class ProcedureImplementation extends SourceElement implements IHasScope,
     private final IHasScope parent;
     private final String name;
     private final List<FormalArgument> arguments = new ArrayList<>();
-    private final LiteralType returnType;
+    private final IType returnType;
     
     private final List<ConstantDefinition> constantDefinitions = new ArrayList<>();
     private final List<TypeDefinition> typeDefinitions = new ArrayList<>();
@@ -47,7 +47,7 @@ public class ProcedureImplementation extends SourceElement implements IHasScope,
     private final Set<ProcedureType> usedAsExprTypes = new LinkedHashSet<>();
 
     
-    public ProcedureImplementation(SourceLocation sLoc, IHasScope parent, String name, LiteralType returnType) {
+    public ProcedureImplementation(SourceLocation sLoc, IHasScope parent, String name, IType returnType) {
         super(sLoc);
         this.parent = parent;
         this.name = name;
@@ -84,7 +84,7 @@ public class ProcedureImplementation extends SourceElement implements IHasScope,
         return null;
     }
     
-    public LiteralType getReturnType() {
+    public IType getReturnType() {
         return returnType;
     }
     
