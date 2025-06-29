@@ -8,5 +8,10 @@ IMPLEMENTATION MODULE DummyLibrary;
     BEGIN
         RETURN arg;
     END DummyFunction;
+    
+    PROCEDURE TestFunction(VAR arg: DummyType): DummyType;
+    BEGIN
+        RETURN arg;
+    END TestFunction;
 
 END DummyLibrary.

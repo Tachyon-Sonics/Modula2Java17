@@ -41,5 +41,6 @@ BEGIN
     
     (* Qualified arg and result *)
     test := TestProc(test);
+    test := DummyLibrary.TestFunction(test);
     
 END DummyModule.

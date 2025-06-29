@@ -12,5 +12,7 @@ DEFINITION MODULE DummyLibrary;
     PROCEDURE DummyProcedure(arg: LONGINT);
     
     PROCEDURE DummyFunction(arg: LONGINT): LONGINT;
+    
+    PROCEDURE TestFunction(VAR arg: DummyType): DummyType;
 
 END DummyLibrary.

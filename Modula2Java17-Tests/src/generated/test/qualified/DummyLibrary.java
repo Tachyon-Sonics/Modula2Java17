@@ -83,6 +83,10 @@ public class DummyLibrary {
         return arg;
     }
 
+    public DummyType TestFunction(/* var */ DummyType arg) {
+        return arg;
+    }
+
 
     // Support
 

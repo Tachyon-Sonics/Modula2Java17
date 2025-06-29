@@ -66,6 +66,7 @@ public class DummyModule {
         dummyLibrary.DummyTypeVariable.copyFrom(test);
         test.copyFrom(dummyLibrary.DummyTypeVariable);
         test.copyFrom(TestProc(test));
+        test.copyFrom(dummyLibrary.TestFunction(test));
     }
 
     private void close() {
