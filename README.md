@@ -137,13 +137,6 @@ Procedure types are supported; a procedure type is converted to a Java interface
 A procedure used as an expression (when assigned to a variable of a procedure type), is converted to the Java 8 `module::procedure` syntax. Whenever a procedure is used as an expression, a `final` Java field with the `module::procedure` value is created next to it. This field is then used in the code instead of repeating the `module::procedure` expression everywhere. This is necessary to support equality/inequality comparison of variables of procedure type, because in Java every instance of the _same_ `module::procedure` expression results in a _different_ lambda (that are _not_ equal, even if they refer to the same class and method).
 
 
-### CLOSE statement
-
-This is the only non-standard extension that is supported. In a module or implementation module, the `BEGIN` block can be followed by a `CLOSE` block before the `END <Module>.`. It corresponds to code that must be executed on termination, like a Java `finally` block. The `CLOSE` block is executed when the execution reaches the end of the `BEGIN` block, when an exception occur, or if a `HALT` statement is reached. `CLOSE` blocks of multiple implementation modules are executed in reverse order, compared to their `BEGIN` blocks.
-
-This can only be used in the module's body. It cannot be used in procedures.
-
-
 ### Memory management
 
 `NEW` and `DISPOSE` are supported. Only the versions with one argument are supported (tag variants are not supported).
