@@ -8,11 +8,11 @@ Do not expect miracles. I only created this tool to convert two existing Modula-
 The translator generates Java source code that requires at least Java 17. The translator itself also requires at least Java 17.
 
 There are four sub-projects (these are Eclipse projects, with gradle support):
-- **Modula2Java17**: this is the Modula-2 to Java translator. It is also referred to as the "compiler" as it is implemented like a compiler behind the scene.
+- **Modula2Java17**: this is the Modula-2 to Java translator. It is also referred to as the "compiler", as it is implemented like a compiler behind the scene.
 - **Modula2-Runtime**: a small runtime written in Java, that provides support for some Modula-2 constructs. Both the compiler and the produced Java code require it
 - **Modula2-Library**: a very incomplete set of standard Modula-2 libraries (both Modula-2 .def files and the corresponding Java implementations)
-    - Only the minumum to run the tests is provided. This can be used as a starting point though.
-- **Modula2Java17-Tests**: tests (JUnit 4)
+    - Only the minimum to run the tests is provided. This can be used as a starting point though.
+- **Modula2Java17-Tests**: automated tests (JUnit 4)
 
 ## Limitations
 
@@ -75,7 +75,7 @@ As the compiler itself is implemented in Java, it can make sense to invoke the c
 
 As an example, please refer to the `CompileGrotte` or `CompileChaosCastle` classes in package `ch.pitchtech.modula2.converter.tool` of the "Modula2Java17-Test" project. There are the two Java classes that I use to compile / recompile my two games (assuming the corresponding github's repo (https://github.com/Tachyon-Sonics/ChaosCastle) has been checked out in the same place locally). Basically the code to invoke the compiler involves:
 
-- Creating and initializing `FileOptions` to specify where the Modula-2 sources are, and where to produce the Java sources
+- Creating and initializing a `FileOptions` to specify where the Modula-2 sources are, and where to produce the Java sources
 - Creating and initializing a `CompilerOptions` to specify compiler options
 - Creating a `Compiler` with the above options and invoke the `compile` method to translate the code
 
@@ -89,7 +89,7 @@ As an example, please refer to the `CompileGrotte` or `CompileChaosCastle` class
 
 This is basically a 16-bit data model. It currently assumes no overflow and does not check for overflow. Mapping unsigned types to larger types allow the Java code to be natural, without requiring calls to `Integer.divideUnsigned` and similar. As long as the original Modula-2 code never overflows, the semantics are preserved. Note that unsigned numeric types `SHORTCARD`, `CARDINAL` and `LONGCARD` still use 1, 2 and 4 bytes respectively when converted to an argument of type `ARRAY OF BYTE`.
 
-Note: This currently generates a _lot_ of type-casts int the resulting code, because in Java any operation on `byte` or `short` result to an `int`. I plan to change that so that only `int` and `long` are used for numeric types. This will make the Java code cleaner (although it will use more memory), and it would make it possible to have both a 16-bit and 32-bit model that result in compatible Java code.
+Note: This currently generates a _lot_ of type-casts int the resulting code, because in Java any operation on `byte` or `short` result to an `int`. I plan to change that in the future so that only `int` and `long` are used for numeric types. This will make the Java code cleaner (although it will use more memory), and it would make it possible to have both a 16-bit and 32-bit model that result in compatible Java code.
 
 Other simple types are either translated to the corresponding Java types, or to helper classes found in `ch.pitchtech.modula.runtime.Runtime`.
 Modula-2 enumerated types are converted to Java enums. The generated code can be quite ackward when used in a `FOR` loop.
@@ -112,7 +112,7 @@ In Modula-2, a nested procedure has access to all constants and variables of the
 
 ### Arguments by value (default) and by reference (using `VAR`)
 
-Java is only by-value. However, Modula-2 records are converted to Java objects, and Modula-2 arrays are converted to Java arrays. Those are both references in Java. Although a reference itself is passed by value in Java, it correspond to by-reference semantics in Modula-2 because the _content_ is modifiable.
+Java is only by-value. However, Modula-2 records are converted to Java objects, and Modula-2 arrays are converted to Java arrays. Those are both references in Java. Although a reference itself is passed by value in Java, it correspond to the by-reference semantics of Modula-2 because the _content_ is modifiable.
 
 If a record or array is passed by reference in Modula-2 (using `VAR`), the Java code is straightforward.
 
@@ -190,7 +190,7 @@ Some pointer casts (for example casting a `POINTER TO XX` to `POINTER TO YY`, wh
 
 Casting a pointer of a given type to an `ADDRESS`, and back to a pointer of the same type should work. The `ADDRESS` type is mapped to Java's `Object`.
 
-A future version in which records are (optionally) mapped to Java `ByteBuffer` might support pointer arithmetic as well as all pointer casts.
+A future version in which records are (optionally) mapped to Java `ByteBuffer`s might support pointer arithmetic as well as all pointer casts.
 
 
 ### Promotion of `ARRAY OF CHAR` to Java `String`
@@ -206,4 +206,13 @@ The compiler also assumes that all `ARRAY OF CHAR` are either filled up to the u
 
 ## Internals
 
-TODO
+This section is only useful if you plan to modify or contribute to the code of the compiler.
+
+The compiler is implemented in multiple passes:
+
+- Pass 1: Parsing. This pass delegates most of the work to the antlr library. See `Compiler.parse` and `Compiler.parseRecursive`. It makes use of the grammar file `m2pim4.g4`. Note that the parsing code and parse-tree classes (in package `ch.pitchtech.modula.converter.antlr.m2`) are auto-generated from this grammar file. Please refer to the documentation of the antlr library (org.antlr:antlr4).
+    - Dependencies are detected and included for compilation in this pass.
+- Pass 2: Abstraction. This pass transforms the parse-tree of the first pass to a more abstract model, based on classes of the `ch.pitchtech.modula.converter.model` package and sub-packages (if you are familiar with the Modula-2 language, you should find Java classes for basically every Modula-2 construct here). See `Compiler.createCompilationUnit`. Classes from the `ch.pitchtech.modula.converter.parser` package are responsible for this transformation pass.
+- Hidden Pass: Scope resolution. This is not implemented as an explicit pass, but rather computed on-the-fly whenever required. A future version may do it in an explicit pass. See classes from the `ch.pitchtech.modula.converter.model.scope` package, for example interfaces `IScope` and `IHasScope` (implemented by all Modula-2 constructs that have a scope), and `TypeResolver`.
+- Pass 3: Analyze & Transform. This pass is actually a bag of multiple analyses and transforms. They are used whenever some Modula-2 construct is too far away from the corresponding Java construct, and needs to be transformed to better match the Java version. See `Transforms` class. This is used to analyse which variables are actually read or written, and to move nested PROCEDURE at top level for example. This pass is implemented by classes of the `ch.pitchtech.modula.converter.transform` package.
+- Pass 4: Code generation. This last pass generates the resulting Java code. Implemented by classes of the `ch.pitchtech.modula.converter.generator` package. Note that many transformations are performed here on-the-fly rather than in the previous step if they are simple enough. Example is for-loop over an enumeration. This is currently the slowest pass, and it makes heavy use of the "Hidden Pass" to properly resolve variables, types, etc.
