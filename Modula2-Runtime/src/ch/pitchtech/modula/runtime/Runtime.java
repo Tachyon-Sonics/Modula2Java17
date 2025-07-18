@@ -802,6 +802,10 @@ public class Runtime {
             ByteBuffer buffer = ByteBuffer.allocate(4);
             buffer.putFloat(number);
             return buffer;
+        } else if (item instanceof Enum<?> enumItem) {
+            ByteBuffer buffer = ByteBuffer.allocate(1);
+            buffer.put((byte) enumItem.ordinal());
+            return buffer;
         } else if (item instanceof String string) {
             byte[] result = string.getBytes(StandardCharsets.UTF_8);
             byte[] padded = Arrays.copyOf(result, result.length + 1); // Add zero-padding
@@ -825,7 +829,7 @@ public class Runtime {
         }
     }
 
-    private static Object fromByteArray(ByteBuffer buffer, Class<?> expectedType) {
+    public static Object fromByteBuffer(ByteBuffer buffer, Class<?> expectedType) {
         if (byte[].class.equals(expectedType)) {
             return buffer.array();
         } else if (Long.class.equals(expectedType) || long.class.equals(expectedType)) {
@@ -845,6 +849,9 @@ public class Runtime {
             return buffer.getDouble();
         } else if (Float.class.equals(expectedType) || float.class.equals(expectedType)) {
             return buffer.getFloat();
+        } else if (expectedType.isEnum()) {
+            int index = buffer.get();
+            return expectedType.getEnumConstants()[index];
         } else if (String.class.equals(expectedType)) {
             byte[] padded = buffer.array();
             byte[] result = Arrays.copyOf(padded, padded.length - 1); // Remove zero-padding
@@ -883,7 +890,7 @@ public class Runtime {
                     System.arraycopy(bArr, 0, temp, javaSize - m2size, m2size);
                     bArr = temp;
                 }
-                Object newValue = fromByteArray(ByteBuffer.wrap(bArr), type);
+                Object newValue = fromByteBuffer(ByteBuffer.wrap(bArr), type);
                 ((IRef<Object>) itemRef).set(newValue);
             }
 
