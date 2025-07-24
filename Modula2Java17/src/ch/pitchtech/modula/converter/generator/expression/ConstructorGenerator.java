@@ -24,7 +24,6 @@ public class ConstructorGenerator extends Generator {
         this.constructor = constructor;
     }
 
-
     @Override
     public void generate(ResultContext result) {
         IType type = constructor.getType(result.getScope());

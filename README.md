@@ -13,10 +13,11 @@ There are four sub-projects (these are Eclipse projects, with gradle support):
 - **Modula2-Library**: a very incomplete set of standard Modula-2 libraries (both Modula-2 .def files and the corresponding Java implementations)
     - Only the minimum to run the tests is provided. This can be used as a starting point though.
 - **Modula2Java17-Tests**: automated tests (JUnit 4)
+¨
 
 ## Limitations
 
-- Imports using the `FROM <module> IMPORT ...` syntax should work well. Imports using `IMPORT <module>` are not well tested as I never used them.
+- Imports using the `FROM <module> IMPORT ...` syntax should work well. Imports using `IMPORT <module>` are not well tested as I never used them. `EXPORT` keyword (in `EXPORT QUALIFIED` for instance) is not supported.
 - Handling of compilation errors is currently awful. If incorrect or unsupported Modula-2 code is encountered, this may result in any of the following:
     - Java code that does not compile or that is incorrect / crashes at execution
     - A strange exception in the compiler's sources
@@ -28,23 +29,24 @@ There are four sub-projects (these are Eclipse projects, with gradle support):
     - This is the only way to interface Modula-2 code with Java. Inlining Java code is not supported
 - There is no support for incremental compilation. You specify a .mod file that is the main MODULE, and all required dependencies will be detected and compiled
     - Although it is possible to compile an `IMPLEMENTATION MODULE`, mind that
-        - It will be recompiled _again_ if you compile a `MODULE` or `IMPLEMENTATION MODULE` that uses it;
-        - This may result in _different_ Java code. Indeed in some cases a global analysis is used to generate proper Java code.
+        - It will be recompiled *again* if you compile a `MODULE` or `IMPLEMENTATION MODULE` that uses it;
+        - This may result in *different* Java code. Indeed in some cases a global analysis is used to generate proper Java code.
 - Conversion of arbitrary types to `WORD` or `BYTE` is not supported.
 - Minimal support for type-casting is provided using the `VAL(<type>, <value>)` function only.
      - Conversion of arbitrary values to `ARRAY OF BYTE` arguments is provided but with extremely limited support (only basic types - no record or arrays). However, it strictly follows a 16-bit, big-endian data model.
-- There is no graphical user interface. More generally, this tool is _not_ suited for the developement of new Modula-2 projects (due to all the previous points). The purpose is to convert legacy Modula-2 code to Java once, and then to basically forget the original Modula-2 code and to continue working exclusively with the generated Java code.
+- There is no graphical user interface. More generally, this tool is *not* suited for the developement of new Modula-2 projects (due to all the previous points). The purpose is to convert legacy Modula-2 code to Java once, and then to basically forget the original Modula-2 code and to continue working exclusively with the generated Java code.
 - The compiler assumes that module names are PascalCase, and will use the camelCase version for the corresponding instances in the Java code.
     - This can result in name clashes (and hence Java code that does not compile) if the camelCase version corresponds to another identifier. For example if you have a module `Clock` and a variable `clock`, because `clock` will be used in the Java code for the instance of the Class.
     - If the Modula-2 code use camelCase module names... well rename then to PascalCase until I handle this case. Yeah, that sucks, but remind I only did this project to resurect two old games I wrote in Modula-2...
 - `ARRAY [xx .. yy]`, where `xx` and `yy` are members of an enumeration is supported. However `ARRAY <EnumType>` and more generally `ARRAY <RangeType>` are not. `ARRAY [xx .. yy]` where `xx` and `yy` are integer constants works.
 - I think `BITSET` is broken. But `SET OF [0 .. 15]` should work.
-- Support for compile-time constants that involes arithmetic oprations (for instance in array bounds) is very limited.
+- Support for compile-time constants that involve arithmetic oprations (for instance in array bounds) is very limited.
 - RECORD with CASE support is very limited (and probably buggy). No C-like union is created, instead separate fields are generated for each case.
 - No support for corroutines
 - No support for exceptions
 - The compiler generates Java source files but does not compile and / or execute them. You must do it manually using `javac` and `java` or using any Java IDE. More generally this project is not really suited for people that do not know about Java.
 - Many other limitations I forgot, or even Modula-2 constructs that I was never aware of (I vaguely heard of nested modules for example - not sure if it's part of the standard, but definitely not supported)...
+- Here it is assumed that this project ("Modula2Java17") and dependencies ("Modula2-Runtime", "Modula2-Library") are loaded in a Java IDE such as Eclipse, and that the compiler is executed directly from the IDE. There is no executable .jar binary yet.
 
  
 ## Command-line options
@@ -64,7 +66,7 @@ Options:
 - `-ol` or `--output-library`: target directory for the Java files of the "library". Default to the same as `-o`, but another value can be specified, for instance if you want to put them in a different Java project.
 - `-s` or `--source` <dir>: specify an additional directory in which to look for Modula-2 source files. This options can be specified multiple times to add multiple source directories.
 
-Note: by specifying `-s` with the path to `Modula2-Library/modula-2`, `-ol` with the path to "Modula2-Library/src" and `-pl ch.pitchtech.modula.library` (the corresponding package), you can compile code using the existing standard library. Note however that it is *very* incomplete. In practice you may want to write your own version from scratch...
+Note: by specifying `-s` with the path to "Modula2-Library/modula-2", `-ol` with the path to "Modula2-Library/src" and `-pl ch.pitchtech.modula.library` (the corresponding package), you can compile code using the existing standard library. Note however that it is *very* incomplete. In practice you may want to write your own version from scratch...
 
 
 ## Invoking the compiler prgrammatically
@@ -89,7 +91,7 @@ As an example, please refer to the `CompileGrotte` or `CompileChaosCastle` class
 
 This is basically a 16-bit data model. It currently assumes no overflow and does not check for overflow. Mapping unsigned types to larger types allow the Java code to be natural, without requiring calls to `Integer.divideUnsigned` and similar. As long as the original Modula-2 code never overflows, the semantics are preserved. Note that unsigned numeric types `SHORTCARD`, `CARDINAL` and `LONGCARD` still use 1, 2 and 4 bytes respectively when converted to an argument of type `ARRAY OF BYTE`.
 
-Note: This currently generates a _lot_ of type-casts int the resulting code, because in Java any operation on `byte` or `short` result to an `int`. I plan to change that in the future so that only `int` and `long` are used for numeric types. This will make the Java code cleaner (although it will use more memory), and it would make it possible to have both a 16-bit and 32-bit model that result in compatible Java code.
+Note: This currently generates a *lot* of type-casts int the resulting code, because in Java any operation on `byte` or `short` result to an `int`. I plan to change that in the future so that only `int` and `long` are used for numeric types. This will make the Java code cleaner (although it will use more memory), and it would make it possible to have both a 16-bit and 32-bit model that result in compatible Java code.
 
 Other simple types are either translated to the corresponding Java types, or to helper classes found in `ch.pitchtech.modula.runtime.Runtime`.
 Modula-2 enumerated types are converted to Java enums. The generated code can be quite ackward when used in a `FOR` loop.
@@ -97,7 +99,7 @@ Modula-2 enumerated types are converted to Java enums. The generated code can be
 
 ### Records
 
-Record types result in Java classes (and _not_ in Java records, which are immutable). All members of a record are public fields of the Java class. However, the compiler _also_ generates getter and setter for every field.
+Record types result in Java classes (and *not* in Java records, which are immutable). All members of a record are public fields of the Java class. However, the compiler *also* generates getter and setter for every field.
 
 The public fields allow the Java code to be as close as possible to the Modula-2 code, i.e. for example `item.x = item.y` instead of `item.setX(item.getY())`.
 The getter and setter are required in some cases though, see later about arguments by reference.
@@ -128,7 +130,7 @@ If a simple type is passed by reference in Modula-2 (using `VAR`), the compiler 
 
 Note: if the compiler can determine that a `VAR` argument is never written by the procedure, it will pass it by value if it is a simple type in order to simplify the generated Java code. Note that this analysis is limited in scope; for instance as soon as an argument is passed as `VAR` to another procedure, it will be passed by reference, even if the other procedure does not write it.
 
-Note: The `IRef` interface is a basic implementation of a "reference" or "pointer" in Java, and provides only two methods: `get` to get the value, and `set` to change it. Modula-2 pointers are based on the `Ref` class (also defined in `ch.pitchtech.modula.runtime.Runtime`), which is a straightforward implementation of the `IRef` interface that accesses to a wrapped field. 
+Note: The `IRef` interface is a basic implementation of a "reference" or "pointer" in Java, and provides only two methods: `get` to get the value, and `set` to change it. Modula-2 pointers are based on the `Ref` class (also defined in `ch.pitchtech.modula.runtime.Runtime`), which is a straightforward implementation of the `IRef` interface that accesses a wrapped field. 
 
 
 ### Procedure types
@@ -144,15 +146,16 @@ A procedure used as an expression (when assigned to a variable of a procedure ty
 
 The semantics are slightly different in Java, as `DISPOSE` will only set the pointer to `null` (the underlying object will eventually be collected by the garbage collector).
 
-Note that _incorrect_ Modula-2 code can behave very differently in Java. In particular, calling `DISPOSE` on the same pointer twice has no effect in Java (it will only set it to `null` twice).
+Note that *incorrect* Modula-2 code can behave very differently in Java. In particular, calling `DISPOSE` on the same pointer twice has no effect in Java (it will only set it to `null` twice).
 Calling `DISPOSE` on a pointer whose referenced object is still referenced by another pointer will not result in a segmentation fault if the other pointer is dereferenced, because the referenced object will not be collected by the garbage collector.
 
-With _correct_ Modula-2 code, the semantics are practically similar.
+With *correct* Modula-2 code, the semantics are practically similar.
 
 `ALLOCATE` and `DEALLOCATE` from `Storage` (implemented in the "Modula2-Library" project) are partially supported, but _only_ if the code properly uses `SIZE` or `TSIZE` exacly once before each call to `ALLOCATE` or `DEALLOCATE`. They also only work for pointers to `RECORD`s.
 They result in Java code that is more complex, but equivalent to `NEW` and `DISPOSE`.
 
 For example, the following is ok (assuming `point` is a `POINTER TO Point`, etc):
+
 ```
 ALLOCATE(point, SIZE(Point));
 ALLOCATE(rectangle, SIZE(Rectangle));
@@ -161,6 +164,7 @@ ALLOCATE(rectangle, SIZE(Rectangle));
 `SIZE` can be replaced by `TSIZE`, the compiler does not differentiate them and both can be applied to either a type or a variable.
 
 Similarly, the following should also work:
+
 ```
 size := SIZE(Point);
 ALLOCATE(point, size);
@@ -169,6 +173,7 @@ ALLOCATE(rectangle, size);
 ```
 
 However, the following will _not_ work:
+
 ```
 size1 := SIZE(Point);
 size2 := SIZE(Rectangle);
@@ -177,6 +182,7 @@ ALLOCATE(rectangle, size2);
 ```
 
 And obviously, this will not work either because `SIZE` (or `TSIZE`) is not invoked:
+
 ```
 ALLOCATE(point, 4);
 ALLOCATE(rectangle, 8);
@@ -211,8 +217,24 @@ This section is only useful if you plan to modify or contribute to the code of t
 The compiler is implemented in multiple passes:
 
 - Pass 1: Parsing. This pass delegates most of the work to the antlr library. See `Compiler.parse` and `Compiler.parseRecursive`. It makes use of the grammar file `m2pim4.g4`. Note that the parsing code and parse-tree classes (in package `ch.pitchtech.modula.converter.antlr.m2`) are auto-generated from this grammar file. Please refer to the documentation of the antlr library (org.antlr:antlr4).
-    - Dependencies are detected and included for compilation in this pass.
-- Pass 2: Abstraction. This pass transforms the parse-tree of the first pass to a more abstract model, based on classes of the `ch.pitchtech.modula.converter.model` package and sub-packages (if you are familiar with the Modula-2 language, you should find Java classes for basically every Modula-2 construct here). See `Compiler.createCompilationUnit`. Classes from the `ch.pitchtech.modula.converter.parser` package are responsible for this transformation pass.
+    - Dependencies (imported modules) are detected and included for compilation in this pass.
+- Pass 2: Abstraction. This pass transforms the parse-tree of the first pass to a more abstract model, based on classes of the `ch.pitchtech.modula.converter.model` package and sub-packages. If you are familiar with the Modula-2 language, you should find Java classes for basically every Modula-2 construct here. See `Compiler.createCompilationUnit`. Classes from the `ch.pitchtech.modula.converter.parser` package are responsible for this transformation pass.
+    - Implementation note: the choice was made to implement this pass *after* the antlr parsing. Another implementation would be to merge this pass with the antlr parsing, by using antlr's listeners.
 - Hidden Pass: Scope resolution. This is not implemented as an explicit pass, but rather computed on-the-fly whenever required. A future version may do it in an explicit pass. See classes from the `ch.pitchtech.modula.converter.model.scope` package, for example interfaces `IScope` and `IHasScope` (implemented by all Modula-2 constructs that have a scope), and `TypeResolver`.
-- Pass 3: Analyze & Transform. This pass is actually a bag of multiple analyses and transforms. They are used whenever some Modula-2 construct is too far away from the corresponding Java construct, and needs to be transformed to better match the Java version. See `Transforms` class. This is used to analyse which variables are actually read or written, and to move nested PROCEDURE at top level for example. This pass is implemented by classes of the `ch.pitchtech.modula.converter.transform` package.
+- Pass 3: Analyze & Transform. This pass is actually a bag of multiple analyses and transforms. They are used whenever some Modula-2 construct is too far away from the corresponding Java construct, and need to be transformed to better match the Java version. See the `Transforms` class. This is used to analyse which variables are actually read or written, and to move nested PROCEDURE at top level for example. This pass is implemented by classes of the `ch.pitchtech.modula.converter.transform` package.
 - Pass 4: Code generation. This last pass generates the resulting Java code. Implemented by classes of the `ch.pitchtech.modula.converter.generator` package. Note that many transformations are performed here on-the-fly rather than in the previous step if they are simple enough. Example is for-loop over an enumeration. This is currently the slowest pass, and it makes heavy use of the "Hidden Pass" to properly resolve variables, types, etc.
+
+To understand the first passes, consider the following Modula-2 code fragment:
+
+```
+VAR
+  p1, p2: Point;
+  x: INTEGER;
+```
+
+- After pass 1, there is a "VAR" block, with two declaration lists. The first declaration list declares two variables "p1" and "p2" of type "Point", and the second list declares one variable "x" of type "INTEGER". "Point" is just an identifier at this stage, defined only by the `"Point"` string.
+    - The code is modelled by the antlr-generated classes of the `ch.pitchtech.modula.converter.antlr.m2` package. The model is close to the exact syntax of the original code.
+- After pass 2, the structure of the original code is abstracted. For instance, the fact there was two declaration lists is lost. What remains in that the enclosing module or procedure has three local variables: "p1" of type "Point", "p2" of type "Point" and "x" of type "INTEGER". "Point" is still just an identifier at this stage.
+    - The code is now modelled by the classes of the `ch.pitchtech.modula.model` package and subpackages.
+- After the "Hidden pass" (scope resolution), the nature of the "Point" type is now known (for example a RECORD with all its fields - it depends on the remainder of the code that is not shown here). After this pass, for every occurrences of "p1", "p2" or "x" in the code, it is also known where these variables are declared and what their types are. This pass also resolves ambiguities (such as a field in a "WITH" statement having priority over a variable of the same name).
+- After pass 3, the compiler may for example know that a given procedure never reads "x", or never writes "p1", which can be used to optimize the generated code (such as "VAR" arguments, or nested procedures accessing variables of the enclosing one).
