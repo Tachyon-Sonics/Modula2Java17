@@ -38,10 +38,6 @@ public class RealInOut {
         
     }
     
-//    private BufferedReader reader() {
-//        return InOut.instance().reader();
-//    }
-    
     public void close() {
         
     }
