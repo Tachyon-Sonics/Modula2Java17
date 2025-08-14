@@ -69,7 +69,7 @@ Options:
 Note: by specifying `-s` with the path to "Modula2-Library/modula-2", `-ol` with the path to "Modula2-Library/src" and `-pl ch.pitchtech.modula.library` (the corresponding package), you can compile code using the existing standard library. Note however that it is *very* incomplete. In practice you may want to write your own version from scratch...
 
 
-## Invoking the compiler prgrammatically
+## Invoking the compiler programmatically
 
 The compiler generates Java source files, but does not compile them. As such, most users will use a Java IDE to compile and execute the resulting Java code.
 
