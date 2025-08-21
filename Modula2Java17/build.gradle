@@ -45,3 +45,17 @@ task executableJar(type: Jar) {
     with jar
 }
 
+task release(type: Zip){
+    archiveFileName = "Modula2Java17-0.9.zip"
+    destinationDirectory = file('build/')
+    from (files(
+    	'./build/libs',
+    	'../Modula2-Runtime/build/libs',
+    	'../Modula2-Library/build/libs'
+	))
+	dependsOn executableJar
+    dependsOn ':Modula2-Runtime:jar'
+    dependsOn ':Modula2-Runtime:sourcesJar'
+    dependsOn ':Modula2-Library:jar'
+    dependsOn ':Modula2-Library:sourcesJar'
+}
