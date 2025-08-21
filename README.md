@@ -89,10 +89,10 @@ These examples assume you are using the release zip. When launching the compiler
 #### Example 1:
 
 ```
-java -jar Modula2Java17.jar  -p org.example MyModule.mod
+java -jar Modula2Java17.jar -p org.example MyModule.mod
 ```
 
-This will compile `MyModule.mod` (assumed to be in the current directory) and all its dependencies (assumed to be in the same directory), without using any standard library (hence not very useful, and likely to fail).
+This will compile `MyModule.mod` (assumed to be in the current directory) and all its dependencies (assumed to be in the same directory), without using any standard library (hence not very useful, and likely to fail). The generated Java files are placed in a package named `org.example`.
 
 *However*, if any `.def` file is included in the current directory *without* the corresponding `.mod` file (for instance the `.def` files corresponding to definition modules of a standard library), the above command will generate *stub java implementations* for them (in addition to compiling the `.mod` files).
 
@@ -109,7 +109,7 @@ For this example, it is necessary to first decompress the `Modula2-Library-sourc
 java -jar Modula2Java17.jar -s "Modula2-Library/modula-2" -ol "Modula2-Library/src" -pl ch.pitchtech.modula.library -p org.example MyModule.mod
 ```
 
-Tis will compile `MyModule.mod` and all its dependencies, using the provided standard library (that is *very incomplete*, basically just `InOut` and `Storage`).
+Tis will compile `MyModule.mod` and all its dependencies, using the provided standard library (that is *very incomplete*, basically just `InOut` and `Storage`). The generated Java files are placed in a package named `org.example`.
 
 Note: file and directory paths can use either `/` or `\` on Windows.
 
@@ -127,7 +127,8 @@ Assuming:
 The above will:
 - Compile modula-2 files from the `./app` directory into the `./generated` directory, using the `org.example.app` package for the generated Java files
 - Create *stub java implementations* for the standard library (or non-portable modules), using the `org.example.lib` package
-    - See the 1st example for more information about stub java implementations
+    - The stub java implementations contain all methods, but without any implementation (just throwing an `UnsupportedOperationException`). The idea is that you can implement them in Java manually, starting from these generated stub implementations.
+    - The stub java implementations are not generated again if they already exist. To generate them again, you must delete them.
     
 
 ## Invoking the compiler programmatically
