@@ -58,4 +58,5 @@ task release(type: Zip){
     dependsOn ':Modula2-Runtime:sourcesJar'
     dependsOn ':Modula2-Library:jar'
     dependsOn ':Modula2-Library:sourcesJar'
+    into('Modula2Java17')
 }

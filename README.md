@@ -10,10 +10,10 @@ The translator generates Java source code that requires at least Java 17. The tr
 There are four sub-projects (these are Eclipse projects, with gradle support):
 - **Modula2Java17**: this is the Modula-2 to Java translator. It is also referred to as the "compiler", as it is implemented like a compiler behind the scene.
 - **Modula2-Runtime**: a small runtime written in Java, that provides support for some Modula-2 constructs. Both the compiler and the produced Java code require it
-- **Modula2-Library**: a very incomplete set of standard Modula-2 libraries (both Modula-2 .def files and the corresponding Java implementations)
+- **Modula2-Library**: a *very incomplete* set of standard Modula-2 libraries (both Modula-2 .def files and the corresponding Java implementations)
     - Only the minimum to run the tests is provided. This can be used as a starting point though.
 - **Modula2Java17-Tests**: automated tests (JUnit 4)
-¨
+
 
 ## Limitations
 
@@ -46,16 +46,30 @@ There are four sub-projects (these are Eclipse projects, with gradle support):
 - No support for exceptions
 - The compiler generates Java source files but does not compile and / or execute them. You must do it manually using `javac` and `java` or using any Java IDE. More generally this project is not really suited for people that do not know about Java.
 - Many other limitations I forgot, or even Modula-2 constructs that I was never aware of (I vaguely heard of nested modules for example - not sure if it's part of the standard, but definitely not supported)...
-- Here it is assumed that this project ("Modula2Java17") and dependencies ("Modula2-Runtime", "Modula2-Library") are loaded in a Java IDE such as Eclipse, and that the compiler is executed directly from the IDE. There is no executable .jar binary yet.
+- You need to install a Java Runtime Environment (JRE) or JDK version *17 or greater* to run the compiler. The generated Java code also requires at least Java 17.
 
  
 ## Command-line options
 
-The main class of the compiler / translator is `ch.pitchtech.modula.converter.Modula2JavaTranslator`.
+### Launching the compiler
 
-This is a command-line tool. It accepts zero or more options, and a Modula-2 source file. In general you provide only the main Modula-2 module (as a `.mod` file) and all dependences will be detected and compiled automatically.
+When using the release .zip archive, the compiler can be invoked by dezipping the archive, going into the 'Modula2Java17' directory, and using:
 
-Options:
+```
+java -jar Modula2Java17.jar <options> <MyModule.mod>
+```
+
+*Note*: the compiler requires a Java Runtime Environment (JRE) version *17 or greater*.
+
+Please note that the compiler also requires the `Modula2-Runtime.jar` library (included in the release archive), so be sure to keep both `Modula2Java17.jar` and `Modula2-Runtime.jar` together. The generated Java code also requires `Modula2-Runtime.jar`.
+
+If you got the sources from github and are using gradle, the release .zip archive can be build using the `release` gradle task of the `Modula2Java17` project.
+
+If you got the sources from github and loaded them in a Java IDE, the main class to launch the compiler is `ch.pitchtech.modula.converter.Modula2JavaTranslator`.
+
+The compiler is provided a command-line tool only. It accepts zero or more options, and a Modula-2 source file. In general you provide only the main Modula-2 module (as a `.mod` or `.mi` file) and all dependences will be detected and compiled automatically. The compiler except the modules and implementation modules to use the `.mod` or `.mi` extension, and the definition modules to use the `.def` or `.md` extension.
+
+### Compiler options
 
 - `-p` or `--package` <package>: name of the Java package to use for the generated Java source files. Default `org.modula2.generated`
 - `-o` or `--output` <dir>: target directory in which to generate Java code. Defaults to current directory. Note that the Java package structure will be created inside of that directory
@@ -66,7 +80,15 @@ Options:
 - `-ol` or `--output-library`: target directory for the Java files of the "library". Default to the same as `-o`, but another value can be specified, for instance if you want to put them in a different Java project.
 - `-s` or `--source` <dir>: specify an additional directory in which to look for Modula-2 source files. This options can be specified multiple times to add multiple source directories.
 
-Note: by specifying `-s` with the path to "Modula2-Library/modula-2", `-ol` with the path to "Modula2-Library/src" and `-pl ch.pitchtech.modula.library` (the corresponding package), you can compile code using the existing standard library. Note however that it is *very* incomplete. In practice you may want to write your own version from scratch...
+Example:
+
+```
+java -jar Modula2Java17.jar -p org.example MyModule.mod
+```
+
+Note (when launching from a Java IDE): by specifying `-s` with the path to "Modula2-Library/modula-2", `-ol` with the path to "Modula2-Library/src" and `-pl ch.pitchtech.modula.library` (the corresponding package), you can compile code using the existing standard library. Note however that it is *very* incomplete. In practice you may want to write your own version from scratch...
+
+To do the same when launching using the executable jar from the release, you must first decompress `Modula2-Library-sources.jar`, and adjust the paths for the `-s` and `-ol` options properly.
 
 
 ## Invoking the compiler programmatically

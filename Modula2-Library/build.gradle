@@ -28,4 +28,8 @@ eclipse {
 
 sourcesJar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	into('src')
+    into '../modula-2', {
+    	from 'modula-2'
+  	}
 }
