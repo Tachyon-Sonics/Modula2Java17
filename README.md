@@ -117,7 +117,7 @@ Note: file and directory paths can use either `/` or `\` on Windows.
 #### Example 3:
 
 ```
-java -jar Modula2Java17.jar -s "./lib" -p org.example.app -pl org.example.lib -o ./generated ./app/MyModule.mod
+java -jar Modula2Java17.jar -p org.example.app -s "./lib" -pl org.example.lib -o ./generated ./app/MyModule.mod
 ```
 
 Assuming:
@@ -126,9 +126,9 @@ Assuming:
 
 The above will:
 - Compile modula-2 files from the `./app` directory into the `./generated` directory, using the `org.example.app` package for the generated Java files
-- Create *stub java implementations* for the standard library (or non-portable modules), using the `org.example.lib` package
+- Create *stub java implementations* for the standard library (or non-portable modules) into the `./generated` directory, using the `org.example.lib` package
     - The stub java implementations contain all methods, but without any implementation (just throwing an `UnsupportedOperationException`). The idea is that you can implement them in Java manually, starting from these generated stub implementations.
-    - The stub java implementations are not generated again if they already exist. To generate them again, you must delete them.
+    - The stub java implementations are not generated again if they already exist. To generate one of them again, you must delete it and run the compilation again.
     
 
 ## Invoking the compiler programmatically
