@@ -19,8 +19,13 @@ sourceSets {
 java {
 	sourceCompatibility = JavaVersion.VERSION_17
 	targetCompatibility = JavaVersion.VERSION_17
+	withSourcesJar()
 }
 
 eclipse {
     pathVariables 'GRADLE_USER_HOME' : gradle.gradleUserHomeDir
+}
+
+sourcesJar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
