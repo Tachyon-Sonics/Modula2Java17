@@ -80,16 +80,55 @@ The compiler is provided a command-line tool only. It accepts zero or more optio
 - `-ol` or `--output-library`: target directory for the Java files of the "library". Default to the same as `-o`, but another value can be specified, for instance if you want to put them in a different Java project.
 - `-s` or `--source` <dir>: specify an additional directory in which to look for Modula-2 source files. This options can be specified multiple times to add multiple source directories.
 
-Example:
+
+### Examples
+
+These examples assume you are using the release zip. When launching the compiler from an IDE, some paths must be adjusted.
+
+
+#### Example 1:
 
 ```
-java -jar Modula2Java17.jar -p org.example MyModule.mod
+java -jar Modula2Java17.jar  -p org.example MyModule.mod
 ```
 
-Note (when launching from a Java IDE): by specifying `-s` with the path to "Modula2-Library/modula-2", `-ol` with the path to "Modula2-Library/src" and `-pl ch.pitchtech.modula.library` (the corresponding package), you can compile code using the existing standard library. Note however that it is *very* incomplete. In practice you may want to write your own version from scratch...
+This will compile `MyModule.mod` (assumed to be in the current directory) and all its dependencies (assumed to be in the same directory), without using any standard library (hence not very useful, and likely to fail).
 
-To do the same when launching using the executable jar from the release, you must first decompress `Modula2-Library-sources.jar`, and adjust the paths for the `-s` and `-ol` options properly.
+*However*, if any `.def` file is included in the current directory *without* the corresponding `.mod` file (for instance the `.def` files corresponding to definition modules of a standard library), the above command will generate *stub java implementations* for them (in addition to compiling the `.mod` files).
 
+The stub java implementations contain all methods, but without any implementation (just throwing an `UnsupportedOperationException`). The idea is that you can implement them in Java manually, starting from these generated stub implementations.
+
+The stub java implementations are not generated again if they already exist. To generate them again, you must delete them.
+
+
+#### Example 2:
+
+For this example, it is necessary to first decompress the `Modula2-Library-sources.jar` file into a directory named `Modula2-Library` (or any other directory - but you may then need to adjust the corresponding paths in the command line below).
+
+```
+java -jar Modula2Java17.jar -s "Modula2-Library/modula-2" -ol "Modula2-Library/src" -pl ch.pitchtech.modula.library -p org.example MyModule.mod
+```
+
+Tis will compile `MyModule.mod` and all its dependencies, using the provided standard library (that is *very incomplete*, basically just `InOut` and `Storage`).
+
+Note: file and directory paths can use either `/` or `\` on Windows.
+
+
+#### Example 3:
+
+```
+java -jar Modula2Java17.jar -s "./lib" -p org.example.app -pl org.example.lib -o ./generated ./app/MyModule.mod
+```
+
+Assuming:
+- The `./app` directory contains the `.mod` and `.def` files of the Modula-2 app to compile, including the main module `MyModule.mod`, but excluding the standard library (or any non-portable modules)
+- The `./lib` directory contains the `.def` files for the standard library (or of non-portable modules), *without* the corresponding `.mod` files
+
+The above will:
+- Compile modula-2 files from the `./app` directory into the `./generated` directory, using the `org.example.app` package for the generated Java files
+- Create *stub java implementations* for the standard library (or non-portable modules), using the `org.example.lib` package
+    - See the 1st example for more information about stub java implementations
+    
 
 ## Invoking the compiler programmatically
 
