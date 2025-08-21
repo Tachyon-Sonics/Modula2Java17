@@ -25,3 +25,16 @@ java {
 eclipse {
     pathVariables 'GRADLE_USER_HOME' : gradle.gradleUserHomeDir
 }
+
+task executableJar(type: Jar) {
+    manifest {
+        attributes (
+        	'Main-Class': 'ch.pitchtech.modula.converter.Modula2JavaTranslator'
+        )
+    }
+    archiveBaseName = 'Modula2Java17'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
