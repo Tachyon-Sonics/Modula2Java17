@@ -29,12 +29,19 @@ eclipse {
 task executableJar(type: Jar) {
     manifest {
         attributes (
-        	'Main-Class': 'ch.pitchtech.modula.converter.Modula2JavaTranslator'
+        	'Main-Class': 'ch.pitchtech.modula.converter.Modula2JavaTranslator',
+        	'Class-Path': 'Modula2-Runtime.jar'
         )
     }
     archiveBaseName = 'Modula2Java17'
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    from {
+    	configurations.runtimeClasspath.collect {
+    		if (!it.name.equalsIgnoreCase("Modula2-Runtime.jar")) {
+	    		it.isDirectory() ? it : zipTree(it)
+	    	}
+		}
+	}
     with jar
 }
 

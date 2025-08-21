@@ -188,7 +188,7 @@ public class CommandLine {
     private String getAppCommandLine() {
         String appCommandLine = System.getProperty("jpackage.app-path");
         if (appCommandLine == null) {
-            appCommandLine = "java -jar Modula2JavaTranslator.jar";
+            appCommandLine = "java -jar Modula2Java17.jar";
         } else {
             int lastSep = appCommandLine.lastIndexOf(File.separatorChar);
             appCommandLine = appCommandLine.substring(lastSep + 1);
