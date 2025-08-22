@@ -109,7 +109,7 @@ For this example, it is necessary to first decompress the `Modula2-Library-sourc
 java -jar Modula2Java17.jar -s "Modula2-Library/modula-2" -ol "Modula2-Library/src" -pl ch.pitchtech.modula.library -p org.example MyModule.mod
 ```
 
-Tis will compile `MyModule.mod` and all its dependencies, using the provided standard library (that is *very incomplete*, basically just `InOut` and `Storage`). The generated Java files are placed in a package named `org.example`.
+This will compile `MyModule.mod` and all its dependencies, using the provided standard library (that is *very incomplete*, basically just `InOut` and `Storage`). The generated Java files are placed in a package named `org.example`.
 
 Note: file and directory paths can use either `/` or `\` on Windows.
 
@@ -176,7 +176,7 @@ In Modula-2, a nested procedure has access to all constants and variables of the
 
 ### Arguments by value (default) and by reference (using `VAR`)
 
-Java is only by-value. However, Modula-2 records are converted to Java objects, and Modula-2 arrays are converted to Java arrays. Those are both references in Java. Although a reference itself is passed by value in Java, it correspond to the by-reference semantics of Modula-2 because the _content_ is modifiable.
+Java is only by-value. However, Modula-2 records are converted to Java objects, and Modula-2 arrays are converted to Java arrays. Those are both references in Java. Although a reference itself is passed by value in Java, it corresponds to the by-reference semantics of Modula-2 because the _content_ is modifiable.
 
 If a record or array is passed by reference in Modula-2 (using `VAR`), the Java code is straightforward.
 
@@ -278,15 +278,16 @@ This section is only useful if you plan to modify or contribute to the code of t
 
 The compiler is implemented in multiple passes:
 
-- Pass 1: Parsing. This pass delegates most of the work to the antlr library. See `Compiler.parse` and `Compiler.parseRecursive`. It makes use of the grammar file `m2pim4.g4`. Note that the parsing code and parse-tree classes (in package `ch.pitchtech.modula.converter.antlr.m2`) are auto-generated from this grammar file. Please refer to the documentation of the antlr library (org.antlr:antlr4).
+- Pass 1: Parsing. This pass delegates most of the work to the *antlr* library. See `Compiler.parse` and `Compiler.parseRecursive`. It makes use of the grammar file `m2pim4.g4`. Note that the parsing code and parse-tree classes (in package `ch.pitchtech.modula.converter.antlr.m2`) are auto-generated from this grammar file. Please refer to the documentation of the antlr library (org.antlr:antlr4).
     - Dependencies (imported modules) are detected and included for compilation in this pass.
 - Pass 2: Abstraction. This pass transforms the parse-tree of the first pass to a more abstract model, based on classes of the `ch.pitchtech.modula.converter.model` package and sub-packages. If you are familiar with the Modula-2 language, you should find Java classes for basically every Modula-2 construct here. See `Compiler.createCompilationUnit`. Classes from the `ch.pitchtech.modula.converter.parser` package are responsible for this transformation pass.
     - Implementation note: the choice was made to implement this pass *after* the antlr parsing. Another implementation would be to merge this pass with the antlr parsing, by using antlr's listeners.
 - Hidden Pass: Scope resolution. This is not implemented as an explicit pass, but rather computed on-the-fly whenever required. A future version may do it in an explicit pass. See classes from the `ch.pitchtech.modula.converter.model.scope` package, for example interfaces `IScope` and `IHasScope` (implemented by all Modula-2 constructs that have a scope), and `TypeResolver`.
-- Pass 3: Analyze & Transform. This pass is actually a bag of multiple analyses and transforms. They are used whenever some Modula-2 construct is too far away from the corresponding Java construct, and need to be transformed to better match the Java version. See the `Transforms` class. This is used to analyse which variables are actually read or written, and to move nested PROCEDURE at top level for example. This pass is implemented by classes of the `ch.pitchtech.modula.converter.transform` package.
+- Pass 3: Analyze & Transform. This pass is actually a bag of multiple analyses and transforms. They are used whenever some Modula-2 construct is too far away from the corresponding Java construct, and need to be transformed to better match the Java version. See the `Transforms` class. This is used for example to analyse which variables are actually read or written, and to move nested PROCEDURE at top level. This pass is implemented by classes of the `ch.pitchtech.modula.converter.transform` package.
 - Pass 4: Code generation. This last pass generates the resulting Java code. Implemented by classes of the `ch.pitchtech.modula.converter.generator` package. Note that many transformations are performed here on-the-fly rather than in the previous step if they are simple enough. Example is for-loop over an enumeration. This is currently the slowest pass, and it makes heavy use of the "Hidden Pass" to properly resolve variables, types, etc.
+    - Note that code generation uses the `ResultContext` class, that is mostly based on Java's `StringBuilder`. Hence code generation generates source Java code directly as text. Code generation heavily uses the Modula-2 model of the code from the `ch.pitchtech.modula.converter.model` package (created in pass 2), that, thanks to pass 3, is close enough to the Java code to generate.
 
-To understand the first passes, consider the following Modula-2 code fragment:
+To understand the different passes, consider the following Modula-2 code fragment:
 
 ```
 VAR
@@ -296,7 +297,7 @@ VAR
 
 - After pass 1, there is a "VAR" block, with two declaration lists. The first declaration list declares two variables "p1" and "p2" of type "Point", and the second list declares one variable "x" of type "INTEGER". "Point" is just an identifier at this stage, defined only by the `"Point"` string.
     - The code is modelled by the antlr-generated classes of the `ch.pitchtech.modula.converter.antlr.m2` package. The model is close to the exact syntax of the original code.
-- After pass 2, the structure of the original code is abstracted. For instance, the fact there was two declaration lists is lost. What remains in that the enclosing module or procedure has three local variables: "p1" of type "Point", "p2" of type "Point" and "x" of type "INTEGER". "Point" is still just an identifier at this stage.
+- After pass 2, the structure of the original code is abstracted. For instance, the fact there was two declaration lists is lost. What remains is that the enclosing module or procedure has three local variables: "p1" of type "Point", "p2" of type "Point" and "x" of type "INTEGER". "Point" is still just an identifier at this stage.
     - The code is now modelled by the classes of the `ch.pitchtech.modula.model` package and subpackages.
 - After the "Hidden pass" (scope resolution), the nature of the "Point" type is now known (for example a RECORD with all its fields - it depends on the remainder of the code that is not shown here). After this pass, for every occurrences of "p1", "p2" or "x" in the code, it is also known where these variables are declared and what their types are. This pass also resolves ambiguities (such as a field in a "WITH" statement having priority over a variable of the same name).
 - After pass 3, the compiler may for example know that a given procedure never reads "x", or never writes "p1", which can be used to optimize the generated code (such as "VAR" arguments, or nested procedures accessing variables of the enclosing one).
