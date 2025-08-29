@@ -1,7 +1,5 @@
 # Modula2Java17
 
-{:toc}
-
 ## Introduction
 
 This is a command-line tool that translates (or "compiles") working Modula-2 sources (PIM4) into Java sources (.java files).
