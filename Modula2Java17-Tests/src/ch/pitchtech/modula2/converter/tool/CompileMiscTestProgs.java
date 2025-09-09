@@ -56,6 +56,7 @@ public class CompileMiscTestProgs {
      * - https://sourceforge.net/projects/modula2chess/files/
      * - https://www.modula2.org/freepages/downl.html#sour
      * - https://www.modula2.org/tutor/chapter11.php
+     * - https://github.com/sblendorio/gorilla-cpm?tab=readme-ov-file
      * 
      * TODO (3) Comment in generated Java files: (* Converted from Modula-2 by Modula2Java17 *)
      */
