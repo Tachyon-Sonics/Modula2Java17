@@ -1,0 +1,11 @@
+DEFINITION MODULE Arguments;
+
+  TYPE (* Reverse engineered *)
+    Argument = ARRAY [0 .. 127] OF CHAR;
+    ArgumentPtr = POINTER TO Argument;
+    ArgList = ARRAY [0 .. 127] OF ArgumentPtr;
+    ArgTable = POINTER TO ArgList;
+    
+  PROCEDURE GetArgs(VAR numArgs: SHORTCARD, VAR argTable: ArgTable);
+
+END Arguments.

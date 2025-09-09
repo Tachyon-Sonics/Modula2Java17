@@ -1,50 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" output="bin/main" path="src">
+	<classpathentry kind="output" path="bin/default"/>
+	<classpathentry output="bin/main" kind="src" path="src">
 		<attributes>
 			<attribute name="gradle_scope" value="main"/>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17/">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17/"/>
 	<classpathentry kind="src" path="/Modula2-Runtime">
 		<attributes>
 			<attribute name="without_test_code" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="var" path="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.antlr/antlr4/4.12.0/860de2cce023b8175245fa8232b078513a0741d1/antlr4-4.12.0.jar" sourcepath="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.antlr/antlr4/4.12.0/791fd89612b117266447c889751744e5d841dea1/antlr4-4.12.0-sources.jar">
+	<classpathentry sourcepath="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.antlr/antlr4-maven-plugin/4.12.0/4153b1cf3e2c5ec7f87a618f9037d626c63a415f/antlr4-maven-plugin-4.12.0-sources.jar" kind="var" path="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.antlr/antlr4-maven-plugin/4.12.0/a1df868914efcbb7d6f6a97a14f1245305ab6a8f/antlr4-maven-plugin-4.12.0.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="var" path="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.antlr/antlr4-runtime/4.12.0/dd105cf6ac9f7417b3782c178f6dbd06bf75df57/antlr4-runtime-4.12.0.jar" sourcepath="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.antlr/antlr4-runtime/4.12.0/8c3fe89a1799a399ac01141fdef8c64cb72743d3/antlr4-runtime-4.12.0-sources.jar">
+	<classpathentry sourcepath="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.antlr/antlr4/4.12.0/791fd89612b117266447c889751744e5d841dea1/antlr4-4.12.0-sources.jar" kind="var" path="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.antlr/antlr4/4.12.0/860de2cce023b8175245fa8232b078513a0741d1/antlr4-4.12.0.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="var" path="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.antlr/ST4/4.3.4/bf68d049dd4e6e104055a79ac3bf9e6307d29258/ST4-4.3.4.jar" sourcepath="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.antlr/ST4/4.3.4/7af4ede7ea41b2ea2022b185f963246efcb83217/ST4-4.3.4-sources.jar">
+	<classpathentry sourcepath="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.antlr/antlr4-runtime/4.12.0/8c3fe89a1799a399ac01141fdef8c64cb72743d3/antlr4-runtime-4.12.0-sources.jar" kind="var" path="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.antlr/antlr4-runtime/4.12.0/dd105cf6ac9f7417b3782c178f6dbd06bf75df57/antlr4-runtime-4.12.0.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="var" path="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.antlr/antlr-runtime/3.5.3/9011fb189c5ed6d99e5f3322514848d1ec1e1416/antlr-runtime-3.5.3.jar" sourcepath="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.antlr/antlr-runtime/3.5.3/5dec145eac1c84b12e5aa1fc5444e5c02bcee16f/antlr-runtime-3.5.3-sources.jar">
+	<classpathentry sourcepath="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.antlr/ST4/4.3.4/7af4ede7ea41b2ea2022b185f963246efcb83217/ST4-4.3.4-sources.jar" kind="var" path="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.antlr/ST4/4.3.4/bf68d049dd4e6e104055a79ac3bf9e6307d29258/ST4-4.3.4.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="var" path="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.abego.treelayout/org.abego.treelayout.core/1.0.3/457216e8e6578099ae63667bb1e4439235892028/org.abego.treelayout.core-1.0.3.jar" sourcepath="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.abego.treelayout/org.abego.treelayout.core/1.0.3/98d31576a54fd48dabf1fcf67a311dd9f0e4f66e/org.abego.treelayout.core-1.0.3-sources.jar">
+	<classpathentry sourcepath="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.antlr/antlr-runtime/3.5.3/5dec145eac1c84b12e5aa1fc5444e5c02bcee16f/antlr-runtime-3.5.3-sources.jar" kind="var" path="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.antlr/antlr-runtime/3.5.3/9011fb189c5ed6d99e5f3322514848d1ec1e1416/antlr-runtime-3.5.3.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="var" path="GRADLE_USER_HOME/caches/modules-2/files-2.1/com.ibm.icu/icu4j/71.1/9e7d3304c23f9ba5cb71915f7cce23231a57a445/icu4j-71.1.jar" sourcepath="GRADLE_USER_HOME/caches/modules-2/files-2.1/com.ibm.icu/icu4j/71.1/cc9684d401adeb1a90404a5d77fd38d348a41ec1/icu4j-71.1-sources.jar">
+	<classpathentry sourcepath="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.abego.treelayout/org.abego.treelayout.core/1.0.3/98d31576a54fd48dabf1fcf67a311dd9f0e4f66e/org.abego.treelayout.core-1.0.3-sources.jar" kind="var" path="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.abego.treelayout/org.abego.treelayout.core/1.0.3/457216e8e6578099ae63667bb1e4439235892028/org.abego.treelayout.core-1.0.3.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry sourcepath="GRADLE_USER_HOME/caches/modules-2/files-2.1/com.ibm.icu/icu4j/71.1/cc9684d401adeb1a90404a5d77fd38d348a41ec1/icu4j-71.1-sources.jar" kind="var" path="GRADLE_USER_HOME/caches/modules-2/files-2.1/com.ibm.icu/icu4j/71.1/9e7d3304c23f9ba5cb71915f7cce23231a57a445/icu4j-71.1.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.codehaus.plexus/plexus-compiler-api/2.12.1/1d7f33a24a4cc6a2b701b89e2e6cb9b304b8a7ce/plexus-compiler-api-2.12.1-sources.jar" kind="var" path="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.codehaus.plexus/plexus-compiler-api/2.12.1/5c805287660cbb677ba602cf3b4044d442bc3d92/plexus-compiler-api-2.12.1.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.sonatype.plexus/plexus-build-api/0.0.7/1810e0cc9652071d53191f13576489ad66327e49/plexus-build-api-0.0.7-sources.jar" kind="var" path="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.sonatype.plexus/plexus-build-api/0.0.7/e6ba5cd4bfd8de00235af936e7f63eb24ed436e6/plexus-build-api-0.0.7.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.slf4j/slf4j-simple/2.0.0/184053207d2407cd3358bf03bc084f64ff864c4a/slf4j-simple-2.0.0-sources.jar" kind="var" path="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.slf4j/slf4j-simple/2.0.0/bf7158cef919bb65a6de45766fcf0546a88f5907/slf4j-simple-2.0.0.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.slf4j/slf4j-api/2.0.0/1e496a9623d49c1140c73f8343ae1013e666411b/slf4j-api-2.0.0-sources.jar" kind="var" path="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.slf4j/slf4j-api/2.0.0/82b150a36b504a09076b29c0509e31702c9c3999/slf4j-api-2.0.0.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.codehaus.plexus/plexus-utils/3.4.2/b90d33430f2869bdcf6959fc8ee106a787f678a3/plexus-utils-3.4.2-sources.jar" kind="var" path="GRADLE_USER_HOME/caches/modules-2/files-2.1/org.codehaus.plexus/plexus-utils/3.4.2/82445e007f9009ac5ba6ae5d6b6898c4ce54dcf6/plexus-utils-3.4.2.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
 </classpath>

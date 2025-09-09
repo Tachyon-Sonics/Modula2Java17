@@ -53,8 +53,8 @@ public class SourceFileHelper {
             return null;
         Path path = lookup(currentFile.getPath().getParent(), importedModuleName, fileOptions, DEFINITION_EXTENSIONS);
         if (path == null || !Files.isRegularFile(path)) {
-            throw new CompilationException(null, "File {0}.def (or .md) not found in {1}, imported by {2}", 
-                    importedModuleName, fileOptions.getM2sourceDirs(), currentFile.getPath());
+            throw new CompilationException(null, "File {0}.def (or .md) not found in {1} (resolved: {2}), imported by {3}", 
+                    importedModuleName, fileOptions.getM2sourceDirs(), fileOptions.getM2sourceDirsAbsolute(), currentFile.getPath());
         }
         return new SourceFile(path);
     }

@@ -1,6 +1,5 @@
+// Generated from src\ch\pitchtech\modula\converter\antlr\m2\m2pim4.g4 by ANTLR 4.12.0
 package ch.pitchtech.modula.converter.antlr.m2;
-
-// Generated from m2pim4.g4 by ANTLR 4.12.0
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;

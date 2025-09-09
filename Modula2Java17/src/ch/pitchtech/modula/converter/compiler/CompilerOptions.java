@@ -1,5 +1,7 @@
 package ch.pitchtech.modula.converter.compiler;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 public class CompilerOptions {
     
@@ -13,6 +15,7 @@ public class CompilerOptions {
     
     private String targetPackageMain; // Target package for main Java files
     private String targetPackageLib; // Target package for library Java files
+    private Charset charset = StandardCharsets.UTF_8;
     
     
     /**
@@ -103,6 +106,14 @@ public class CompilerOptions {
 
     public void setTargetPackageLib(String targetPackageLib) {
         this.targetPackageLib = targetPackageLib;
+    }
+
+    public Charset getCharset() {
+        return charset;
+    }
+    
+    public void setCharset(Charset charset) {
+        this.charset = charset;
     }
 
 }

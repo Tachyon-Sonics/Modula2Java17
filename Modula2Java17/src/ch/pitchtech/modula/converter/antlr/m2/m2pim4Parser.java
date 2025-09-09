@@ -1,6 +1,5 @@
+// Generated from src\ch\pitchtech\modula\converter\antlr\m2\m2pim4.g4 by ANTLR 4.12.0
 package ch.pitchtech.modula.converter.antlr.m2;
-
-// Generated from m2pim4.g4 by ANTLR 4.12.0
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -167,11 +166,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitIdent(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitIdent(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final IdentContext ident() throws RecognitionException {
@@ -216,11 +210,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitNumber(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitNumber(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -274,11 +263,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitInteger(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitInteger(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final IntegerContext integer() throws RecognitionException {
@@ -327,11 +311,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitReal(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitReal(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final RealContext real() throws RecognitionException {
@@ -379,11 +358,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitScaleFactor(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitScaleFactor(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final ScaleFactorContext scaleFactor() throws RecognitionException {
@@ -421,11 +395,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitHexDigit(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitHexDigit(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -465,11 +434,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitDigit(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitDigit(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final DigitContext digit() throws RecognitionException {
@@ -508,11 +472,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitOctalDigit(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitOctalDigit(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final OctalDigitContext octalDigit() throws RecognitionException {
@@ -550,11 +509,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitString(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitString(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -598,11 +552,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitQualident(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitQualident(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -664,11 +613,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitConstantDeclaration(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitConstantDeclaration(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final ConstantDeclarationContext constantDeclaration() throws RecognitionException {
@@ -718,11 +662,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitConstExpression(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitConstExpression(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -774,11 +713,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitRelation(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitRelation(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -887,11 +821,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitSimpleConstExpr(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitSimpleConstExpr(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final SimpleConstExprContext simpleConstExpr() throws RecognitionException {
@@ -985,11 +914,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitAddOperator(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitAddOperator(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final AddOperatorContext addOperator() throws RecognitionException {
@@ -1048,11 +972,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitConstTerm(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitConstTerm(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final ConstTermContext constTerm() throws RecognitionException {
@@ -1109,11 +1028,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitMulOperator(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitMulOperator(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1180,11 +1094,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitConstFactor(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitConstFactor(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1333,11 +1242,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitSetOrQualident(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitSetOrQualident(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final SetOrQualidentContext setOrQualident() throws RecognitionException {
@@ -1406,11 +1310,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitSet_(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitSet_(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1484,11 +1383,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitElement(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitElement(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final ElementContext element() throws RecognitionException {
@@ -1544,11 +1438,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitTypeDeclaration(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitTypeDeclaration(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1608,11 +1497,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitType_(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitType_(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1705,11 +1589,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitSimpleType(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitSimpleType(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final SimpleTypeContext simpleType() throws RecognitionException {
@@ -1772,11 +1651,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitEnumeration(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitEnumeration(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final EnumerationContext enumeration() throws RecognitionException {
@@ -1823,11 +1697,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitIdentList(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitIdentList(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1889,11 +1758,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitSubrangeType(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitSubrangeType(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final SubrangeTypeContext subrangeType() throws RecognitionException {
@@ -1949,11 +1813,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitArrayType(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitArrayType(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2020,11 +1879,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitRecordType(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitRecordType(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final RecordTypeContext recordType() throws RecognitionException {
@@ -2071,11 +1925,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitFieldListSequence(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitFieldListSequence(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2155,11 +2004,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitFieldList(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitFieldList(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2295,11 +2139,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitVariant(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitVariant(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final VariantContext variant() throws RecognitionException {
@@ -2346,11 +2185,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitCaseLabelList(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitCaseLabelList(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2412,11 +2246,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitCaseLabels(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitCaseLabels(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final CaseLabelsContext caseLabels() throws RecognitionException {
@@ -2472,11 +2301,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitSetType(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitSetType(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final SetTypeContext setType() throws RecognitionException {
@@ -2523,11 +2347,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitPointerType(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitPointerType(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final PointerTypeContext pointerType() throws RecognitionException {
@@ -2572,11 +2391,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitProcedureType(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitProcedureType(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2638,11 +2452,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitFormalTypeList(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitFormalTypeList(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2748,11 +2557,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitVariableDeclaration(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitVariableDeclaration(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final VariableDeclarationContext variableDeclaration() throws RecognitionException {
@@ -2799,11 +2603,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitDesignator(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitDesignator(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2864,11 +2663,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitDesignatorTail(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitDesignatorTail(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2962,11 +2756,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitExpList(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitExpList(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final ExpListContext expList() throws RecognitionException {
@@ -3030,11 +2819,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitExpression(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitExpression(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final ExpressionContext expression() throws RecognitionException {
@@ -3096,11 +2880,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitSimpleExpression(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitSimpleExpression(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3207,11 +2986,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitTerm(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitTerm(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final TermContext term() throws RecognitionException {
@@ -3285,11 +3059,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitFactor(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitFactor(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3455,11 +3224,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitSetOrDesignatorOrProcCall(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitSetOrDesignatorOrProcCall(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final SetOrDesignatorOrProcCallContext setOrDesignatorOrProcCall() throws RecognitionException {
@@ -3585,11 +3349,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitActualParameters(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitActualParameters(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final ActualParametersContext actualParameters() throws RecognitionException {
@@ -3668,11 +3427,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitStatement(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitStatement(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3802,11 +3556,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitAssignmentOrProcCall(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitAssignmentOrProcCall(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final AssignmentOrProcCallContext assignmentOrProcCall() throws RecognitionException {
@@ -3885,11 +3634,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitStatementSequence(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitStatementSequence(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final StatementSequenceContext statementSequence() throws RecognitionException {
@@ -3966,11 +3710,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitIfStatement(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitIfStatement(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4066,11 +3805,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitCaseStatement(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitCaseStatement(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final CaseStatementContext caseStatement() throws RecognitionException {
@@ -4151,11 +3885,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitCcase(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitCcase(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final CcaseContext ccase() throws RecognitionException {
@@ -4205,11 +3934,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitWhileStatement(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitWhileStatement(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4263,11 +3987,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitRepeatStatement(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitRepeatStatement(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4331,11 +4050,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitForStatement(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitForStatement(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4408,11 +4122,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitLoopStatement(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitLoopStatement(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final LoopStatementContext loopStatement() throws RecognitionException {
@@ -4462,11 +4171,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitWithStatement(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitWithStatement(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4522,11 +4226,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitProcedureDeclaration(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitProcedureDeclaration(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final ProcedureDeclarationContext procedureDeclaration() throws RecognitionException {
@@ -4576,11 +4275,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitProcedureHeading(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitProcedureHeading(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4642,11 +4336,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitBlock(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitBlock(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4738,11 +4427,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitDeclaration(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitDeclaration(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4879,11 +4563,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitFormalParameters(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitFormalParameters(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final FormalParametersContext formalParameters() throws RecognitionException {
@@ -4969,11 +4648,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitFpSection(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitFpSection(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final FpSectionContext fpSection() throws RecognitionException {
@@ -5030,11 +4704,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitFormalType(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitFormalType(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5107,11 +4776,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitModuleDeclaration(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitModuleDeclaration(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5196,11 +4860,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitPriority(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitPriority(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final PriorityContext priority() throws RecognitionException {
@@ -5246,11 +4905,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitExportList(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitExportList(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5311,11 +4965,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitImportList(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitImportList(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5394,11 +5043,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitDefinitionModule(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitDefinitionModule(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5517,11 +5161,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitDefinition(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitDefinition(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5671,11 +5310,6 @@ public class m2pim4Parser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitProgramModule(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitProgramModule(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final ProgramModuleContext programModule() throws RecognitionException {
@@ -5755,11 +5389,6 @@ public class m2pim4Parser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof m2pim4Listener ) ((m2pim4Listener)listener).exitCompilationUnit(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof m2pim4Visitor ) return ((m2pim4Visitor<? extends T>)visitor).visitCompilationUnit(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 

@@ -1,9 +1,7 @@
 package ch.pitchtech.modula.converter.compiler;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -151,14 +149,13 @@ public class Compiler {
         Logger.log(2, "  {0}", path);
 
         CurrentFile.setCurrentFile(path);
-        String content = Files.readString(path);
+        String content = Files.readString(path, compilerOptions.getCharset());
         
         // Step 1: pre-processing
         content = preProcess(content);
         
         // Step 2: lexer + parser
-        InputStream inputStream = new ByteArrayInputStream(content.getBytes());
-        Lexer lexer = new m2pim4Lexer(CharStreams.fromStream(inputStream));
+        Lexer lexer = new m2pim4Lexer(CharStreams.fromString(content));
         TokenStream tokenStream = new CommonTokenStream(lexer);
         m2pim4Parser parser = new m2pim4Parser(tokenStream);
         

@@ -22,6 +22,10 @@ public class FileOptions {
     public List<Path> getM2sourceDirs() {
         return m2sourceDirs;
     }
+    
+    public List<Path> getM2sourceDirsAbsolute() {
+        return m2sourceDirs.stream().map(Path::toAbsolutePath).map(Path::normalize).toList();
+    }
 
     public Path getTargetMainDir() {
         return targetMainDir;

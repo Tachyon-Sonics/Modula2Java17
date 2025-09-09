@@ -1,5 +1,6 @@
 package ch.pitchtech.modula.converter.cmd;
 
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -58,6 +59,18 @@ public class CmdOptions {
         public void apply(Object value, FileOptions fileOptions, CompilerOptions compilerOptions) {
             String pck = (String) value;
             compilerOptions.setTargetPackageLib(pck);
+        }
+        
+    };
+    
+    public final static CmdOption TEXT_ENCODING = new CmdOption("te", "text-encoding", OptionType.STRING,
+            "<encoding>", "Source files text encoding such as ISO-8859-1 (default UTF-8)") {
+
+        @Override
+        public void apply(Object value, FileOptions fileOptions, CompilerOptions compilerOptions) {
+            String charsetName = (String) value;
+            Charset charset = Charset.forName(charsetName);
+            compilerOptions.setCharset(charset);
         }
         
     };
