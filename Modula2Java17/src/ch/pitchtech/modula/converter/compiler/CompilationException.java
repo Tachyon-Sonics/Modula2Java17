@@ -1,7 +1,12 @@
 package ch.pitchtech.modula.converter.compiler;
 
+import java.nio.file.Path;
+
+import org.antlr.v4.runtime.ParserRuleContext;
+
 import ch.pitchtech.modula.converter.generator.Generator;
 import ch.pitchtech.modula.converter.model.INode;
+import ch.pitchtech.modula.converter.model.source.CurrentFile;
 import ch.pitchtech.modula.converter.model.source.SourceElement;
 import ch.pitchtech.modula.converter.model.source.SourceInfo;
 import ch.pitchtech.modula.converter.utils.StringUtils;
@@ -52,6 +57,12 @@ public class CompilationException extends RuntimeException {
                     result = node.toString() + result;
                     node = node.getParentNode();
                 }
+            } else if (element instanceof ParserRuleContext node) {
+                Path currentFile = CurrentFile.getCurrentFile();
+                if (currentFile != null) {
+                    result = currentFile.toString();
+                }
+                result += " at " + node.getStart().getLine() + "." + node.getStart().getCharPositionInLine();
             }
         }
         if (!result.isEmpty())

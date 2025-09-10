@@ -6,6 +6,6 @@ DEFINITION MODULE Arguments;
     ArgList = ARRAY [0 .. 127] OF ArgumentPtr;
     ArgTable = POINTER TO ArgList;
     
-  PROCEDURE GetArgs(VAR numArgs: SHORTCARD, VAR argTable: ArgTable);
+  PROCEDURE GetArgs(VAR numArgs: SHORTCARD; VAR argTable: ArgTable);
 
 END Arguments.

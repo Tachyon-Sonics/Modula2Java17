@@ -1,0 +1,7 @@
+DEFINITION MODULE Clock;
+
+  PROCEDURE ResetClock();
+  
+  PROCEDURE UserTime(): INTEGER;
+
+END Clock.

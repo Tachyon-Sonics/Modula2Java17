@@ -183,7 +183,7 @@ fieldListSequence
    ;
 
 fieldList
-   : (identList ':' type_ | CASE ident ((':' | '.' {       }) qualident)? OF variant ('|' variant)* (ELSE fieldListSequence)? END)?
+   : (identList ':' type_ | CASE ident ((':' | '.' {       }) qualident)? OF variant ('|' variant)* ('|'? ELSE fieldListSequence)? END)?
    ;
 
 variant
@@ -281,7 +281,7 @@ ifStatement
    ;
 
 caseStatement
-   : CASE expression OF ccase ('|' ccase)* (ELSE statementSequence)? END
+   : CASE expression OF ccase ('|' ccase)* ('|'? ELSE statementSequence)? END
    ;
 
 ccase
@@ -594,7 +594,7 @@ WITH
 
 
 IDENT
-   : LETTER (LETTER | DIGIT)*
+   : LETTER (LETTER | DIGIT | '_')*
    ;
 
 
