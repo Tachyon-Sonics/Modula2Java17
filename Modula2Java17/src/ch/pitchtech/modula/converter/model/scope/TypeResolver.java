@@ -52,13 +52,25 @@ public class TypeResolver {
         }
     }
     
+    /**
+     * Resolve the given type until we get a "root" type, that is, a type that is built-in, or a
+     * type that is not a literal. The reason is that a literal type that is not built-in is 
+     * just an "alias" to the real type (like 'TYPE Alias = RootType')
+     */
     private static TypeDefinition getRootType(TypeDefinition typeDefinition, IScope scope) {
-        if (typeDefinition.getType() instanceof LiteralType literalType) {
-            while (!literalType.isBuiltIn()) {
-                typeDefinition = scope.resolveType(literalType.getName());
-                literalType = (LiteralType) typeDefinition.getType();
-            }
+        while (typeDefinition.getType() instanceof LiteralType literalType && !literalType.isBuiltIn()) {
+            typeDefinition = scope.resolveType(literalType.getName());
         }
+        
+        /*
+         * TODO (1) unit test: TYPE Alias = XY; XY = POINTER TO Other;
+         */
+//        if (typeDefinition.getType() instanceof LiteralType literalType) {
+//            while (!literalType.isBuiltIn()) {
+//                typeDefinition = scope.resolveType(literalType.getName());
+//                literalType = (LiteralType) typeDefinition.getType();
+//            }
+//        }
         return typeDefinition;
     }
 

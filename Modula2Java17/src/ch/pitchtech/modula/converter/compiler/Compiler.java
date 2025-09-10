@@ -252,16 +252,19 @@ public class Compiler {
                     ResultContext stubImpl = new ResultContext(application.getCompilerOptions());
                     new StubImplementationGenerator(definitionModule).generate(stubImpl);
                     Files.writeString(javaImplFile, stubImpl.toString());
+                    Logger.log(2, "  --> {0}", javaImplFile);
                 }
             }
         } else if (compilationUnit instanceof ImplementationModule implementationModule) {
             new ImplementationModuleGenerator(implementationModule).generate(result);
             Path javaImplFile = targetPackageDir.resolve(implementationModule.getName() + ".java");
             Files.writeString(javaImplFile, result.toString());
+            Logger.log(2, "  --> {0}", javaImplFile);
         } else if (compilationUnit instanceof ch.pitchtech.modula.converter.model.Module module) {
             new ModuleGenerator(module).generate(result);
             Path javaImplFile = targetPackageDir.resolve(module.getName() + ".java");
             Files.writeString(javaImplFile, result.toString());
+            Logger.log(2, "  --> {0}", javaImplFile);
         }
     }
     

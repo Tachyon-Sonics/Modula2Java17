@@ -118,6 +118,7 @@ public class PointerTypeGenerator extends Generator implements ITypeDefinitionGe
                 String elementJavaType = recResult.toString();
                 result.write(elementJavaType + suffix);
             } else {
+                // TODO (1) POINTER TO ARRAY OF POINTER; also see if we can generalize (the two above 'if's seem quite generic)
                 throw new CompilerException(pointerType, "Unhandled " + String.valueOf(elementType));
             }
         } else if (targetType instanceof LiteralType literalType) {
