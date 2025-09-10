@@ -61,16 +61,6 @@ public class TypeResolver {
         while (typeDefinition.getType() instanceof LiteralType literalType && !literalType.isBuiltIn()) {
             typeDefinition = scope.resolveType(literalType.getName());
         }
-        
-        /*
-         * TODO (1) unit test: TYPE Alias = XY; XY = POINTER TO Other;
-         */
-//        if (typeDefinition.getType() instanceof LiteralType literalType) {
-//            while (!literalType.isBuiltIn()) {
-//                typeDefinition = scope.resolveType(literalType.getName());
-//                literalType = (LiteralType) typeDefinition.getType();
-//            }
-//        }
         return typeDefinition;
     }
 

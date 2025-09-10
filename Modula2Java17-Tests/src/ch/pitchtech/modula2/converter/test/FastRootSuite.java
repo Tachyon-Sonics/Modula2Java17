@@ -8,6 +8,7 @@ import org.junit.runners.Suite;
     BasicTest.class,
     ScopingTest.class,
     MemoryTest.class,
+    TypesTest.class,
 })
 public class FastRootSuite {
 
