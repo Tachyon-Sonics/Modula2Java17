@@ -10,7 +10,6 @@ import ch.pitchtech.modula.converter.model.type.IArrayType;
 import ch.pitchtech.modula.converter.model.type.IType;
 import ch.pitchtech.modula.converter.model.type.LiteralType;
 import ch.pitchtech.modula.converter.model.type.PointerType;
-import ch.pitchtech.modula.converter.model.type.RangeSetType;
 import ch.pitchtech.modula.converter.model.type.RecordType;
 import ch.pitchtech.modula.converter.model.type.TypeDefinition;
 import ch.pitchtech.modula.runtime.Runtime;
@@ -106,20 +105,11 @@ public class PointerTypeGenerator extends Generator implements ITypeDefinitionGe
                 if (elementJavaType.equals("String"))
                     suffix = suffix.substring("[]".length()); // POINTER TO ARRAY OF CHAR (with ARRAY OF CHAR as String) -> String TODO this sucks a lot...
                 result.write(elementJavaType + suffix);
-            } else if (elementType instanceof RangeSetType rangeSetType) {
-                ResultContext rsResult = result.subContext();
-                new RangeSetTypeGenerator(scopeUnit, rangeSetType).generate(rsResult);
-                String elementJavaType = rsResult.toString();
-                result.write(elementJavaType + suffix);
-            } else if (elementType instanceof RecordType recordType) {
-                // POINTER TO ARRAY OF RECORD
-                ResultContext recResult = result.subContext();
-                new RecordTypeGenerator(scopeUnit, recordType).generate(recResult);
-                String elementJavaType = recResult.toString();
-                result.write(elementJavaType + suffix);
             } else {
-                // TODO (1) POINTER TO ARRAY OF POINTER; also see if we can generalize (the two above 'if's seem quite generic)
-                throw new CompilerException(pointerType, "Unhandled " + String.valueOf(elementType));
+                ResultContext eltResult = result.subContext();
+                Types.getGenerator(scopeUnit, elementType).generate(eltResult);
+                String elementJavaType = eltResult.toString();
+                result.write(elementJavaType + suffix);
             }
         } else if (targetType instanceof LiteralType literalType) {
             result.ensureJavaImport(Runtime.class);
@@ -141,7 +131,7 @@ public class PointerTypeGenerator extends Generator implements ITypeDefinitionGe
                 new PointerTypeGenerator(scopeUnit, pointerType).generate(result, skipGenerics);
                 result.write(">");
             }
-        } else {
+        } else { // TODO (2) POINTER to Opaque, POINTER TO RangeSetType?
             throw new CompilerException(pointerType, "Unhandled " + String.valueOf(targetType));
         }
         return false;
