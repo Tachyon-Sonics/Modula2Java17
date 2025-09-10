@@ -11,7 +11,7 @@ import ch.pitchtech.modula.converter.model.block.VariableDefinition;
 import ch.pitchtech.modula.converter.model.builtin.BuiltInProcedure;
 import ch.pitchtech.modula.converter.model.expression.ArrayAccess;
 import ch.pitchtech.modula.converter.model.expression.Dereference;
-import ch.pitchtech.modula.converter.model.expression.FieldAccess;
+import ch.pitchtech.modula.converter.model.expression.QualifiedAccess;
 import ch.pitchtech.modula.converter.model.expression.FunctionCall;
 import ch.pitchtech.modula.converter.model.expression.IExpression;
 import ch.pitchtech.modula.converter.model.expression.Identifier;
@@ -89,12 +89,12 @@ public class AddressedAnalysis { // TODO merge common code with ReadWriteAnalysi
                     // Nothing to do. ArrayElementRef handles it...
                 } else if (expression instanceof Dereference) {
                     // Nothing to do: 'ADR(ptr^)' is equivalent to just 'ptr' 
-                } else if (expression instanceof FieldAccess fieldAccess) {
-                    IExpression faExpression = fieldAccess.getExpression();
+                } else if (expression instanceof QualifiedAccess qualifiedAccess) {
+                    IExpression faExpression = qualifiedAccess.getExpression();
                     IScope faScope = getScopeUnit(faExpression).getScope();
                     IType faType = TypeResolver.resolveType(faScope, faExpression.getType(faScope));
                     
-                    Identifier field = fieldAccess.getField();
+                    Identifier field = qualifiedAccess.getField();
                     if (faType instanceof RecordType recordType) {
                         VariableDefinition recordItem = recordType.getExElements().stream().filter(
                                 (vd) -> vd.getName().equals(field.getName()))

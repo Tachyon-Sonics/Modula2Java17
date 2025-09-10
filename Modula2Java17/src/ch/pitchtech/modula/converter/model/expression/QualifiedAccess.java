@@ -16,15 +16,21 @@ import ch.pitchtech.modula.converter.model.type.RecordType;
 
 
 /**
- * "record.field"
+ * A qualified access of the form "&lt;expr&gt;.yy".
+ * <p>
+ * This can be
+ * <ul>
+ * <li>A record field access
+ * <li>A module access like "Module.yy". In that case ""&lt;expr&gt;" must be an {@link Identifier} that matches a module name
+ * </ul>
  */
-public class FieldAccess extends SourceElement implements IExpression {
+public class QualifiedAccess extends SourceElement implements IExpression {
     
     private final IExpression expression;
     private final Identifier field;
 
     
-    public FieldAccess(SourceLocation sourceLocation, IExpression expression, Identifier field) {
+    public QualifiedAccess(SourceLocation sourceLocation, IExpression expression, Identifier field) {
         super(sourceLocation);
         this.expression = expression;
         this.field = field;

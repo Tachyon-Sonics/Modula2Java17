@@ -23,7 +23,7 @@ import ch.pitchtech.modula.converter.model.block.VariableDefinition;
 import ch.pitchtech.modula.converter.model.builtin.BuiltInProcedure;
 import ch.pitchtech.modula.converter.model.builtin.BuiltInType;
 import ch.pitchtech.modula.converter.model.expression.ArrayAccess;
-import ch.pitchtech.modula.converter.model.expression.FieldAccess;
+import ch.pitchtech.modula.converter.model.expression.QualifiedAccess;
 import ch.pitchtech.modula.converter.model.expression.FunctionCall;
 import ch.pitchtech.modula.converter.model.expression.IExpression;
 import ch.pitchtech.modula.converter.model.expression.Identifier;
@@ -423,20 +423,20 @@ public class TypeCastHelper {
                     }
                 }
             }
-        } else if (addressedExpr instanceof FieldAccess fieldAccess) {
+        } else if (addressedExpr instanceof QualifiedAccess qualifiedAccess) {
             // Let's say fieldAccess is 'xx^.GetMyRecord().number'
             
             // Generate expression before field access, like 'xx^.GetMyRecord()'
             ResultContext exprResult = resultContext.subContext();
-            Expressions.getGenerator(scopeUnit, fieldAccess.getExpression()).generate(exprResult);
+            Expressions.getGenerator(scopeUnit, qualifiedAccess.getExpression()).generate(exprResult);
             
             // Get type before field access, like 'MyRecord'
-            IType exprType = resultContext.resolveType(fieldAccess.getExpression());
+            IType exprType = resultContext.resolveType(qualifiedAccess.getExpression());
             ResultContext typeResult = resultContext.subContext();
             Types.getGenerator(scopeUnit, exprType).generate(typeResult);
             
             // Generate using Runtime.FieldExprRef
-            IType type = resultContext.resolveType(fieldAccess);
+            IType type = resultContext.resolveType(qualifiedAccess);
             ResultContext result = resultContext.subContext();
             result.ensureJavaImport(Runtime.class);
             result.write("new Runtime.FieldExprRef<>(");
@@ -444,11 +444,11 @@ public class TypeCastHelper {
             result.write(", ");
             result.write(typeResult);
             result.write("::");
-            result.write(VariableDefinitionGenerator.getterName(fieldAccess.getField().getName(), type));
+            result.write(VariableDefinitionGenerator.getterName(qualifiedAccess.getField().getName(), type));
             result.write(", ");
             result.write(typeResult);
             result.write("::");
-            result.write(VariableDefinitionGenerator.setterName(fieldAccess.getField().getName(), type));
+            result.write(VariableDefinitionGenerator.setterName(qualifiedAccess.getField().getName(), type));
             result.write(")");
             return result;
         }

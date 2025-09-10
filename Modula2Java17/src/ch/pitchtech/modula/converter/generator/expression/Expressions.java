@@ -7,7 +7,7 @@ import ch.pitchtech.modula.converter.model.expression.ArrayAccess;
 import ch.pitchtech.modula.converter.model.expression.ConstantLiteral;
 import ch.pitchtech.modula.converter.model.expression.Constructor;
 import ch.pitchtech.modula.converter.model.expression.Dereference;
-import ch.pitchtech.modula.converter.model.expression.FieldAccess;
+import ch.pitchtech.modula.converter.model.expression.QualifiedAccess;
 import ch.pitchtech.modula.converter.model.expression.FunctionCall;
 import ch.pitchtech.modula.converter.model.expression.IExpression;
 import ch.pitchtech.modula.converter.model.expression.Identifier;
@@ -54,8 +54,8 @@ public class Expressions {
             return new ArrayAccessGenerator(scopeUnit, arrayAccess);
         else if (expression instanceof ParenthesedExpression parentheseExpression)
             return new ParenthesedExpressionGenerator(scopeUnit, parentheseExpression);
-        else if (expression instanceof FieldAccess fieldAccess)
-            return new FieldAccessGenerator(scopeUnit, fieldAccess);
+        else if (expression instanceof QualifiedAccess fieldAccess)
+            return new QualifiedAccessGenerator(scopeUnit, fieldAccess);
         else if (expression instanceof SetExpression setExpression)
             return new SetExpressionGenerator(scopeUnit, setExpression);
         throw new CompilerException(expression, "Unhandled expression type " + expression.getClass().getSimpleName());

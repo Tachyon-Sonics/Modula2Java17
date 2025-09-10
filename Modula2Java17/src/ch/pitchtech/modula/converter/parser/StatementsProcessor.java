@@ -31,10 +31,9 @@ import ch.pitchtech.modula.converter.compiler.CompilationException;
 import ch.pitchtech.modula.converter.model.DefinitionModule;
 import ch.pitchtech.modula.converter.model.block.ProcedureImplementation;
 import ch.pitchtech.modula.converter.model.builtin.BuiltInProcedure;
-import ch.pitchtech.modula.converter.model.expression.FieldAccess;
 import ch.pitchtech.modula.converter.model.expression.IExpression;
 import ch.pitchtech.modula.converter.model.expression.Identifier;
-import ch.pitchtech.modula.converter.model.expression.QualifiedIdentifier;
+import ch.pitchtech.modula.converter.model.expression.QualifiedAccess;
 import ch.pitchtech.modula.converter.model.scope.IHasScope;
 import ch.pitchtech.modula.converter.model.scope.IScope;
 import ch.pitchtech.modula.converter.model.scope.ProcedureImplementationScope;
@@ -394,26 +393,20 @@ public class StatementsProcessor extends ProcessorBase {
             ProcedureCall procedureCall = new ProcedureCall(loc(qualidentContext), scopeUnit, null, procedureName);
             processProcedureArguments(scopeUnit, actualParamsContext, procedureCall::addArguments);
             return procedureCall;
-        } else if (procedureId instanceof FieldAccess fieldAccess) {
-            if (fieldAccess.getExpression() instanceof Identifier qualifier) {
-                // Qualified access
+        } else if (procedureId instanceof QualifiedAccess qualifiedAccess) {
+            if (qualifiedAccess.getExpression() instanceof Identifier qualifier) {
+                // Module qualified access
                 String moduleName = qualifier.getName();
                 DefinitionModule definition = scopeUnit.getScope().resolveModule(moduleName);
                 if (definition == null)
                     throw new CompilationException(qualidentContext, "Cannot resolve module: {0}", moduleName);
-                String procedureName = fieldAccess.getField().getName();
+                String procedureName = qualifiedAccess.getField().getName();
                 ProcedureCall procedureCall = new ProcedureCall(loc(qualidentContext), definition, moduleName, procedureName);
                 processProcedureArguments(scopeUnit, actualParamsContext, procedureCall::addArguments);
                 return procedureCall;
             } else {
                 throw new UnexpectedTokenException(qualidentContext, "Expected a procedure name");
             }
-        } else if (procedureId instanceof QualifiedIdentifier qi) {
-            String moduleName = qi.getModule();
-            String procedureName = qi.getName();
-            ProcedureCall procedureCall = new ProcedureCall(loc(qualidentContext), qi.getScopeUnit(), moduleName, procedureName);
-            processProcedureArguments(scopeUnit, actualParamsContext, procedureCall::addArguments);
-            return procedureCall;
         } else {
             throw new UnexpectedTokenException(qualidentContext, "Expected a procedure name");
         }

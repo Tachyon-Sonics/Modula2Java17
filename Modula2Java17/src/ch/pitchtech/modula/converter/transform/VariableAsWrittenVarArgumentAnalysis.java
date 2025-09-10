@@ -8,7 +8,7 @@ import ch.pitchtech.modula.converter.model.block.IDefinition;
 import ch.pitchtech.modula.converter.model.block.ProcedureDefinition;
 import ch.pitchtech.modula.converter.model.block.ProcedureImplementation;
 import ch.pitchtech.modula.converter.model.block.VariableDefinition;
-import ch.pitchtech.modula.converter.model.expression.FieldAccess;
+import ch.pitchtech.modula.converter.model.expression.QualifiedAccess;
 import ch.pitchtech.modula.converter.model.expression.IExpression;
 import ch.pitchtech.modula.converter.model.expression.Identifier;
 import ch.pitchtech.modula.converter.model.scope.IHasScope;
@@ -141,7 +141,7 @@ public class VariableAsWrittenVarArgumentAnalysis {
     private void mark(INode node) {
         if (node instanceof Identifier identifier) {
             INode parent = identifier.getParentNode();
-            if (parent instanceof FieldAccess)
+            if (parent instanceof QualifiedAccess)
                 return; // This is a field access and hence not a local variable
             
             IHasScope scopeUnit = getScopeUnit(identifier);

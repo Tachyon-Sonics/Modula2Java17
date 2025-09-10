@@ -16,7 +16,7 @@ import ch.pitchtech.modula.converter.model.block.ProcedureDefinition;
 import ch.pitchtech.modula.converter.model.block.ProcedureImplementation;
 import ch.pitchtech.modula.converter.model.block.VariableDefinition;
 import ch.pitchtech.modula.converter.model.builtin.BuiltInProcedure;
-import ch.pitchtech.modula.converter.model.expression.FieldAccess;
+import ch.pitchtech.modula.converter.model.expression.QualifiedAccess;
 import ch.pitchtech.modula.converter.model.expression.IExpression;
 import ch.pitchtech.modula.converter.model.expression.Identifier;
 import ch.pitchtech.modula.converter.model.scope.IHasScope;
@@ -235,7 +235,7 @@ public class ReadWriteAnalysis {
     private void mark(INode node, Set<ILocalData> addToList, BiConsumer<ILocalData, Boolean> marker) {
         if (node instanceof Identifier identifier) {
             INode parent = identifier.getParentNode();
-            if (parent instanceof FieldAccess)
+            if (parent instanceof QualifiedAccess)
                 return; // This is a field access and hence not any markable ILocalData (argument, variable or constant)
             
             IHasScope scopeUnit = getScopeUnit(identifier);

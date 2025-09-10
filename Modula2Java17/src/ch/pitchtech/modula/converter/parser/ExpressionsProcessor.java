@@ -32,7 +32,7 @@ import ch.pitchtech.modula.converter.model.builtin.BuiltInProcedure;
 import ch.pitchtech.modula.converter.model.expression.ArrayAccess;
 import ch.pitchtech.modula.converter.model.expression.ConstantLiteral;
 import ch.pitchtech.modula.converter.model.expression.Dereference;
-import ch.pitchtech.modula.converter.model.expression.FieldAccess;
+import ch.pitchtech.modula.converter.model.expression.QualifiedAccess;
 import ch.pitchtech.modula.converter.model.expression.FunctionCall;
 import ch.pitchtech.modula.converter.model.expression.IExpression;
 import ch.pitchtech.modula.converter.model.expression.Identifier;
@@ -79,7 +79,7 @@ public class ExpressionsProcessor extends ProcessorBase {
                 if (result instanceof Identifier prefix) {
                     if (qualify) {
                         Identifier qualifier = new Identifier(loc(identContext), scopeUnit, prefix.getName());
-                        result = new FieldAccess(loc(identContext), qualifier, identifier);
+                        result = new QualifiedAccess(loc(identContext), qualifier, identifier);
                         qualify = false;
                     } else {
                         throw new UnexpectedTokenException(identContext, "Identifier not expected after expression " + result);
@@ -100,7 +100,7 @@ public class ExpressionsProcessor extends ProcessorBase {
                         if (curExpr == null)
                             curExpr = identifier;
                         else
-                            curExpr = new FieldAccess(loc(identContext), curExpr, identifier);
+                            curExpr = new QualifiedAccess(loc(identContext), curExpr, identifier);
                     } else if (item instanceof TerminalNode terminal) {
                         expectText(terminal, ".");
                     } else {
@@ -374,7 +374,7 @@ public class ExpressionsProcessor extends ProcessorBase {
                 inFieldAccess = false;
                 String identName = identContext.getText();
                 Identifier identifier = new Identifier(loc(identContext), scopeUnit, identName);
-                result = new FieldAccess(loc(identContext), result, identifier);
+                result = new QualifiedAccess(loc(identContext), result, identifier);
             } else if (node instanceof ExpListContext expListContext) {
                 if (!inArrayAccess)
                     throw new UnexpectedTokenException(expListContext);
