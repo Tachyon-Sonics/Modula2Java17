@@ -28,8 +28,6 @@ import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.SimpleConstExprContex
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.SimpleExpressionContext;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.StringContext;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.TermContext;
-import ch.pitchtech.modula.converter.compiler.CompilationException;
-import ch.pitchtech.modula.converter.model.DefinitionModule;
 import ch.pitchtech.modula.converter.model.builtin.BuiltInProcedure;
 import ch.pitchtech.modula.converter.model.expression.ArrayAccess;
 import ch.pitchtech.modula.converter.model.expression.ConstantLiteral;
@@ -41,7 +39,6 @@ import ch.pitchtech.modula.converter.model.expression.Identifier;
 import ch.pitchtech.modula.converter.model.expression.InfixOpExpression;
 import ch.pitchtech.modula.converter.model.expression.MinusExpression;
 import ch.pitchtech.modula.converter.model.expression.ParenthesedExpression;
-import ch.pitchtech.modula.converter.model.expression.QualifiedIdentifier;
 import ch.pitchtech.modula.converter.model.expression.SetExpression;
 import ch.pitchtech.modula.converter.model.expression.SetExpression.SetRange;
 import ch.pitchtech.modula.converter.model.expression.StringLiteral;
@@ -81,10 +78,8 @@ public class ExpressionsProcessor extends ProcessorBase {
                 Identifier identifier = new Identifier(loc(identContext), scopeUnit, identContext.getText());
                 if (result instanceof Identifier prefix) {
                     if (qualify) {
-                        DefinitionModule definition = scopeUnit.getScope().resolveModule(prefix.getName());
-                        if (definition == null)
-                            throw new CompilationException(identContext, "Cannot resolve module: {0}", prefix.getName());
-                        result = new QualifiedIdentifier(loc(identContext), definition, prefix.getName(), identContext.getText());
+                        Identifier qualifier = new Identifier(loc(identContext), scopeUnit, prefix.getName());
+                        result = new FieldAccess(loc(identContext), qualifier, identifier);
                         qualify = false;
                     } else {
                         throw new UnexpectedTokenException(identContext, "Identifier not expected after expression " + result);

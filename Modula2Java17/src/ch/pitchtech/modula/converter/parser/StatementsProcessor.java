@@ -27,8 +27,11 @@ import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.StatementContext;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.StatementSequenceContext;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.WhileStatementContext;
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.WithStatementContext;
+import ch.pitchtech.modula.converter.compiler.CompilationException;
+import ch.pitchtech.modula.converter.model.DefinitionModule;
 import ch.pitchtech.modula.converter.model.block.ProcedureImplementation;
 import ch.pitchtech.modula.converter.model.builtin.BuiltInProcedure;
+import ch.pitchtech.modula.converter.model.expression.FieldAccess;
 import ch.pitchtech.modula.converter.model.expression.IExpression;
 import ch.pitchtech.modula.converter.model.expression.Identifier;
 import ch.pitchtech.modula.converter.model.expression.QualifiedIdentifier;
@@ -391,6 +394,20 @@ public class StatementsProcessor extends ProcessorBase {
             ProcedureCall procedureCall = new ProcedureCall(loc(qualidentContext), scopeUnit, null, procedureName);
             processProcedureArguments(scopeUnit, actualParamsContext, procedureCall::addArguments);
             return procedureCall;
+        } else if (procedureId instanceof FieldAccess fieldAccess) {
+            if (fieldAccess.getExpression() instanceof Identifier qualifier) {
+                // Qualified access
+                String moduleName = qualifier.getName();
+                DefinitionModule definition = scopeUnit.getScope().resolveModule(moduleName);
+                if (definition == null)
+                    throw new CompilationException(qualidentContext, "Cannot resolve module: {0}", moduleName);
+                String procedureName = fieldAccess.getField().getName();
+                ProcedureCall procedureCall = new ProcedureCall(loc(qualidentContext), definition, moduleName, procedureName);
+                processProcedureArguments(scopeUnit, actualParamsContext, procedureCall::addArguments);
+                return procedureCall;
+            } else {
+                throw new UnexpectedTokenException(qualidentContext, "Expected a procedure name");
+            }
         } else if (procedureId instanceof QualifiedIdentifier qi) {
             String moduleName = qi.getModule();
             String procedureName = qi.getName();

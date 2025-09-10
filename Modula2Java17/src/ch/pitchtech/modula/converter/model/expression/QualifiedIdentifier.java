@@ -14,7 +14,7 @@ import ch.pitchtech.modula.converter.model.type.EnumerationType;
 import ch.pitchtech.modula.converter.model.type.IType;
 import ch.pitchtech.modula.converter.model.type.ProcedureType;
 
-public class QualifiedIdentifier extends SourceElement implements IExpression, IHasName {
+public class QualifiedIdentifier extends SourceElement implements IExpression, IHasName { // TODO (0) remove; better document FieldAccess
     
     private final IHasScope scopeUnit;
     private final String module;
