@@ -15,10 +15,10 @@ import ch.pitchtech.modula.converter.utils.Logger;
  */
 public class CompileChess {
 
-    private final static String SOURCE_DIRECTORY_MAIN = "../../Modula2Chess-1.0/modula-2";
+    private final static String SOURCE_DIRECTORY_MAIN = "../../Modula2Chess/modula-2";
     private final static String SOURCE_DIRECTORY_LIBRARY = "../../Modula2Java17/Modula2-Library/modula-2";
     
-    private final static String TARGET_DIRECTORY_MAIN = "../../Modula2Chess-1.0/modula-2";
+    private final static String TARGET_DIRECTORY_MAIN = "../../Modula2Chess/src";
     private final static String TARGET_DIRECTORY_LIBRARY = "../../Modula2Java17/Modula2-Library/src";
 
     

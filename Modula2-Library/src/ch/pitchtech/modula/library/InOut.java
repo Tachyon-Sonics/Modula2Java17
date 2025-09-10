@@ -42,7 +42,7 @@ public class InOut {
         return consoleReader;
     }
     
-    public void ReadChar(IRef<Character> ch) {
+    public void Read(IRef<Character> ch) {
         System.out.flush();
         try {
             int data = reader().read();
