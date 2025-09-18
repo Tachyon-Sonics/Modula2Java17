@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.junit.Test;
 
+import generated.test.arguments.ByRefByValue;
 import generated.test.arguments.StringByValue;
 
 public class ArgumentsTest {
@@ -26,6 +27,20 @@ public class ArgumentsTest {
          * Hence the value is NOT modified, because of the initial pass-by-value:
          */
         assertEquals("Initial Text", output.trim());
+    }
+    
+    // TODO (1) Incorrect. We must have 10, 42, 10, 42 and not 10, 42, 42, 42
+    @Test
+    public void testByRefByValue() throws IOException, InvocationTargetException {
+        CompilerHelper helper = new CompilerHelper("arguments");
+        helper.compile("ByRefByValue.mod");
+        
+        helper.assertCompilationResult(ByRefByValue.class, 
+                "    @SuppressWarnings(\"unused\")");
+        
+        ExecuteHelper executor = new ExecuteHelper();
+        String output = executor.execute(ByRefByValue::main);
+        executor.assertOutput(getClass(), "ByRefByValue.txt", output);
     }
 
 }
