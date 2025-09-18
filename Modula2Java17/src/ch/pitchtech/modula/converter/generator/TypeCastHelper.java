@@ -23,10 +23,10 @@ import ch.pitchtech.modula.converter.model.block.VariableDefinition;
 import ch.pitchtech.modula.converter.model.builtin.BuiltInProcedure;
 import ch.pitchtech.modula.converter.model.builtin.BuiltInType;
 import ch.pitchtech.modula.converter.model.expression.ArrayAccess;
-import ch.pitchtech.modula.converter.model.expression.QualifiedAccess;
 import ch.pitchtech.modula.converter.model.expression.FunctionCall;
 import ch.pitchtech.modula.converter.model.expression.IExpression;
 import ch.pitchtech.modula.converter.model.expression.Identifier;
+import ch.pitchtech.modula.converter.model.expression.QualifiedAccess;
 import ch.pitchtech.modula.converter.model.expression.StringLiteral;
 import ch.pitchtech.modula.converter.model.scope.IHasScope;
 import ch.pitchtech.modula.converter.model.statement.WithStatement;
@@ -383,10 +383,10 @@ public class TypeCastHelper {
                     result.write(VariableDefinitionGenerator.setterName(result, variableDefinition));
                     result.write(")");
                     return result;
-                } else if (hasScope instanceof ProcedureImplementation) {
+                } else if (hasScope instanceof ProcedureImplementation procImpl) {
                     if (!variableDefinition.isUseRef()) {
                         throw new CompilerException(addressedExpr, "PROCEDURE variable should be an IRef. PROCEDURE {0}, variable: {1}",
-                                hasScope, variableDefinition);
+                                procImpl.getName(), variableDefinition.getName());
                     }
                     // Nothing to do, variable is already an IRef
                 } else if (hasScope instanceof WithStatement withStatement) {

@@ -1174,7 +1174,7 @@ public class Runtime {
     }
     
     private static String appName;
-    private static Object[] args;
+    private static String[] args;
 
     
     public static String getAppName() {
@@ -1201,11 +1201,11 @@ public class Runtime {
         return name;
     }
     
-    public static Object[] getArgs() {
+    public static String[] getArgs() {
         return args;
     }
 
-    public static void setArgs(Object[] args) {
+    public static void setArgs(String[] args) {
         Runtime.args = args;
     }
     

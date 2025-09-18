@@ -127,20 +127,24 @@ public class ProcedureImplementationGenerator extends Generator {
             result.write("; // By-value and written argument");
             result.writeLn();
         }
+        
         // Wrap non-VAR arguments that are passed as VAR argument or addressed
+        List<FormalArgument> toUnRef = new ArrayList<>();
         for (FormalArgument formalArgument : argumentsToWrapAsRef) {
+            assert !formalArgument.isUseRef();
             formalArgument.setUseRef(true); // Make sure all users now use it as a reference
+            toUnRef.add(formalArgument); // up to the end of this procedure's body
             
             // Create reference variable, with value variable (with "_" prefix) as initial value
             String argFinalName = name(formalArgument);
             String argTmpName = "_" + name(formalArgument);
-            ResultContext argTmpContext = result.subContext();
-            argTmpContext.write(argTmpName);
+            ResultContext initialValueContext = result.subContext();
+            initialValueContext.write(argTmpName);
             
             VariableDefinition wrappedVariable = new VariableDefinition(formalArgument.getSourceLocation(), 
                     procedureImplementation, argFinalName, formalArgument.getType());
             wrappedVariable.copyAccessDataFrom(formalArgument);
-            new VariableDefinitionGenerator(procedureImplementation, wrappedVariable).generate(result, false, argTmpContext);
+            new VariableDefinitionGenerator(procedureImplementation, wrappedVariable).generate(result, false, initialValueContext);
         }
         if (!argumentsToCopy.isEmpty() || !argumentsToWrapAsRef.isEmpty())
             result.writeLn();
@@ -191,6 +195,11 @@ public class ProcedureImplementationGenerator extends Generator {
         result.decIndent();
         result.writeLine("}");
         result.writeLn();
+        
+        // Restore arguments that were temporarily marked as ref
+        for (FormalArgument arg : toUnRef) {
+            arg.setUseRef(false);
+        }
         
         // References, if procedure is used as an expression
         ProcedureDefinition procedureDefinition = procedureImplementation.findDefinition();

@@ -22,8 +22,9 @@ public class Arguments {
     // PROCEDURE
 
     public void GetArgs(/* VAR */ Runtime.IRef<Short> numArgs, /* VAR */ Runtime.IRef<String[]> argTable) {
-        // todo implement GetArgs
-        throw new UnsupportedOperationException("Not implemented: GetArgs");
+        String[] args = Runtime.getArgs();
+        numArgs.set((short) args.length);
+        argTable.set(args);
     }
 
 

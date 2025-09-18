@@ -27,7 +27,6 @@ import ch.pitchtech.modula.converter.model.statement.IStatement;
 import ch.pitchtech.modula.converter.model.statement.ProcedureExpressionCall;
 import ch.pitchtech.modula.converter.model.type.IType;
 import ch.pitchtech.modula.converter.model.type.ProcedureType;
-import ch.pitchtech.modula.converter.utils.Debug;
 
 /**
  * For a {@link ProcedureImplementation}, check what {@link ILocalData} is read or written.
@@ -124,8 +123,6 @@ public class ReadWriteAnalysis {
     }
     
     private void process(ProcedureImplementation curProcedure, INode node) {
-        if (curProcedure.getName().equals("Auxiliar1"))
-            Debug.doNothing();
         // Check for procedure call. The "VAR" keyword makes a write access
         if (node instanceof IMethodCall methodCall) {
             IHasScope scopeUnit = getScopeUnit(methodCall);

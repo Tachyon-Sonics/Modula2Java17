@@ -60,7 +60,12 @@ public class VariableDefinitionGenerator extends Generator {
                 result.ensureJavaImport(ch.pitchtech.modula.runtime.Runtime.class);
                 result.write("Runtime.Ref<String> ");
                 result.write(name(variableDefinition));
-                result.write(" = new Runtime.Ref<>(\"\");");
+                result.write(" = new Runtime.Ref<>(");
+                if (explicitInitialValue != null)
+                    result.write(explicitInitialValue);
+                else
+                    result.write("\"\"");
+                result.write(");");
                 result.writeLn();
             } else {
                 // TODO test: it may fail if we have to generate an unnamed POINTER TO XX by reference
