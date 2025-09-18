@@ -21,7 +21,7 @@ import ch.pitchtech.modula.converter.model.type.RecordType;
  * This can be
  * <ul>
  * <li>A record field access
- * <li>A module access like "Module.yy". In that case ""&lt;expr&gt;" must be an {@link Identifier} that matches a module name
+ * <li>A module access like "Module.yy". In that case "&lt;expr&gt;" must be an {@link Identifier} that matches a module name
  * </ul>
  */
 public class QualifiedAccess extends SourceElement implements IExpression {
@@ -91,7 +91,7 @@ public class QualifiedAccess extends SourceElement implements IExpression {
 
     @Override
     public String toString() {
-        return "FieldAccess [expression=" + expression + ", field=" + field + "]";
+        return "QualifiedAccess [expression=" + expression + ", field=" + field + "]";
     }
 
 }

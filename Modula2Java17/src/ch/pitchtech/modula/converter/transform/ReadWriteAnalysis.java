@@ -16,9 +16,9 @@ import ch.pitchtech.modula.converter.model.block.ProcedureDefinition;
 import ch.pitchtech.modula.converter.model.block.ProcedureImplementation;
 import ch.pitchtech.modula.converter.model.block.VariableDefinition;
 import ch.pitchtech.modula.converter.model.builtin.BuiltInProcedure;
-import ch.pitchtech.modula.converter.model.expression.QualifiedAccess;
 import ch.pitchtech.modula.converter.model.expression.IExpression;
 import ch.pitchtech.modula.converter.model.expression.Identifier;
+import ch.pitchtech.modula.converter.model.expression.QualifiedAccess;
 import ch.pitchtech.modula.converter.model.scope.IHasScope;
 import ch.pitchtech.modula.converter.model.scope.TypeResolver;
 import ch.pitchtech.modula.converter.model.source.NodeAttachType;
@@ -27,6 +27,7 @@ import ch.pitchtech.modula.converter.model.statement.IStatement;
 import ch.pitchtech.modula.converter.model.statement.ProcedureExpressionCall;
 import ch.pitchtech.modula.converter.model.type.IType;
 import ch.pitchtech.modula.converter.model.type.ProcedureType;
+import ch.pitchtech.modula.converter.utils.Debug;
 
 /**
  * For a {@link ProcedureImplementation}, check what {@link ILocalData} is read or written.
@@ -123,6 +124,8 @@ public class ReadWriteAnalysis {
     }
     
     private void process(ProcedureImplementation curProcedure, INode node) {
+        if (curProcedure.getName().equals("Auxiliar1"))
+            Debug.doNothing();
         // Check for procedure call. The "VAR" keyword makes a write access
         if (node instanceof IMethodCall methodCall) {
             IHasScope scopeUnit = getScopeUnit(methodCall);
@@ -235,8 +238,8 @@ public class ReadWriteAnalysis {
     private void mark(INode node, Set<ILocalData> addToList, BiConsumer<ILocalData, Boolean> marker) {
         if (node instanceof Identifier identifier) {
             INode parent = identifier.getParentNode();
-            if (parent instanceof QualifiedAccess)
-                return; // This is a field access and hence not any markable ILocalData (argument, variable or constant)
+            if (parent instanceof QualifiedAccess qualifiedAccess && qualifiedAccess.getField() == node)
+                return; // This is the field of a qualified access and hence not any markable ILocalData (argument, variable or constant)
             
             IHasScope scopeUnit = getScopeUnit(identifier);
             IDefinition definition = scopeUnit.getScope().resolve(identifier.getName(), true, false, true, false);

@@ -57,6 +57,7 @@ public class CompileMiscTestProgs {
      * - https://www.modula2.org/freepages/downl.html#sour
      * - https://www.modula2.org/tutor/chapter11.php
      * - https://github.com/sblendorio/gorilla-cpm?tab=readme-ov-file
+     * - https://github.com/GunterMueller?tab=repositories&q=modula&type=&language=&sort=
      * 
      * TODO (3) Comment in generated Java files: (* Converted from Modula-2 by Modula2Java17 *)
      */
