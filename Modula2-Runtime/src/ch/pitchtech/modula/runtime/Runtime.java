@@ -1020,7 +1020,43 @@ public class Runtime {
     }
     
     /**
-     * Duplicate an array. This is used when assigning an array to another one, or when passing an array as a non-VAR argument
+     * Copy an array from 'src' into 'dst'. This is used when assigning an array to another one.
+     * @param deep whether to duplicate elements. <tt>false</tt> for an ARRAY OF POINTER
+     * @param array the array to duplicate
+     */
+    public static <E> void copyArray(boolean deep, E dst, E src) {
+        Class<?> type = src.getClass();        
+        if (!type.isArray())
+            throw new IllegalArgumentException("Argument is not an array");
+        Class<?> componentType = type.getComponentType();
+        int length = Array.getLength(src);
+        for (int i = 0; i < length; i++) {
+            Object item = Array.get(src, i);
+            boolean update = true;
+            if (deep) {
+                if (item != null && item.getClass().isArray()) {
+                    Object target = Array.get(dst, i);
+                    copyArray(deep, target, item);
+                    update = false; // Mutated in-place
+                } else if (item != null && !componentType.isPrimitive()) {
+                    // Check for a newCopy() method indicating a RECORD, and use it to create a copy
+                    try {
+                        Method newCopy = item.getClass().getMethod("newCopy");
+                        if (newCopy != null)
+                            item = newCopy.invoke(item);
+                    } catch (ReflectiveOperationException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+            if (update)
+                Array.set(dst, i, item);
+        }
+    }
+    
+    /**
+     * Duplicate an array. This is used when assigning a String promoted from ARRAY OF CHAR, or when passing 
+     * an array as a non-VAR argument.
      * @param deep whether to duplicate elements. <tt>false</tt> for an ARRAY OF POINTER
      * @param array the array to duplicate
      */

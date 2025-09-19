@@ -85,8 +85,8 @@ public class AssignmentGenerator extends Generator {
                     && !value.isConstant(scopeUnit.getScope())) {
                 // Copy values
                 boolean closeParenthese = true;
-                Expressions.getGenerator(scopeUnit, target).generate(result);
                 if (targetType instanceof EnumSetType) {
+                    Expressions.getGenerator(scopeUnit, target).generate(result);
                     if (value instanceof InfixOpExpression) {
                         // The value is a set expression, which is already a copy
                         result.write(" = ");
@@ -98,19 +98,32 @@ public class AssignmentGenerator extends Generator {
                     } else {
                         result.write(" = EnumSet.copyOf(");
                     }
+                    writeValueWithProperCast(result, scopeUnit, targetType, value, valueType, false, false);
                 } else if (targetType instanceof IArrayType arrayType) {
                     IType elementType = result.resolveType(arrayType.getElementType());
                     boolean deep = (!(elementType instanceof PointerType) 
                             && !(elementType instanceof OpaqueType) 
                             && !elementType.isBuiltInType(BuiltInType.ADDRESS));
-                    result.ensureJavaImport(Runtime.class);
-                    result.write(" = Runtime.copyOf(" + deep + ", ");
+                    if (TypeHelper.isCharArrayAsString(targetType, result)) {
+                        // Use copyOf() because we cannot mutate a String
+                        Expressions.getGenerator(scopeUnit, target).generate(result);
+                        result.write(" = Runtime.copyOf(" + deep + ", ");
+                        writeValueWithProperCast(result, scopeUnit, targetType, value, valueType, false, false);
+                    } else {
+                        // Use copyArray to mutate the target array
+                        result.ensureJavaImport(Runtime.class);
+                        result.write("Runtime.copyArray(" + deep + ", ");
+                        Expressions.getGenerator(scopeUnit, target).generate(result);
+                        result.write(", ");
+                        writeValueWithProperCast(result, scopeUnit, targetType, value, valueType, false, false);
+                    }
                 } else if (targetType instanceof RangeSetType || targetType instanceof RecordType) {
+                    Expressions.getGenerator(scopeUnit, target).generate(result);
                     result.write(".copyFrom(");
+                    writeValueWithProperCast(result, scopeUnit, targetType, value, valueType, false, false);
                 } else {
                     throw new CompilerException(assignement, "Not handled: {0}", targetType);
                 }
-                writeValueWithProperCast(result, scopeUnit, targetType, value, valueType, false, false);
                 if (closeParenthese)
                     result.write(")");
                 return;

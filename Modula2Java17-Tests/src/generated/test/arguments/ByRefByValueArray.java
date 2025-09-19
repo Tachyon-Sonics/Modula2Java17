@@ -32,10 +32,9 @@ public class ByRefByValueArray {
         short[] arr2 = new short[10];
 
         arr2[0] = 42;
-        value = Runtime.copyOf(true, arr2);
+        Runtime.copyArray(true, value, arr2);
     }
 
-    @SuppressWarnings("unused")
     private void ModifyByValue(short[] _value) {
         short[] value = Runtime.copyOf(true, _value); // By-value and written argument
 
@@ -43,7 +42,7 @@ public class ByRefByValueArray {
         short[] arr2 = new short[10];
 
         arr2[0] = 42;
-        value = Runtime.copyOf(true, arr2);
+        Runtime.copyArray(true, value, arr2);
     }
 
     private void ModifyByRefByRef(/* VAR+WRT */ short[] value) {

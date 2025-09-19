@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import generated.test.arguments.ByRefByValueArray;
@@ -72,14 +71,12 @@ public class ArgumentsTest {
         executor.assertOutput(getClass(), "ByRefByValue.txt", output);
     }
 
-    @Ignore // TODO (1) fix
     @Test
     public void testByRefByValueArray() throws IOException, InvocationTargetException {
         CompilerHelper helper = new CompilerHelper("arguments");
         helper.compile("ByRefByValueArray.mod");
         
-        helper.assertCompilationResult(ByRefByValueArray.class, 
-                "    @SuppressWarnings(\"unused\")");
+        helper.assertCompilationResult(ByRefByValueArray.class);
         
         ExecuteHelper executor = new ExecuteHelper();
         String output = executor.execute(ByRefByValueArray::main);
