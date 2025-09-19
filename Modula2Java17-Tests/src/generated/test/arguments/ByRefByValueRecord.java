@@ -5,7 +5,7 @@ import ch.pitchtech.modula.runtime.HaltException;
 import ch.pitchtech.modula.runtime.Runtime;
 
 
-public class ByRefByValue {
+public class ByRefByValueRecord {
 
     // Imports
     private final InOut inOut = InOut.instance();
@@ -53,17 +53,8 @@ public class ByRefByValue {
 
     // VAR
 
-    private short value;
     private Point point = new Point();
 
-
-    public short getValue() {
-        return this.value;
-    }
-
-    public void setValue(short value) {
-        this.value = value;
-    }
 
     public Point getPoint() {
         return this.point;
@@ -76,38 +67,24 @@ public class ByRefByValue {
 
     // PROCEDURE
 
-    private void ModifyByRefInt(/* VAR */ Runtime.IRef<Short> value) {
-        value.set((short) 42);
+    private void ModifyByRef(/* VAR */ Point value) {
+        // VAR
+        Point p2 = new Point();
+
+        p2.x = 42;
+        p2.y = 42;
+        value.copyFrom(p2);
     }
 
-    private void ModifyByValueInt(short value) {
-        value = 42;
-    }
+    private void ModifyByValue(Point _value) {
+        Point value = _value.newCopy(); // By-value and written argument
 
-    private void ModifyByRefByRefInt(/* VAR+WRT */ Runtime.IRef<Short> value) {
-        ModifyByRefInt(value);
-    }
+        // VAR
+        Point p2 = new Point();
 
-    private void ModifyByRefByValueInt(/* var */ Runtime.IRef<Short> value) {
-        ModifyByValueInt(value.get());
-    }
-
-    private void ModifyByValueByRefInt(/* WRT */ short _value) {
-        Runtime.Ref<Short> value = new Runtime.Ref<>(_value);
-
-        ModifyByRefInt(value);
-    }
-
-    private void ModifyByValueByValueInt(short value) {
-        ModifyByValueInt(value);
-    }
-
-    private void ModifyByRef(/* var */ Point value) {
-        value.x = 42;
-    }
-
-    private void ModifyByValue(Point value) {
-        value.x = 42;
+        p2.x = 42;
+        p2.y = 42;
+        value.copyFrom(p2);
     }
 
     private void ModifyByRefByRef(/* VAR+WRT */ Point value) {
@@ -134,15 +111,6 @@ public class ByRefByValue {
     private void begin() {
         InOut.instance().begin();
 
-        value = 10;
-        ModifyByValueByValueInt(value);
-        ModifyByRefByValueInt(new Runtime.FieldRef<>(this::getValue, this::setValue));
-        ModifyByValueByRefInt(value);
-        inOut.WriteInt(value, 2);
-        inOut.WriteLn();
-        ModifyByRefByRefInt(new Runtime.FieldRef<>(this::getValue, this::setValue));
-        inOut.WriteInt(value, 2);
-        inOut.WriteLn();
         point.x = 10;
         point.y = 10;
         ModifyByValueByValue(point);
@@ -161,7 +129,7 @@ public class ByRefByValue {
 
     public static void main(String[] args) {
         Runtime.setArgs(args);
-        ByRefByValue instance = new ByRefByValue();
+        ByRefByValueRecord instance = new ByRefByValueRecord();
         try {
             instance.begin();
         } catch (HaltException ex) {
