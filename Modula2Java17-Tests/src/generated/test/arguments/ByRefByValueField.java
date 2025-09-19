@@ -67,11 +67,13 @@ public class ByRefByValueField {
 
     // PROCEDURE
 
-    private void ModifyByRef(/* var */ Point value) {
+    private void ModifyByRef(/* VAR */ Point value) {
         value.x = 42;
     }
 
-    private void ModifyByValue(Point value) {
+    private void ModifyByValue(Point _value) {
+        Point value = _value.newCopy(); // By-value and written argument
+
         value.x = 42;
     }
 

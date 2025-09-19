@@ -236,33 +236,47 @@ public class ReadWriteAnalysis {
         if (node instanceof Identifier identifier) {
             INode parent = identifier.getParentNode();
             if (parent instanceof QualifiedAccess qualifiedAccess && qualifiedAccess.getField() == node)
-                return; // This is the field of a qualified access and hence not any markable ILocalData (argument, variable or constant)
+                return; // This is the field of a qualified access and hence handled below, when visiting the parent
             
-            IHasScope scopeUnit = getScopeUnit(identifier);
-            IDefinition definition = scopeUnit.getScope().resolve(identifier.getName(), true, false, true, false);
-            ILocalData localData = null;
-            if (definition instanceof VariableDefinition variableDefinition) {
-                if (variableDefinition.getParent() instanceof ProcedureImplementation targetProcedure) {
-                    // This is either an argument or a local variable of our procedure
-                    FormalArgument arg = targetProcedure.getArgument(variableDefinition.getName());
-                    if (arg != null) { // This is an argument of target procedure
-                        localData = arg;
-                    } else {
-                        // This is a local variable of target procedure
-                        localData = variableDefinition;
-                    }
+            markIdentifierIfRelevant(addToList, marker, identifier);
+        } else if (node instanceof QualifiedAccess qualifiedAccess) {
+            /*
+             * If the field of a record is read/written, the record itself must be marked as read/written.
+             * Indeed, records are references in Java; but if passed as argument by value, it must be copied
+             * explicitely if any of its fields is written. 
+             */
+            if (qualifiedAccess.getExpression() instanceof Identifier identifier) {
+                // Either Module.Item or recordVariable.field. Module.Item won't resolve and will be ignored
+                markIdentifierIfRelevant(addToList, marker, identifier);
+            }
+        }
+    }
+
+    private void markIdentifierIfRelevant(Set<ILocalData> addToList, BiConsumer<ILocalData, Boolean> marker, Identifier identifier) {
+        IHasScope scopeUnit = getScopeUnit(identifier);
+        IDefinition definition = scopeUnit.getScope().resolve(identifier.getName(), true, false, true, false);
+        ILocalData localData = null;
+        if (definition instanceof VariableDefinition variableDefinition) {
+            if (variableDefinition.getParent() instanceof ProcedureImplementation targetProcedure) {
+                // This is either an argument or a local variable of our procedure
+                FormalArgument arg = targetProcedure.getArgument(variableDefinition.getName());
+                if (arg != null) { // This is an argument of target procedure
+                    localData = arg;
                 } else {
-                    // This is a variable of a compilation unit
+                    // This is a local variable of target procedure
                     localData = variableDefinition;
                 }
-            } else if (definition instanceof ConstantDefinition constantDefinition) {
-                localData = constantDefinition;
+            } else {
+                // This is a variable of a compilation unit
+                localData = variableDefinition;
             }
-            
-            if (localData != null) {
-                marker.accept(localData, true);
-                addToList.add(localData);
-            }
+        } else if (definition instanceof ConstantDefinition constantDefinition) {
+            localData = constantDefinition;
+        }
+        
+        if (localData != null) {
+            marker.accept(localData, true);
+            addToList.add(localData);
         }
     }
 

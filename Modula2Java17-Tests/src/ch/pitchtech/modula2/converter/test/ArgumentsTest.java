@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import generated.test.arguments.ByRefByValueField;
@@ -57,9 +56,7 @@ public class ArgumentsTest {
         executor.assertOutput(getClass(), "ByRefByValue.txt", output);
     }
 
-    // TODO (1) Review, output must be 10, 42 and not 42, 42
     // TODO make a similar test for array element access
-    @Ignore
     @Test
     public void testByRefByValueField() throws IOException, InvocationTargetException {
         CompilerHelper helper = new CompilerHelper("arguments");
