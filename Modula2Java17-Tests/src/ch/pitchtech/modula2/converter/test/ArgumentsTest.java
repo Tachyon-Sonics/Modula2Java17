@@ -5,8 +5,11 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
+import generated.test.arguments.ByRefByValueArray;
+import generated.test.arguments.ByRefByValueArrayElt;
 import generated.test.arguments.ByRefByValueField;
 import generated.test.arguments.ByRefByValueRecord;
 import generated.test.arguments.ByRefByValueSimple;
@@ -56,7 +59,6 @@ public class ArgumentsTest {
         executor.assertOutput(getClass(), "ByRefByValue.txt", output);
     }
 
-    // TODO make a similar test for array element access
     @Test
     public void testByRefByValueField() throws IOException, InvocationTargetException {
         CompilerHelper helper = new CompilerHelper("arguments");
@@ -67,6 +69,32 @@ public class ArgumentsTest {
         
         ExecuteHelper executor = new ExecuteHelper();
         String output = executor.execute(ByRefByValueField::main);
+        executor.assertOutput(getClass(), "ByRefByValue.txt", output);
+    }
+
+    @Ignore // TODO (1) fix
+    @Test
+    public void testByRefByValueArray() throws IOException, InvocationTargetException {
+        CompilerHelper helper = new CompilerHelper("arguments");
+        helper.compile("ByRefByValueArray.mod");
+        
+        helper.assertCompilationResult(ByRefByValueArray.class, 
+                "    @SuppressWarnings(\"unused\")");
+        
+        ExecuteHelper executor = new ExecuteHelper();
+        String output = executor.execute(ByRefByValueArray::main);
+        executor.assertOutput(getClass(), "ByRefByValue.txt", output);
+    }
+
+    @Test
+    public void testByRefByValueArrayElt() throws IOException, InvocationTargetException {
+        CompilerHelper helper = new CompilerHelper("arguments");
+        helper.compile("ByRefByValueArrayElt.mod");
+        
+        helper.assertCompilationResult(ByRefByValueArrayElt.class);
+        
+        ExecuteHelper executor = new ExecuteHelper();
+        String output = executor.execute(ByRefByValueArrayElt::main);
         executor.assertOutput(getClass(), "ByRefByValue.txt", output);
     }
 
