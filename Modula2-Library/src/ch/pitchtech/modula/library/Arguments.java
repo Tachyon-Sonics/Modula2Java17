@@ -23,8 +23,12 @@ public class Arguments {
 
     public void GetArgs(/* VAR */ Runtime.IRef<Short> numArgs, /* VAR */ Runtime.IRef<String[]> argTable) {
         String[] args = Runtime.getArgs();
-        numArgs.set((short) args.length);
-        argTable.set(args);
+        String[] nameAndArgs = new String[args.length + 1];
+        nameAndArgs[0] = Runtime.getAppNameOrDefault();
+        if (args.length > 0)
+            System.arraycopy(args, 0, nameAndArgs, 1, args.length);
+        numArgs.set((short) nameAndArgs.length);
+        argTable.set(nameAndArgs);
     }
 
 
