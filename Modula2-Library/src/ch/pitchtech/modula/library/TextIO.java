@@ -1,5 +1,15 @@
 package ch.pitchtech.modula.library;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import javax.swing.filechooser.FileSystemView;
+
 import ch.pitchtech.modula.runtime.Runtime;
 
 
@@ -23,13 +33,80 @@ public class TextIO {
 
     public static interface File { // Opaque type
     }
+    
+    private static class InputFileImpl implements File {
+        
+        public InputFileImpl(Reader reader) {
+            this.reader = reader;
+        }
 
+        final Reader reader;
+        
+        private int lastChar;
+        private Integer readAgain;
+        
+        
+        public int read() {
+            if (readAgain != null) {
+                lastChar = readAgain;
+                readAgain = null;
+                return lastChar;
+            }
+            try {
+                lastChar = reader.read();
+                return lastChar;
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+        
+        public void readAgain() {
+            readAgain = lastChar;
+        }
+        
+    }
+
+    // Impl
+
+    private InputStream lookupStream(String fileName) {
+        return TextIO.class.getResourceAsStream("/" + fileName);
+    }
+    
+    private Path lookupPath(String fileName) {
+        String appName = Runtime.getAppNameOrDefault();
+        java.io.File baseDir = FileSystemView.getFileSystemView().getDefaultDirectory();
+        java.io.File appDir = new java.io.File(baseDir, appName);
+        appDir.mkdir();
+        java.io.File binDir = new java.io.File(appDir, ".data");
+        binDir.mkdir();
+        return binDir.toPath().resolve(fileName);
+    }
 
     // PROCEDURE
 
     public void OpenInput(/* VAR */ Runtime.IRef<File> file, String name) {
-        // todo implement OpenInput
-        throw new UnsupportedOperationException("Not implemented: OpenInput");
+        // Try resource
+        InputStream input = lookupStream(name);
+        if (input != null) {
+            Reader reader = new InputStreamReader(input, StandardCharsets.UTF_8);
+            InputFileImpl fileImpl = new InputFileImpl(reader);
+            file.set(fileImpl);
+            return;
+        }
+        // Try file
+        Path path = lookupPath(name);
+        if (Files.isReadable(path)) {
+            try {
+                input = Files.newInputStream(path);
+                Reader reader = new InputStreamReader(input, StandardCharsets.UTF_8);
+                InputFileImpl fileImpl = new InputFileImpl(reader);
+                file.set(fileImpl);
+                return;
+            } catch (IOException ex) {
+                throw new RuntimeException();
+            }
+        }
+        file.set(null);
     }
 
     public void OpenOutput(/* VAR */ Runtime.IRef<File> file, String name) {
@@ -38,13 +115,18 @@ public class TextIO {
     }
 
     public void Close(File file) {
-        // todo implement Close
-        throw new UnsupportedOperationException("Not implemented: Close");
+        InputFileImpl f = (InputFileImpl) file;
+        try {
+            f.reader.close();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     public void GetChar(File file, /* VAR */ Runtime.IRef<Character> x) {
-        // todo implement GetChar
-        throw new UnsupportedOperationException("Not implemented: GetChar");
+        InputFileImpl f = (InputFileImpl) file;
+        int ch = f.read();
+        x.set((char) ch);
     }
 
     public void GetString(File file, /* VAR */ Runtime.IRef<String> x) {
@@ -58,8 +140,16 @@ public class TextIO {
     }
 
     public void GetInt(File file, /* VAR */ Runtime.IRef<Short> x) {
-        // todo implement GetInt
-        throw new UnsupportedOperationException("Not implemented: GetInt");
+        InputFileImpl f = (InputFileImpl) file;
+        int result = 0;
+        int ch = f.read();
+        while (ch >= '0' && ch <= '9') {
+            result = (result * 10) + (ch - '0');
+            ch = f.read();
+        }
+        if (ch < ' ')
+            f.readAgain();
+        x.set((short) result);
     }
 
     public void GetReal(File file, /* VAR */ Runtime.IRef<Float> x) {
@@ -136,10 +226,25 @@ public class TextIO {
         // todo implement Done
         throw new UnsupportedOperationException("Not implemented: Done");
     }
-
+    
     public boolean Accessible(/* VAR */ Runtime.IRef<String> name, boolean ForWriting) {
-        // todo implement Accessible
-        throw new UnsupportedOperationException("Not implemented: Accessible");
+        if (name.get() == null || name.get().isBlank())
+            return false;
+        if (!ForWriting) {
+            // Try local resource
+            try (InputStream input = lookupStream(name.get())) {
+                return true;
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+        // Try file
+        Path path = lookupPath(name.get());
+        if (ForWriting) {
+            return Files.isWritable(path);
+        } else {
+            return Files.isReadable(path);
+        }
     }
 
     public boolean EOF(File file) {

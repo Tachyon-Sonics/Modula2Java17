@@ -14,18 +14,21 @@ public class Clock {
             new Clock(); // will set 'instance'
         return instance;
     }
+    
+    private long startTime = System.nanoTime();
 
 
     // PROCEDURE
 
     public void ResetClock() {
-        // todo implement ResetClock
-        throw new UnsupportedOperationException("Not implemented: ResetClock");
+        startTime = System.nanoTime();
     }
+    
+    private final static long PERIOD = 1000000000L / 60;
 
     public short UserTime() {
-        // todo implement UserTime
-        throw new UnsupportedOperationException("Not implemented: UserTime");
+        long elapsed = System.nanoTime() - startTime;
+        return (short) (elapsed / PERIOD);
     }
 
 
