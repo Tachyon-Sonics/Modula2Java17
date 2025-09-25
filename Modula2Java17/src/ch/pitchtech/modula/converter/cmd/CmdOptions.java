@@ -3,8 +3,10 @@ package ch.pitchtech.modula.converter.cmd;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.StringJoiner;
 
 import ch.pitchtech.modula.converter.compiler.CompilerOptions;
+import ch.pitchtech.modula.converter.compiler.DataModelType;
 import ch.pitchtech.modula.converter.compiler.FileOptions;
 import ch.pitchtech.modula.converter.utils.Logger;
 
@@ -75,6 +77,25 @@ public class CmdOptions {
         
     };
     
+    private static String getDataModelValues() {
+        StringJoiner joiner = new StringJoiner("|");
+        for (DataModelType dataModel : DataModelType.values()) {
+            joiner.add(dataModel.name());
+        }
+        return joiner.toString();
+    }
+    
+    public final static CmdOption DATA_MODEL = new CmdOption("dm", "data-model", DataModelType.class,
+            getDataModelValues(), "Size of INTEGER (16 or 32 bit - default 16 bit) and related types") {
+
+        @Override
+        public void apply(Object value, FileOptions fileOptions, CompilerOptions compilerOptions) {
+            DataModelType dataModel = (DataModelType) value;
+            compilerOptions.setDataModel(dataModel);
+        }
+        
+    };
+    
     public final static CmdOption VERBOSE = new CmdOption("v", "verbose", OptionType.INTEGER,
             "<level>", "Set verbose level between 0 and 2") {
         
@@ -87,7 +108,7 @@ public class CmdOptions {
     
     public final static List<CmdOption> getAllOptions() {
         return List.of(SOURCE_DIR, TARGET_MAIN_DIR, TARGET_LIBRARY_DIR, TARGET_PACKAGE_MAIN, TARGET_PACKAGE_LIB,
-                VERBOSE);
+                DATA_MODEL, VERBOSE);
     }
 
 }
