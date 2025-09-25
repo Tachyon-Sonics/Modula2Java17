@@ -127,7 +127,7 @@ public class ArrayAccessGenerator extends Generator {
             IExpression lowerBound = stdArrayType.getLowerBound();
             IType lowerType = context.resolveType(lowerBound);
             lowerContext = context.subContext();
-            lowerContext.pushRequestedReturnType(lowerBound, new LiteralType(BuiltInType.javaInt()));
+            lowerContext.pushRequestedReturnType(lowerBound, new LiteralType(BuiltInType.getTypeForJavaInt()));
             Expressions.getGenerator(scopeUnit, lowerBound).generate(lowerContext);
             if (lowerType instanceof EnumerationType enumerationType) {
                 lowerContext.write(".ordinal()");

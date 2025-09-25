@@ -115,10 +115,10 @@ public class ArrayTypeGenerator extends Generator implements ITypePreInitializer
             ResultContext upperBoundContext = result.subContext();
             ResultContext lowerBoundContext = result.subContext();
             IExpression upperBoundExpr = currentArrayType.getUpperBound();
-            upperBoundContext.pushRequestedReturnType(upperBoundExpr, new LiteralType(BuiltInType.javaInt()));
+            upperBoundContext.pushRequestedReturnType(upperBoundExpr, new LiteralType(BuiltInType.getTypeForJavaInt()));
             Expressions.getGenerator(scopeUnit, upperBoundExpr).generate(upperBoundContext);
             IExpression lowerBoundExpr = currentArrayType.getLowerBound();
-            lowerBoundContext.pushRequestedReturnType(lowerBoundExpr, new LiteralType(BuiltInType.javaInt()));
+            lowerBoundContext.pushRequestedReturnType(lowerBoundExpr, new LiteralType(BuiltInType.getTypeForJavaInt()));
             Expressions.getGenerator(scopeUnit, lowerBoundExpr).generate(lowerBoundContext);
             String lowerBound = lowerBoundContext.toString();
             String upperBound = upperBoundContext.toString();

@@ -37,6 +37,7 @@ public class BasicTest {
     @Test
     public void testCompileFractions() throws IOException, InvocationTargetException {
         CompilerHelper helper = new CompilerHelper();
+//        helper.getCompilerOptions().setDataModel(DataModelType.INT_32_BIT); // TODO (1) try in a new test, debug
         helper.compile("Fractions.mod");
         Path unexpectedInOut = helper.getTargetDir().resolve("generated").resolve("test").resolve("InOut.java");
         assert !Files.isRegularFile(unexpectedInOut);

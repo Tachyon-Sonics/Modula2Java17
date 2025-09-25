@@ -5,6 +5,9 @@ import java.nio.charset.StandardCharsets;
 
 public class CompilerOptions {
     
+    private static final ThreadLocal<CompilerOptions> current = new ThreadLocal<>();
+    
+    private DataModelType dataModel = DataModelType.INT_16_BIT;
     private boolean euclideanDivMod = false;
     private boolean convertArrayOfCharToString = true;
     private boolean useRecordHelper = false;
@@ -18,6 +21,36 @@ public class CompilerOptions {
     private Charset charset = StandardCharsets.UTF_8;
     
     
+    /**
+     * Hopefully, we only create a single {@link CompilerOptions} during compilation.
+     * Therefore the compiler can store it here, so we can retrieve it using {@link #get()}
+     * without passing it as an additional argument to every single method...
+     */
+    static void set(CompilerOptions options) {
+        if (options != null) {
+            if (current.get() != null)
+                throw new IllegalArgumentException("CompilerOptions was already set");
+            current.set(options);
+        } else {
+            current.remove();
+        }
+    }
+    
+    public static CompilerOptions get() {
+        return current.get();
+    }
+    
+    /**
+     * @return current data model (16 or 32 bit) that determines the size of INTEGER, LONGINT, etc...
+     */
+    public DataModelType getDataModel() {
+        return dataModel;
+    }
+    
+    public void setDataModel(DataModelType dataModel) {
+        this.dataModel = dataModel;
+    }
+
     /**
      * Whether to use Euclidean division for "DIV" and "MOD" on INTEGER.
      * <p>
@@ -115,5 +148,5 @@ public class CompilerOptions {
     public void setCharset(Charset charset) {
         this.charset = charset;
     }
-
+    
 }

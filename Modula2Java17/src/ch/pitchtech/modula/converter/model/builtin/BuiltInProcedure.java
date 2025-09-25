@@ -2,6 +2,7 @@ package ch.pitchtech.modula.converter.model.builtin;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import ch.pitchtech.modula.converter.model.type.EnumerationType;
 import ch.pitchtech.modula.converter.model.type.IType;
@@ -36,7 +37,7 @@ public enum BuiltInProcedure {
         }
         
     },
-    NOT(BuiltInType.BOOLEAN, false),
+    NOT(() -> BuiltInType.BOOLEAN, false),
     ABS(BuiltInType.javaInt(), false) {
 
         @Override
@@ -58,22 +59,25 @@ public enum BuiltInProcedure {
     ORD(BuiltInType.javaInt(), false),
     HIGH(BuiltInType.javaInt(), false),
     SHIFT(BuiltInType.javaInt(), false),
-    ODD(BuiltInType.BOOLEAN, false),
-    CHR(BuiltInType.CHAR, false),
-    ADR(BuiltInType.ADDRESS, false),
-    VAL(BuiltInType.ADDRESS, false);
+    ODD(() -> BuiltInType.BOOLEAN, false),
+    CHR(() -> BuiltInType.CHAR, false),
+    ADR(() -> BuiltInType.ADDRESS, false),
+    VAL(() -> BuiltInType.ADDRESS, false);
     
     
-    private final BuiltInType returnType;
+    private final Supplier<BuiltInType> returnType;
     private final boolean writeFirstArgument;
     
-    private BuiltInProcedure(BuiltInType returnType, boolean writeFirstArgument) {
+    
+    private BuiltInProcedure(Supplier<BuiltInType> returnType, boolean writeFirstArgument) {
         this.returnType = returnType;
         this.writeFirstArgument = writeFirstArgument;
     }
     
     public BuiltInType getReturnType() {
-        return returnType;
+        if (returnType == null)
+            return null;
+        return returnType.get();
     }
     
     public boolean isWriteFirstArgument() {
@@ -81,7 +85,7 @@ public enum BuiltInProcedure {
     }
 
     public IType getReturnTypeFor(IType forType) {
-        return new LiteralType(returnType);
+        return new LiteralType(returnType.get());
     }
     
     public static Set<String> getBuiltInFunctionNames() {

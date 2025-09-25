@@ -46,53 +46,65 @@ public class Compiler {
 
     private final FileOptions fileOptions;
     private final CompilerOptions compilerOptions;
-    private final Application application;
+    private Application application;
     private TreeSet<SourceFile> sourceFiles = new TreeSet<>();
     
     
     public Compiler(FileOptions fileOptions, CompilerOptions compilerOptions) {
         this.fileOptions = fileOptions;
         this.compilerOptions = compilerOptions;
-        application = new Application(compilerOptions);
     }
     
     // TODO (4) allow non MODULE files, or detect and report an error
+    /**
+     * Compile one or more Modula-2 source files.
+     * @param mainModuleFiles the Modula-2 source file(s) corresponding to the main module(s). Dependent
+     * implementation and definition modules will be discovered and included automatically.
+     */
     public void compile(SourceFile... mainModuleFiles) throws IOException {
-        Logger.log(1, "P1: Parsing...");
-        // Parse
-        parseRecursive(mainModuleFiles); // This fills 'sourceFiles'
-        
-        // Abstract into a model
-        Logger.log(1, "P2: Abstraction...");
-        for (SourceFile sourceFile : sourceFiles) {
-            Logger.log(2, "  {0}", sourceFile.getPath().getFileName());
-            CurrentFile.setCurrentFile(sourceFile.getPath());
-            ICompilationUnit cu = createCompilationUnit(sourceFile.getCuContext());
-            sourceFile.setCompilationUnit(cu);
-        }
+        CompilerOptions.set(compilerOptions);
+        application = new Application(compilerOptions);
 
-        // Analyze + Transform
-        Logger.log(1, "P3: Analyze & Transform...");
-        for (SourceFile sourceFile : sourceFiles) {
-            CurrentFile.setCurrentFile(sourceFile.getPath());
-            ICompilationUnit compilationUnit = sourceFile.getCompilationUnit();
-            Logger.log(2, "  {0}", compilationUnit.getName());
-            Transforms.applyTransforms(compilationUnit, compilerOptions);
+        try {
+            Logger.log(1, "P1: Parsing...");
+            // Parse
+            parseRecursive(mainModuleFiles); // This fills 'sourceFiles'
+            
+            // Abstract into a model
+            Logger.log(1, "P2: Abstraction...");
+            for (SourceFile sourceFile : sourceFiles) {
+                Logger.log(2, "  {0}", sourceFile.getPath().getFileName());
+                CurrentFile.setCurrentFile(sourceFile.getPath());
+                ICompilationUnit cu = createCompilationUnit(sourceFile.getCuContext());
+                sourceFile.setCompilationUnit(cu);
+            }
+    
+            // Analyze + Transform
+            Logger.log(1, "P3: Analyze & Transform...");
+            for (SourceFile sourceFile : sourceFiles) {
+                CurrentFile.setCurrentFile(sourceFile.getPath());
+                ICompilationUnit compilationUnit = sourceFile.getCompilationUnit();
+                Logger.log(2, "  {0}", compilationUnit.getName());
+                Transforms.applyTransforms(compilationUnit, compilerOptions);
+            }
+            
+            // Generate Java code
+            Logger.log(1, "P4: Generate code...");
+            Path targetDirMain = fileOptions.getTargetMainDir();
+            Path targetDirLibrary = fileOptions.getTargetLibraryDir();
+            Path targetPackageDir = targetDirMain.resolve(compilerOptions.getTargetPackageMain().replace(".", File.separator));
+            Files.createDirectories(targetPackageDir);
+            Path targetLibraryDir = targetDirLibrary.resolve(compilerOptions.getTargetPackageLib().replace(".", File.separator));
+            Files.createDirectories(targetLibraryDir);
+            for (SourceFile sourceFile : sourceFiles) {
+                generateCode(sourceFile, targetPackageDir, targetLibraryDir);
+            }
+            
+            Logger.log(1, "Done; {0} Modula-2 files compiled into {1}", sourceFiles.size(), targetPackageDir);
+        } finally {
+            CompilerOptions.set(null);
+            application = null;
         }
-        
-        // Generate Java code
-        Logger.log(1, "P4: Generate code...");
-        Path targetDirMain = fileOptions.getTargetMainDir();
-        Path targetDirLibrary = fileOptions.getTargetLibraryDir();
-        Path targetPackageDir = targetDirMain.resolve(compilerOptions.getTargetPackageMain().replace(".", File.separator));
-        Files.createDirectories(targetPackageDir);
-        Path targetLibraryDir = targetDirLibrary.resolve(compilerOptions.getTargetPackageLib().replace(".", File.separator));
-        Files.createDirectories(targetLibraryDir);
-        for (SourceFile sourceFile : sourceFiles) {
-            generateCode(sourceFile, targetPackageDir, targetLibraryDir);
-        }
-        
-        Logger.log(1, "Done; {0} Modula-2 files compiled into {1}", sourceFiles.size(), targetPackageDir);
     }
     
     /**

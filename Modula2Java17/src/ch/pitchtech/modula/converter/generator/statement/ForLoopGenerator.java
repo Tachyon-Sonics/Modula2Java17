@@ -130,7 +130,7 @@ public class ForLoopGenerator extends Generator {
         result.write("int _" + variableName);
         result.write(" = ");
         ResultContext fromContext = result.subContext();
-        IType expectedType = new LiteralType(BuiltInType.javaInt());
+        IType expectedType = new LiteralType(BuiltInType.getTypeForJavaInt());
         fromContext.pushRequestedReturnType(fromExpression, expectedType);
         Expressions.getGenerator(scopeUnit, fromExpression, expectedType).generate(fromContext);
         if (fromType instanceof EnumerationType) {
@@ -153,7 +153,7 @@ public class ForLoopGenerator extends Generator {
         result.write("; ");
         
         ResultContext toContext = result.subContext();
-        toContext.pushRequestedReturnType(forLoop.getToExpression(), new LiteralType(BuiltInType.javaInt()));
+        toContext.pushRequestedReturnType(forLoop.getToExpression(), new LiteralType(BuiltInType.getTypeForJavaInt()));
         Expressions.getGenerator(scopeUnit, forLoop.getToExpression()).generate(toContext);
         result.write("_" + variableName);
         IType toType = result.resolveType(forLoop.getToExpression());
