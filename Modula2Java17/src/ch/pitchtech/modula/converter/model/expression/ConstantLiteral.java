@@ -39,7 +39,7 @@ public class ConstantLiteral extends SourceElement implements IExpression {
             return new LiteralType(BuiltInType.LONGREAL);
         if (value.matches("\\d+C"))
             return new LiteralType(BuiltInType.CHAR);
-        return new LiteralType(BuiltInType.LONGINT);
+        return new LiteralType(BuiltInType.getTypeForJavaInt());
     }
 
     @Override
