@@ -7,7 +7,7 @@ public class CompilerOptions {
     
     private static final ThreadLocal<CompilerOptions> current = new ThreadLocal<>();
     
-    private DataModelType dataModel = DataModelType.INT_16_BIT;
+    private DataModelType dataModel = DataModelType.STRICT_16_32;
     private boolean euclideanDivMod = false;
     private boolean convertArrayOfCharToString = true;
     private boolean useRecordHelper = false;

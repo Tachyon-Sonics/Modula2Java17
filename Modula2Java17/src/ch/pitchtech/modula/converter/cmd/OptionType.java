@@ -75,6 +75,12 @@ public enum OptionType {
      * Parse the given value and return the result, or an error string
      */
     public abstract Object parseValue(String value);
+    
+    private static <E extends Enum<E>> String enumArgName(E enumValue) {
+        if (enumValue instanceof IArgName argName)
+            return argName.getArgName();
+        return enumValue.name();
+    }
 
     /**
      * Smart parse an enum value.
@@ -86,13 +92,13 @@ public enum OptionType {
     public static <E extends Enum<E>> E parseEnumValue(Class<E> enumClass, String value) throws ParseEnumException {
         E result = null;
         for (E enumValue : enumClass.getEnumConstants()) {
-            if (enumValue.name().toLowerCase().startsWith(value.toLowerCase())) {
+            if (enumArgName(enumValue).toLowerCase().startsWith(value.toLowerCase())) {
                 if (result != null) {
                     // Report ambiguous value
                     String error = "'" + value + "' is ambiguous; it can be: ";
                     boolean isFirst = true;
                     for (E enumValue0 : enumClass.getEnumConstants()) {
-                        if (enumValue0.name().toLowerCase().startsWith(value.toLowerCase())) {
+                        if (enumArgName(enumValue0).toLowerCase().startsWith(value.toLowerCase())) {
                             if (!isFirst)
                                 error += ", ";
                             isFirst = false;
