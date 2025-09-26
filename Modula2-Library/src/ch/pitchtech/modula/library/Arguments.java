@@ -21,13 +21,13 @@ public class Arguments {
 
     // PROCEDURE
 
-    public void GetArgs(/* VAR */ Runtime.IRef<Short> numArgs, /* VAR */ Runtime.IRef<String[]> argTable) {
+    public void GetArgs(/* VAR */ Runtime.IRef<Integer> numArgs, /* VAR */ Runtime.IRef<String[]> argTable) {
         String[] args = Runtime.getArgs();
         String[] nameAndArgs = new String[args.length + 1];
         nameAndArgs[0] = Runtime.getAppNameOrDefault();
         if (args.length > 0)
             System.arraycopy(args, 0, nameAndArgs, 1, args.length);
-        numArgs.set((short) nameAndArgs.length);
+        numArgs.set(nameAndArgs.length);
         argTable.set(nameAndArgs);
     }
 

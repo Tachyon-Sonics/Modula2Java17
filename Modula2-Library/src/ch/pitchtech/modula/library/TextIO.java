@@ -139,7 +139,7 @@ public class TextIO {
         throw new UnsupportedOperationException("Not implemented: GetCard");
     }
 
-    public void GetInt(File file, /* VAR */ Runtime.IRef<Short> x) {
+    public void GetInt(File file, /* VAR */ Runtime.IRef<Integer> x) {
         InputFileImpl f = (InputFileImpl) file;
         int result = 0;
         int ch = f.read();
@@ -149,7 +149,7 @@ public class TextIO {
         }
         if (ch < ' ')
             f.readAgain();
-        x.set((short) result);
+        x.set(result);
     }
 
     public void GetReal(File file, /* VAR */ Runtime.IRef<Float> x) {

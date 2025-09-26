@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import ch.pitchtech.modula.converter.compiler.Compiler;
 import ch.pitchtech.modula.converter.compiler.CompilerOptions;
+import ch.pitchtech.modula.converter.compiler.DataModelType;
 import ch.pitchtech.modula.converter.compiler.FileOptions;
 import ch.pitchtech.modula.converter.compiler.SourceFile;
 import ch.pitchtech.modula.converter.utils.Logger;
@@ -36,6 +37,7 @@ public class CompileChess {
         compilerOptions.setCharset(StandardCharsets.ISO_8859_1);
         compilerOptions.setTargetPackageMain("ch.pitchtech.modula.chess");
         compilerOptions.setTargetPackageLib("ch.pitchtech.modula.library");
+        compilerOptions.setDataModel(DataModelType.STRICT_32_63);
         Logger.setVerboseLevel(2);
         
         Compiler compiler = new Compiler(fileOptions, compilerOptions);

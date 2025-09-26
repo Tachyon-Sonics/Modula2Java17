@@ -26,9 +26,9 @@ public class Clock {
     
     private final static long PERIOD = 1000000000L / 60;
 
-    public short UserTime() {
+    public int UserTime() {
         long elapsed = System.nanoTime() - startTime;
-        return (short) (elapsed / PERIOD);
+        return (int) (elapsed / PERIOD);
     }
 
 
