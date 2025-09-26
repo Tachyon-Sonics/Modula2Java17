@@ -8,9 +8,11 @@ import java.nio.file.Path;
 import org.junit.After;
 import org.junit.Test;
 
+import ch.pitchtech.modula.converter.compiler.DataModelType;
 import generated.test.Basic;
 import generated.test.EscapeSeq;
 import generated.test.Fractions;
+import generated.test.Fractions32;
 import generated.test.Harmonic;
 import generated.test.PowersOf2;
 import generated.test.Primes;
@@ -37,7 +39,6 @@ public class BasicTest {
     @Test
     public void testCompileFractions() throws IOException, InvocationTargetException {
         CompilerHelper helper = new CompilerHelper();
-//        helper.getCompilerOptions().setDataModel(DataModelType.INT_32_BIT); // TODO (1) try in a new test, debug
         helper.compile("Fractions.mod");
         Path unexpectedInOut = helper.getTargetDir().resolve("generated").resolve("test").resolve("InOut.java");
         assert !Files.isRegularFile(unexpectedInOut);
@@ -45,6 +46,21 @@ public class BasicTest {
         
         ExecuteHelper executor = new ExecuteHelper();
         String output = executor.execute(Fractions::main);
+        executor.assertOutput(getClass(), "Fractions.txt", output);
+    }
+    
+    /**
+     * Same as {@link #testCompileFractions()}, but with the 32-bit data model
+     */
+    @Test
+    public void testCompileFractions32() throws IOException, InvocationTargetException {
+        CompilerHelper helper = new CompilerHelper();
+        helper.getCompilerOptions().setDataModel(DataModelType.STRICT_32_63);
+        helper.compile("Fractions32.mod");
+        helper.assertCompilationResult(Fractions32.class);
+        
+        ExecuteHelper executor = new ExecuteHelper();
+        String output = executor.execute(Fractions32::main);
         executor.assertOutput(getClass(), "Fractions.txt", output);
     }
     
