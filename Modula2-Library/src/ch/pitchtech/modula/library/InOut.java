@@ -12,6 +12,7 @@ public class InOut {
     private final static InOut instance = new InOut();
     private BufferedReader consoleReader;
     
+    private String lineRemaining = null;
     public boolean Done;
     
     
@@ -59,6 +60,20 @@ public class InOut {
     }
     
     public void ReadString(IRef<String> s) {
+        if (lineRemaining != null) {
+            String line = lineRemaining;
+            int sepPos = line.indexOf(' ');
+            if (sepPos > 0) {
+                lineRemaining = line.substring(sepPos + 1);
+                line = line.substring(0, sepPos);
+            } else {
+                lineRemaining = null;
+            }
+            s.set(line);
+            Done = true;
+            return;
+        }
+        
         System.out.flush();
         try {
             String line = reader().readLine();
@@ -66,6 +81,11 @@ public class InOut {
                 s.set("");
                 Done = false;
             } else {
+                int sepPos = line.indexOf(' ');
+                if (sepPos > 0) {
+                    lineRemaining = line.substring(sepPos + 1);
+                    line = line.substring(0, sepPos);
+                }
                 s.set(line);
                 Done = true;
             }
