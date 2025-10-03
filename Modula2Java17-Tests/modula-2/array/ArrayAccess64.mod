@@ -2,12 +2,13 @@ MODULE ArrayAccess64;
 
 	VAR
 		array: ARRAY[0..9] OF INTEGER;
-		index: LONGCARD;
+		x, y: LONGCARD;
 		
 BEGIN
 
-	index := 4;
-	array[index] := 42;
-	index := array[4];
+	x := 4;
+	y := 2;
+	array[x + y] := 42;
+	x := array[y];
 
 END ArrayAccess64.

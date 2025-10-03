@@ -9,7 +9,8 @@ public class ArrayAccess64 {
     // VAR
 
     private int[] array = new int[10];
-    private long index;
+    private long x;
+    private long y;
 
 
     public int[] getArray() {
@@ -20,21 +21,30 @@ public class ArrayAccess64 {
         this.array = array;
     }
 
-    public long getIndex() {
-        return this.index;
+    public long getX() {
+        return this.x;
     }
 
-    public void setIndex(long index) {
-        this.index = index;
+    public void setX(long x) {
+        this.x = x;
+    }
+
+    public long getY() {
+        return this.y;
+    }
+
+    public void setY(long y) {
+        this.y = y;
     }
 
 
     // Life Cycle
 
     private void begin() {
-        index = 4;
-        array[(int) index] = 42;
-        index = array[4];
+        x = 4;
+        y = 2;
+        array[(int) (x + y)] = 42;
+        x = array[(int) y];
     }
 
     private void close() {

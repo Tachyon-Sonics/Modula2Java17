@@ -145,10 +145,15 @@ public class ArrayAccessGenerator extends Generator {
 
     public static void writeArrayIndex(IHasScope scopeUnit, ResultContext lowerContext, ResultContext boundsContext, IExpression indexExpr) {
         IType indexType = boundsContext.resolveType(indexExpr);
+        ResultContext afterIndexContext = boundsContext.subContext();
         if (indexType instanceof LiteralType literalType && literalType.isBuiltIn()) {
             BuiltInType builtInType = BuiltInType.valueOf(literalType.getName());
             if (builtInType.getJavaType().equals("long")) {
-                boundsContext.write("(int) "); // Cast to int
+                boundsContext.write("(int) "); // Cast to int TODO (1) same for RangeSet, incl, etc. See CompileGrotte with 32-64 model
+                if (indexExpr.isComplex(boundsContext)) {
+                    boundsContext.write("(");
+                    afterIndexContext.write(")");
+                }
             }
         }
         
@@ -174,6 +179,7 @@ public class ArrayAccessGenerator extends Generator {
                 boundsContext.write(lowerContext);
             }
         }
+        boundsContext.write(afterIndexContext);
     }
 
     private static ResultContext processBooleanIndex(IExpression indexExpr, boolean lowerBound, ResultContext indexContext) {
