@@ -145,6 +145,13 @@ public class ArrayAccessGenerator extends Generator {
 
     public static void writeArrayIndex(IHasScope scopeUnit, ResultContext lowerContext, ResultContext boundsContext, IExpression indexExpr) {
         IType indexType = boundsContext.resolveType(indexExpr);
+        if (indexType instanceof LiteralType literalType && literalType.isBuiltIn()) {
+            BuiltInType builtInType = BuiltInType.valueOf(literalType.getName());
+            if (builtInType.getJavaType().equals("long")) {
+                boundsContext.write("(int) "); // Cast to int
+            }
+        }
+        
         ResultContext indexContext = boundsContext.subContext();
         Expressions.getGenerator(scopeUnit, indexExpr).generate(indexContext);
         if (indexType instanceof EnumerationType) {
@@ -153,7 +160,7 @@ public class ArrayAccessGenerator extends Generator {
             indexContext = processBooleanIndex(indexExpr, false, indexContext);
         }
         
-        if (lowerContext == null) { // Open array. Always starts at. Just write the index
+        if (lowerContext == null) { // Open array. Always starts at 0. Just write the index
             boundsContext.write(indexContext);
         } else if (indexContext.toString().matches("\\d+") && lowerContext.toString().matches("\\d+")) {
             // Two constants -> evaluate

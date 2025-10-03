@@ -10,6 +10,7 @@ import org.junit.runners.Suite;
     MemoryTest.class,
     TypesTest.class,
     ArgumentsTest.class,
+    ArrayTest.class,
 })
 public class FastRootSuite {
 
