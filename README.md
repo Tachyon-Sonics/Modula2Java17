@@ -95,7 +95,7 @@ java -jar Modula2Java17.jar -p org.example MyModule.mod
 
 This will compile `MyModule.mod` (assumed to be in the current directory) and all its dependencies (assumed to be in the same directory), without using any standard library. The generated Java files are placed in a package named `org.example`.
 
-Because no standard library is used in this example (`Modula2-Runtime` is *not* a standard library, just runtime support), it is likely to fail.
+Because no standard library is used in this example, it is likely to fail.
 
 *However*, if any `.def` file is included in the current directory *without* the corresponding `.mod` file (for instance the `.def` files corresponding to definition modules of a standard library), the above command will generate *stub java implementations* for them (in addition to compiling the `.mod` files).
 
