@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.Stack;
 
 import ch.pitchtech.modula.converter.compiler.CompilationException;
+import ch.pitchtech.modula.converter.generator.ArrayIndexHelper;
 import ch.pitchtech.modula.converter.generator.Generator;
 import ch.pitchtech.modula.converter.generator.ResultContext;
 import ch.pitchtech.modula.converter.model.builtin.BuiltInType;
@@ -297,7 +298,7 @@ public class InfixOpExpressionGenerator extends Generator {
     private void generateInOp(ResultContext result, IType leftType, IType rightType) {
         if (rightType instanceof RangeSetType) {
             ResultContext leftContext = result.subContext();
-            Expressions.getGenerator(scopeUnit, expression.getLeft()).generate(leftContext);
+            ArrayIndexHelper.writeIntIndex(scopeUnit, expression.getLeft(), leftContext);
             ResultContext rightContext = result.subContext();
             Expressions.getGenerator(scopeUnit, expression.getRight()).generate(rightContext);
             

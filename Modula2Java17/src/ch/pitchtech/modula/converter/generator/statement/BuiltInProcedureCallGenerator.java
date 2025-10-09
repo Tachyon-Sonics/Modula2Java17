@@ -2,6 +2,7 @@ package ch.pitchtech.modula.converter.generator.statement;
 
 import ch.pitchtech.modula.converter.compiler.CompilationException;
 import ch.pitchtech.modula.converter.compiler.CompilerException;
+import ch.pitchtech.modula.converter.generator.ArrayIndexHelper;
 import ch.pitchtech.modula.converter.generator.Generator;
 import ch.pitchtech.modula.converter.generator.ResultContext;
 import ch.pitchtech.modula.converter.generator.expression.Expressions;
@@ -164,7 +165,7 @@ public class BuiltInProcedureCallGenerator extends Generator {
             methodName = (incl ? "set" : "clear");
         }
         result.write("." + methodName + "(");
-        Expressions.getGenerator(scopeUnit, itemExpression).generate(result);
+        ArrayIndexHelper.writeIntIndex(scopeUnit, itemExpression, result);
         result.write(");");
         result.writeLn();
     }
