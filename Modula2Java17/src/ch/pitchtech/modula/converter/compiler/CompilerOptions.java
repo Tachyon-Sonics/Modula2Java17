@@ -2,12 +2,15 @@ package ch.pitchtech.modula.converter.compiler;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.EnumSet;
+import java.util.Set;
 
 public class CompilerOptions {
     
     private static final ThreadLocal<CompilerOptions> current = new ThreadLocal<>();
     
     private DataModelType dataModel = DataModelType.STRICT_16_32;
+    private Set<UnsignedType> exactUnsignedTypes = EnumSet.allOf(UnsignedType.class);
     private boolean euclideanDivMod = false;
     private boolean convertArrayOfCharToString = true;
     private boolean useRecordHelper = false;
@@ -49,6 +52,23 @@ public class CompilerOptions {
     
     public void setDataModel(DataModelType dataModel) {
         this.dataModel = dataModel;
+    }
+    
+    /**
+     * The unsigned types (such as CARDINAL, LONGCARD; etc) for which Java's unsigned
+     * support methods should be used ({@link Integer#compareUnsigned(int, int)}, 
+     * {@link Integer#divideUnsigned(int, int)}, etc for strict compatibility.
+     * <p>
+     * If an unisgned type is excluded, it will use the signed Java operators, and hence
+     * effectivly hold one less bit (such as 32 bits for CARD32 and 63 bits for CARD64).
+     * TODO (3) implement
+     */
+    public Set<UnsignedType> getExactUnsignedTypes() {
+        return exactUnsignedTypes;
+    }
+
+    public void setExactUnsignedTypes(Set<UnsignedType> exactUnsignedTypes) {
+        this.exactUnsignedTypes = exactUnsignedTypes;
     }
 
     /**

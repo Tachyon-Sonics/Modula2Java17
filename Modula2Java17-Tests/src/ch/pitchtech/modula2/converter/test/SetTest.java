@@ -12,7 +12,7 @@ public class SetTest {
     @Test
     public void testSetAccessCard64() throws IOException {
         CompilerHelper helper = new CompilerHelper("set");
-        helper.getCompilerOptions().setDataModel(DataModelType.STRICT_32_63);
+        helper.getCompilerOptions().setDataModel(DataModelType.STRICT_32_64);
         helper.compile("SetAccess64.mod");
         
         helper.assertCompilationResult(SetAccess64.class, "import ch.pitchtech.modula.library.*;");

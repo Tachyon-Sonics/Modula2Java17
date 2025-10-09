@@ -55,7 +55,7 @@ public class BasicTest {
     @Test
     public void testCompileFractions32() throws IOException, InvocationTargetException {
         CompilerHelper helper = new CompilerHelper();
-        helper.getCompilerOptions().setDataModel(DataModelType.STRICT_32_63);
+        helper.getCompilerOptions().setDataModel(DataModelType.STRICT_32_64);
         helper.compile("Fractions32.mod");
         helper.assertCompilationResult(Fractions32.class);
         

@@ -8,19 +8,77 @@ import ch.pitchtech.modula.converter.model.builtin.BuiltInType;
  */
 public enum DataModelType implements IArgName {
     /**
+     * INTEGER and CARDINAL are 16-bit, LONGINT and LONGCARD are 32-bit.
+     * <p>
+     * All types (except BYTE) ar expanded to at least Java's <tt>int</tt>.
+     * <p>
+     * LONGINT and LONGCARD are expanded to Java's <tt>long</tt> for compatibility with
+     * {@link #LOOSE_32_64}.
+     */
+    LOOSE_16_32("l16_32", 16, BuiltInType.LONGINT) {
+
+        @Override
+        public int getJavaSize(BuiltInType type) {
+            return switch (type) {
+                case SHORTINT -> 4;
+                case INTEGER -> 4;
+                case LONGINT -> 8;
+                case SHORTCARD -> 4;
+                case CARDINAL -> 4;
+                case LONGCARD -> 8;
+                default -> throw new IllegalArgumentException("Not an integer type: " + type);
+            };
+        }
+
+        @Override
+        public int getModulaSize(BuiltInType type) {
+            return switch (type) {
+                case SHORTINT, SHORTCARD -> 1;
+                case INTEGER, CARDINAL -> 2;
+                case LONGINT, LONGCARD -> 4;
+                default -> throw new IllegalArgumentException("Not an integer type: " + type);
+            };
+        }
+    },
+    /**
+     * INTEGER and CARDINAL are 32-bit, LONGINT and LONGCARD are 64-bit.
+     * <p>
+     * All types (except BYTE) ar expanded to at least Java's <tt>int</tt>.
+     * <p>
+     * Note that CARDINAL is mapped to <tt>int</tt>. It will hence only hold
+     * 31 bits, unless {@link CompilerOptions#isUnsignedCard32()} is <tt>true</tt>.
+     * <p>
+     * Similarly, LONGCARD will only hold 63 bits, unless {@link CompilerOptions#isUnsignedCard64()}.
+     */
+    LOOSE_32_64("s32_64", 32, BuiltInType.INTEGER) {
+
+        @Override
+        public int getJavaSize(BuiltInType type) {
+            return switch (type) {
+                case SHORTINT -> 4;
+                case INTEGER -> 4;
+                case LONGINT -> 8;
+                case SHORTCARD -> 4;
+                case CARDINAL -> 4;
+                case LONGCARD -> 8;
+                default -> throw new IllegalArgumentException("Not an integer type: " + type);
+            };
+        }
+
+        @Override
+        public int getModulaSize(BuiltInType type) {
+            return switch (type) {
+                case SHORTINT, SHORTCARD -> 2;
+                case INTEGER, CARDINAL -> 4;
+                case LONGINT, LONGCARD -> 8;
+                default -> throw new IllegalArgumentException("Not an integer type: " + type);
+            };
+        }
+    },
+    /**
      * INTEGER and CARDINAL are 16-bit, LONGINT and LONGCARD are 32-bit
      */
-    STRICT_16_32 {
-
-        @Override
-        public int getNbBits() {
-            return 16;
-        }
-
-        @Override
-        public BuiltInType getTypeForJavaInt() {
-            return BuiltInType.LONGINT;
-        }
+    STRICT_16_32("s16_32", 16, BuiltInType.LONGINT) {
 
         @Override
         public int getJavaSize(BuiltInType type) {
@@ -44,69 +102,11 @@ public enum DataModelType implements IArgName {
                 default -> throw new IllegalArgumentException("Not an integer type: " + type);
             };
         }
-
-        @Override
-        public String getArgName() {
-            return "s16_32";
-        }
-    },
-    /**
-     * INTEGER is 32-bit, CARDINAL is 31-bit (uses <tt>int</tt>), LONGINT is 64-bit, LONGCARD is 63-bit (uses <tt>long</tt>)
-     */
-    STRICT_31_63 {
-
-        @Override
-        public int getNbBits() {
-            return 32;
-        }
-
-        @Override
-        public BuiltInType getTypeForJavaInt() {
-            return BuiltInType.INTEGER;
-        }
-
-        @Override
-        public int getJavaSize(BuiltInType type) {
-            return switch (type) {
-                case SHORTINT -> 2;
-                case INTEGER -> 4;
-                case LONGINT -> 8;
-                case SHORTCARD -> 4;
-                case CARDINAL -> 4;
-                case LONGCARD -> 8;
-                default -> throw new IllegalArgumentException("Not an integer type: " + type);
-            };
-        }
-
-        @Override
-        public int getModulaSize(BuiltInType type) {
-            return switch (type) {
-                case SHORTINT, SHORTCARD -> 2;
-                case INTEGER, CARDINAL -> 4;
-                case LONGINT, LONGCARD -> 8;
-                default -> throw new IllegalArgumentException("Not an integer type: " + type);
-            };
-        }
-
-        @Override
-        public String getArgName() {
-            return "s31_63";
-        }
     },
     /**
      * INTEGER and CARDINAL are 32-bit, LONGINT is 64-bit, LONGCARD is 63-bit (uses <tt>long</tt>)
      */
-    STRICT_32_63 {
-
-        @Override
-        public int getNbBits() {
-            return 32;
-        }
-
-        @Override
-        public BuiltInType getTypeForJavaInt() {
-            return BuiltInType.INTEGER;
-        }
+    STRICT_32_64("s32_64", 32, BuiltInType.INTEGER) {
 
         @Override
         public int getJavaSize(BuiltInType type) {
@@ -130,19 +130,34 @@ public enum DataModelType implements IArgName {
                 default -> throw new IllegalArgumentException("Not an integer type: " + type);
             };
         }
-
-        @Override
-        public String getArgName() {
-            return "s32_63";
-        }
     };
     
-    public abstract int getNbBits();
+    private final String argName;
+    private final int nbBits;
+    private final BuiltInType typeForJavaInt;
+    
+    
+    private DataModelType(String argName, int nbBits, BuiltInType typeForJavaInt) {
+        this.argName = argName;
+        this.nbBits = nbBits;
+        this.typeForJavaInt = typeForJavaInt;
+    }
+    
+    @Override
+    public String getArgName() {
+        return this.argName;
+    }
+    
+    public int getNbBits() {
+        return this.nbBits;
+    }
     
     /**
      * Get the Modula-2 type that is the closest to Java's <tt>int</tt>
      */
-    public abstract BuiltInType getTypeForJavaInt();
+    public BuiltInType getTypeForJavaInt() {
+        return this.typeForJavaInt;
+    }
     
     /**
      * Java size for the given signed or unsigned integer type
