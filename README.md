@@ -95,15 +95,15 @@ java -jar Modula2Java17.jar -p org.example MyModule.mod
 
 This will compile `MyModule.mod` (assumed to be in the current directory) and all its dependencies (assumed to be in the same directory), without using any standard library. The generated Java files are placed in a package named `org.example`.
 
-The generated Java code may use helper classes from the `ch.pitchtech.modula.runtime` to support some Modula-2 constructs. These helper classes are found in `Modula2-Runtime.jar`, and their sources are in the `Modula2-Runtime` project. Hence to compile the generated Java file you must add `Modula2-Runtime.jar` to the Java classpath.
-
-Because no standard library is used in this example (`Modula2-Runtime` is *not* a standard library, just runtime support), it is likely to fail.
+Because no standard library is used in this example, it is likely to fail.
 
 *However*, if any `.def` file is included in the current directory *without* the corresponding `.mod` file (for instance the `.def` files corresponding to definition modules of a standard library), the above command will generate *stub java implementations* for them (in addition to compiling the `.mod` files).
 
 The stub java implementations contain all methods, but without any implementation (just throwing an `UnsupportedOperationException`). The idea is that you can implement them in Java manually, starting from these generated stub implementations.
 
 The stub java implementations are not generated again if they already exist. To generate them again, you must delete them.
+
+The generated Java code may use helper classes from the `ch.pitchtech.modula.runtime` to support some Modula-2 constructs. These helper classes are found in `Modula2-Runtime.jar`, and their sources are in the `Modula2-Runtime` project. Hence to compile the generated Java file you must add `Modula2-Runtime.jar` to the Java classpath.
 
 
 #### Example 2:
