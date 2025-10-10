@@ -14,9 +14,6 @@ public enum DataModelType implements IArgName {
      * <p>
      * LONGINT and LONGCARD are expanded to Java's <tt>long</tt> for compatibility with
      * {@link #LOOSE_32_64}.
-     * TODO (1): long/int constants should be down-casted anyway as required
-     * TODO (1): Constants are long, should be int if it fits in an int; 
-     * TODO (1): GrotteAction.WaitKey, ClearLine((int) 21) : type cast to int is not necessary
      */
     LOOSE_16_32("16", 16, BuiltInType.INTEGER) {
 
