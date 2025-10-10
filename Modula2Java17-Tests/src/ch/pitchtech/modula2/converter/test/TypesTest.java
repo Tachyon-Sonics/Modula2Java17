@@ -7,6 +7,8 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.junit.Test;
 
+import ch.pitchtech.modula.converter.compiler.DataModelType;
+import generated.test.types.Constants;
 import generated.test.types.DoubleAlias;
 import generated.test.types.PointerArrayPointer;
 
@@ -44,6 +46,15 @@ public class TypesTest {
         ExecuteHelper executor = new ExecuteHelper();
         String output = executor.execute(PointerArrayPointer::main);
         assertEquals("", output);
+    }
+    
+    @Test
+    public void testConstants() throws IOException {
+        CompilerHelper helper = new CompilerHelper("types");
+        helper.getCompilerOptions().setDataModel(DataModelType.LOOSE_16_32);
+        helper.compile("Constants.mod");
+        
+        helper.assertCompilationResult(Constants.class, "import ch.pitchtech.modula.library.*;");
     }
 
 }

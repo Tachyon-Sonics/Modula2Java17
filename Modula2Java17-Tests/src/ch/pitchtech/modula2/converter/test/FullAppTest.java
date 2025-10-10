@@ -13,6 +13,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import ch.pitchtech.modula.converter.compiler.CompilerOptions;
+import ch.pitchtech.modula.converter.compiler.DataModelType;
 import ch.pitchtech.modula.converter.compiler.FileOptions;
 
 /**
@@ -58,6 +59,7 @@ public class FullAppTest {
         CompilerOptions compilerOptions = new CompilerOptions();
         compilerOptions.setTargetPackageMain("ch.chaos.grotte");
         compilerOptions.setTargetPackageLib("ch.chaos.library");
+        compilerOptions.setDataModel(DataModelType.LOOSE_16_32);
         CompilerHelper helper = new CompilerHelper(targetDir, fileOptions, compilerOptions);
         helper.compile(appModulaPath.resolve("Grotte.mod"));
         

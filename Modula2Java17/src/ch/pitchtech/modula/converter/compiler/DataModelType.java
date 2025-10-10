@@ -18,7 +18,7 @@ public enum DataModelType implements IArgName {
      * TODO (1): Constants are long, should be int if it fits in an int; 
      * TODO (1): GrotteAction.WaitKey, ClearLine((int) 21) : type cast to int is not necessary
      */
-    LOOSE_16_32("l16_32", 16, BuiltInType.LONGINT) {
+    LOOSE_16_32("16", 16, BuiltInType.INTEGER) {
 
         @Override
         public int getJavaSize(BuiltInType type) {
@@ -53,7 +53,7 @@ public enum DataModelType implements IArgName {
      * <p>
      * Similarly, LONGCARD will only hold 63 bits, unless {@link CompilerOptions#isUnsignedCard64()}.
      */
-    LOOSE_32_64("s32_64", 32, BuiltInType.INTEGER) {
+    LOOSE_32_64("32", 32, BuiltInType.INTEGER) {
 
         @Override
         public int getJavaSize(BuiltInType type) {
@@ -81,7 +81,7 @@ public enum DataModelType implements IArgName {
     /**
      * INTEGER and CARDINAL are 16-bit, LONGINT and LONGCARD are 32-bit
      */
-    STRICT_16_32("s16_32", 16, BuiltInType.LONGINT) {
+    STRICT_16_32("s16", 16, BuiltInType.LONGINT) {
 
         @Override
         public int getJavaSize(BuiltInType type) {
@@ -109,7 +109,7 @@ public enum DataModelType implements IArgName {
     /**
      * INTEGER and CARDINAL are 32-bit, LONGINT is 64-bit, LONGCARD is 63-bit (uses <tt>long</tt>)
      */
-    STRICT_32_64("s32_64", 32, BuiltInType.INTEGER) {
+    STRICT_32_64("s32", 32, BuiltInType.INTEGER) {
 
         @Override
         public int getJavaSize(BuiltInType type) {

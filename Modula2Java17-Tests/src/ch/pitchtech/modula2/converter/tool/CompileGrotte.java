@@ -8,6 +8,7 @@ import ch.pitchtech.modula.converter.Modula2JavaTranslator;
 import ch.pitchtech.modula.converter.cmd.CmdOptions;
 import ch.pitchtech.modula.converter.compiler.Compiler;
 import ch.pitchtech.modula.converter.compiler.CompilerOptions;
+import ch.pitchtech.modula.converter.compiler.DataModelType;
 import ch.pitchtech.modula.converter.compiler.FileOptions;
 import ch.pitchtech.modula.converter.compiler.SourceFile;
 
@@ -54,8 +55,8 @@ public class CompileGrotte {
                 "-" + CmdOptions.TARGET_MAIN_DIR.getName(), Path.of(TARGET_DIRECTORY_MAIN).toString(),
                 "-" + CmdOptions.TARGET_LIBRARY_DIR.getName(), Path.of(TARGET_DIRECTORY_LIBRARY).toString(),
                 "-" + CmdOptions.TARGET_PACKAGE_MAIN.getName(), "ch.chaos.grotte",
-                "-" + CmdOptions.TARGET_PACKAGE_LIB.getName(), "ch.chaos.library"
-//                "-" + CmdOptions.DATA_MODEL.getName(), DataModelType.LOOSE_16_32.getArgName()
+                "-" + CmdOptions.TARGET_PACKAGE_LIB.getName(), "ch.chaos.library",
+                "-" + CmdOptions.DATA_MODEL.getName(), DataModelType.LOOSE_16_32.getArgName()
                 );
         Modula2JavaTranslator.main(args.toArray(String[]::new));
     }
