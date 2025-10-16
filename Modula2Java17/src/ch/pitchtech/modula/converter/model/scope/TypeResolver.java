@@ -33,24 +33,27 @@ public class TypeResolver {
             result = type;
         }
         
-        result = resolveAnyBuiltInType(type, result);
+        result = replaceAnyBuiltInType(type.getDeclaringScope(), result);
 
-        return result; // Other built-in type do not need to be resolved
+        return result;
     }
 
     /**
-     * If <tt>type</tt> resolves to a built-in type <tt>builtInType</tt>, check if that type must further
-     * be resolved. Actually this method only replaces built-in type {@link BuiltInType#BITSET} by
+     * If {@code type} is a built-in type, check if that type must further be replaced.
+     * <p>
+     * Actually this method only replaces the built-in type {@link BuiltInType#BITSET} by
      * a {@link RangeSetType} with bounds 0 and {@link DataModelType#getNbBits()} - 1.
+     * <p>
+     * In all other cases, {@code type} is returned unmodified.
      */
-    private static IType resolveAnyBuiltInType(IType type, IType builtInType) {
-        if (builtInType instanceof LiteralType literalType && literalType.isBuiltInType(BuiltInType.BITSET)) {
+    private static IType replaceAnyBuiltInType(IHasScope scopeUnit, IType type) {
+        if (type instanceof LiteralType literalType && literalType.isBuiltInType(BuiltInType.BITSET)) {
             int nbBits = CompilerOptions.get().getDataModel().getNbBits();
-            builtInType = new RangeSetType(null, type.getDeclaringScope(), "BITSET", true, 
+            type = new RangeSetType(null, scopeUnit, "BITSET", true, 
                     new ConstantLiteral(null, "0"), 
                     new ConstantLiteral(null, String.valueOf(nbBits - 1)));
         }
-        return builtInType;
+        return type;
     }
     
     private static IType resolveTypeImpl(IScope scope, IType type) {
