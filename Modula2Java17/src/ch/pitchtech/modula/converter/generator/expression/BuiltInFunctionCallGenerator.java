@@ -4,6 +4,7 @@ import ch.pitchtech.modula.converter.compiler.CompilationException;
 import ch.pitchtech.modula.converter.compiler.CompilerException;
 import ch.pitchtech.modula.converter.generator.Generator;
 import ch.pitchtech.modula.converter.generator.ResultContext;
+import ch.pitchtech.modula.converter.generator.TypeCastHelper;
 import ch.pitchtech.modula.converter.generator.type.ArrayTypeGenerator;
 import ch.pitchtech.modula.converter.generator.type.EnumerationTypeGenerator;
 import ch.pitchtech.modula.converter.generator.type.TypeHelper;
@@ -244,9 +245,32 @@ public class BuiltInFunctionCallGenerator extends Generator {
             assert byRefVariableDefinition.isUseRef();
             // Ref<Integer>.value -> cast to (int)
             LiteralType literalType = (LiteralType) result.resolveType(expression);
-            BuiltInType builtInType = BuiltInType.valueOf(literalType.getName());
-            String javaPrimitiveType = builtInType.getJavaType();
-            exprContext.write("(" + javaPrimitiveType + ") ");
+            
+            boolean casted = false;
+            /*
+             * Check if we can cast directly to the target expected type (which might
+             * be compatible with int) instead of casting to 'int'
+             */
+            if (expectedReturnType instanceof LiteralType leType && leType.isBuiltIn()) {
+                TypeCastHelper helper = new TypeCastHelper(exprContext);
+                ResultContext preValueContext = exprContext.subContext();
+                ResultContext postValueContext = exprContext.subContext();
+                ResultContext resultCast = helper.getRequiredTypeCast(expectedReturnType, true, literalType, expression, false, false,
+                        preValueContext, postValueContext, scopeUnit);
+                if (resultCast != null || !postValueContext.isEmpty())
+                    throw new CompilerException(expression, "Unexpected complex cast for ORD(): result: {0}, postValue: {1}",
+                            resultCast, postValueContext);
+                if (!preValueContext.isEmpty()) {
+                    exprContext.write(preValueContext);
+                    casted = true;
+                }
+            }
+            
+            if (!casted) {
+                // Cast to 'int' by default
+                String javaPrimitiveType =  BuiltInType.javaInt().get().getJavaType();
+                exprContext.write("(" + javaPrimitiveType + ") ");
+            }
         }
         
         Expressions.getGenerator(scopeUnit, expression).generate(exprContext);

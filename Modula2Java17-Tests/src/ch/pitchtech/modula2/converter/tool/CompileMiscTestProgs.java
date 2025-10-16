@@ -5,6 +5,7 @@ import java.nio.file.Path;
 
 import ch.pitchtech.modula.converter.compiler.Compiler;
 import ch.pitchtech.modula.converter.compiler.CompilerOptions;
+import ch.pitchtech.modula.converter.compiler.DataModelType;
 import ch.pitchtech.modula.converter.compiler.FileOptions;
 import ch.pitchtech.modula.converter.compiler.SourceFile;
 import ch.pitchtech.modula.converter.utils.Logger;
@@ -31,6 +32,7 @@ public class CompileMiscTestProgs {
         CompilerOptions compilerOptions = new CompilerOptions();
         compilerOptions.setTargetPackageMain("ch.chaos.castle");
         compilerOptions.setTargetPackageLib("ch.chaos.library");
+        compilerOptions.setDataModel(DataModelType.LOOSE_16_32);
         
         {
             Compiler compiler = new Compiler(fileOptions, compilerOptions);

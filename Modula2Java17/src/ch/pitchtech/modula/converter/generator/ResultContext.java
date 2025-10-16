@@ -40,6 +40,10 @@ public class ResultContext {
     public CompilerOptions getCompilerOptions() {
         return compilerOptions;
     }
+    
+    public boolean isEmpty() {
+        return builder.isEmpty();
+    }
 
     public void write(String text) {
         builder.append(text);
