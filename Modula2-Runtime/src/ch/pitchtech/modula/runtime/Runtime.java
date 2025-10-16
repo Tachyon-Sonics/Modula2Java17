@@ -464,24 +464,36 @@ public class Runtime {
                 throw new ArrayIndexOutOfBoundsException("Index " + index + " is outside of bounds [" + lower + ".." + upper + "]");
         }
 
+        /**
+         * Implements the <tt>+</tt> operator on sets. The arguments are not modified, a new set is returned
+         */
         public static RangeSet plus(RangeSet a, RangeSet b) {
             RangeSet result = a.clone();
             result.target.or(b.target);
             return result;
         }
         
+        /**
+         * Implements the <tt>-</tt> operator on sets. The arguments are not modified, a new set is returned
+         */
         public static RangeSet minus(RangeSet a, RangeSet b) {
             RangeSet result = a.clone();
             result.target.andNot(b.target);
             return result;
         }
         
+        /**
+         * Implements the <tt>*</tt> operator on sets. The arguments are not modified, a new set is returned
+         */
         public static RangeSet mul(RangeSet a, RangeSet b) {
             RangeSet result = a.clone();
             result.target.and(b.target);
             return result;
         }
         
+        /**
+         * Implements the <tt>/</tt> operator on sets. The arguments are not modified, a new set is returned
+         */
         public static RangeSet div(RangeSet a, RangeSet b) {
             RangeSet result = a.clone();
             result.target.xor(b.target);
@@ -684,24 +696,36 @@ public class Runtime {
         return result;
     }
     
+    /**
+     * Implements the <tt>+</tt> operator on enum sets. The arguments are not modified, a new set is returned.
+     */
     public static <E extends Enum<E>> EnumSet<E> plusSet(EnumSet<E> a, EnumSet<E> b) {
         EnumSet<E> result = a.clone();
         result.addAll(b);
         return result;
     }
     
+    /**
+     * Implements the <tt>-</tt> operator on enum sets. The arguments are not modified, a new set is returned.
+     */
     public static <E extends Enum<E>> EnumSet<E> minusSet(EnumSet<E> a, EnumSet<E> b) {
         EnumSet<E> result = a.clone();
         result.removeAll(b);
         return result;
     }
     
+    /**
+     * Implements the <tt>*</tt> operator on enum sets. The arguments are not modified, a new set is returned.
+     */
     public static <E extends Enum<E>> EnumSet<E> mulSet(EnumSet<E> a, EnumSet<E> b) {
         EnumSet<E> result = a.clone();
         result.retainAll(b);
         return result;
     }
     
+    /**
+     * Implements the <tt>/</tt> operator on enum sets. The arguments are not modified, a new set is returned.
+     */
     public static <E extends Enum<E>> EnumSet<E> divSet(EnumSet<E> a, EnumSet<E> b) {
         EnumSet<E> result = a.clone();
         result.addAll(b);

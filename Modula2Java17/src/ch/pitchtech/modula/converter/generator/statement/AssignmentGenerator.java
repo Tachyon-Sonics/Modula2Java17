@@ -85,7 +85,7 @@ public class AssignmentGenerator extends Generator {
                     && !value.isConstant(scopeUnit.getScope())) {
                 // Copy values
                 boolean closeParenthese = true;
-                if (targetType instanceof EnumSetType) {
+                if (targetType instanceof EnumSetType || targetType instanceof RangeSetType) {
                     Expressions.getGenerator(scopeUnit, target).generate(result);
                     if (value instanceof InfixOpExpression) {
                         // The value is a set expression, which is already a copy
@@ -96,7 +96,12 @@ public class AssignmentGenerator extends Generator {
                             closeParenthese = false;
                         }
                     } else {
-                        result.write(" = EnumSet.copyOf(");
+                        if (targetType instanceof EnumSetType) {
+                            result.write(" = EnumSet.copyOf(");
+                        } else {
+                            assert targetType instanceof RangeSetType;
+                            result.write(".copyFrom(");
+                        }
                     }
                     writeValueWithProperCast(result, scopeUnit, targetType, value, valueType, false, false);
                 } else if (targetType instanceof IArrayType arrayType) {
@@ -117,7 +122,7 @@ public class AssignmentGenerator extends Generator {
                         result.write(", ");
                         writeValueWithProperCast(result, scopeUnit, targetType, value, valueType, false, false);
                     }
-                } else if (targetType instanceof RangeSetType || targetType instanceof RecordType) {
+                } else if (targetType instanceof RecordType) {
                     Expressions.getGenerator(scopeUnit, target).generate(result);
                     result.write(".copyFrom(");
                     writeValueWithProperCast(result, scopeUnit, targetType, value, valueType, false, false);

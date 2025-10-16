@@ -70,10 +70,10 @@ public class SetAccess64 {
         set.excl((int) index);
         index = 5;
         test = (set.contains((int) index));
-        set.copyFrom(Runtime.RangeSet.plus(set2, set3));
-        set.copyFrom(Runtime.RangeSet.minus(set2, set3));
-        set.copyFrom(Runtime.RangeSet.mul(set2, set3));
-        set.copyFrom(Runtime.RangeSet.div(set2, set3));
+        set = Runtime.RangeSet.plus(set2, set3);
+        set = Runtime.RangeSet.minus(set2, set3);
+        set = Runtime.RangeSet.mul(set2, set3);
+        set = Runtime.RangeSet.div(set2, set3);
     }
 
     private void close() {

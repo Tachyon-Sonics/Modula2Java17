@@ -65,10 +65,10 @@ public class BitSetAccess {
         zeSet.excl(index);
         index = 5;
         test = (zeSet.contains(index));
-        zeSet.copyFrom(Runtime.RangeSet.plus(set2, set3));
-        zeSet.copyFrom(Runtime.RangeSet.minus(set2, set3));
-        zeSet.copyFrom(Runtime.RangeSet.mul(set2, set3));
-        zeSet.copyFrom(Runtime.RangeSet.div(set2, set3));
+        zeSet = Runtime.RangeSet.plus(set2, set3);
+        zeSet = Runtime.RangeSet.minus(set2, set3);
+        zeSet = Runtime.RangeSet.mul(set2, set3);
+        zeSet = Runtime.RangeSet.div(set2, set3);
     }
 
     private void close() {

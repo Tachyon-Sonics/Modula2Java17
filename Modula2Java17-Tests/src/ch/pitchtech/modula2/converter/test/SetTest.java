@@ -18,7 +18,6 @@ public class SetTest {
         CompilerHelper helper = new CompilerHelper("set");
         helper.compile("SetAccess.mod");
         
-        // TODO (3) there is an unnecessary copyFrom in the code for + - * / operators
         helper.assertCompilationResult(SetAccess.class, "import ch.pitchtech.modula.library.*;");
     }
     
