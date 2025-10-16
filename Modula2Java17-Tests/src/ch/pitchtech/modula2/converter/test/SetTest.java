@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import ch.pitchtech.modula.converter.compiler.DataModelType;
+import generated.test.set.EnumSetAccess;
 import generated.test.set.SetAccess;
 import generated.test.set.SetAccess64;
 
@@ -18,7 +19,6 @@ public class SetTest {
         
         helper.assertCompilationResult(SetAccess.class, "import ch.pitchtech.modula.library.*;");
     }
-    
 
     @Test
     public void testSetAccessCard64() throws IOException {
@@ -29,7 +29,12 @@ public class SetTest {
         helper.assertCompilationResult(SetAccess64.class, "import ch.pitchtech.modula.library.*;");
     }
     
-    // TODO (1) Does not work in we declare directly VAR set : SET OF [0..63]
-
-
+    @Test
+    public void testEnumSetAccess() throws IOException {
+        CompilerHelper helper = new CompilerHelper("set");
+        helper.compile("EnumSetAccess.mod");
+        
+        helper.assertCompilationResult(EnumSetAccess.class, "import ch.pitchtech.modula.library.*;");
+    }
+    
 }
