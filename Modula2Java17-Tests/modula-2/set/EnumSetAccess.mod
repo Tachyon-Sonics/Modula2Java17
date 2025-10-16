@@ -5,7 +5,7 @@ MODULE EnumSetAccess;
 		MySet = SET OF MyEnum;
 
 	VAR
-		set: MySet;
+		set, set2, set3: MySet;
 		index: MyEnum;
 		test: BOOLEAN;
 		
@@ -17,5 +17,10 @@ BEGIN
 	EXCL(set, index);
 	index := Sun;
 	test := (index IN set);
+	
+	set := set2 + set3;
+	set := set2 - set3;
+	set := set2 * set3;
+	set := set2 / set3;
 
 END EnumSetAccess.

@@ -1,7 +1,7 @@
 MODULE BitSetAccess;
 
 	VAR
-		zeSet: BITSET;
+		zeSet, set2, set3: BITSET;
 		index: CARDINAL;
 		test: BOOLEAN;
 		
@@ -13,5 +13,10 @@ BEGIN
 	EXCL(zeSet, index);
 	index := 5;
 	test := (index IN zeSet);
+	
+	zeSet := set2 + set3;
+	zeSet := set2 - set3;
+	zeSet := set2 * set3;
+	zeSet := set2 / set3;
 
 END BitSetAccess.

@@ -21,6 +21,8 @@ public class EnumSetAccess {
     // VAR
 
     private EnumSet<MyEnum> set = EnumSet.noneOf(MyEnum.class);
+    private EnumSet<MyEnum> set2 = EnumSet.noneOf(MyEnum.class);
+    private EnumSet<MyEnum> set3 = EnumSet.noneOf(MyEnum.class);
     private MyEnum index;
     private boolean test;
 
@@ -31,6 +33,22 @@ public class EnumSetAccess {
 
     public void setSet(EnumSet<MyEnum> set) {
         this.set = set;
+    }
+
+    public EnumSet<MyEnum> getSet2() {
+        return this.set2;
+    }
+
+    public void setSet2(EnumSet<MyEnum> set2) {
+        this.set2 = set2;
+    }
+
+    public EnumSet<MyEnum> getSet3() {
+        return this.set3;
+    }
+
+    public void setSet3(EnumSet<MyEnum> set3) {
+        this.set3 = set3;
     }
 
     public MyEnum getIndex() {
@@ -59,6 +77,10 @@ public class EnumSetAccess {
         set.remove(index);
         index = MyEnum.Sun;
         test = (set.contains(index));
+        set = Runtime.plusSet(set2, set3);
+        set = Runtime.minusSet(set2, set3);
+        set = Runtime.mulSet(set2, set3);
+        set = Runtime.divSet(set2, set3);
     }
 
     private void close() {

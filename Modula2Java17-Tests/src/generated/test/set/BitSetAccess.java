@@ -9,6 +9,8 @@ public class BitSetAccess {
     // VAR
 
     private Runtime.RangeSet zeSet = new Runtime.RangeSet(0, 15);
+    private Runtime.RangeSet set2 = new Runtime.RangeSet(0, 15);
+    private Runtime.RangeSet set3 = new Runtime.RangeSet(0, 15);
     private int index;
     private boolean test;
 
@@ -19,6 +21,22 @@ public class BitSetAccess {
 
     public void setZeSet(Runtime.RangeSet zeSet) {
         this.zeSet = zeSet;
+    }
+
+    public Runtime.RangeSet getSet2() {
+        return this.set2;
+    }
+
+    public void setSet2(Runtime.RangeSet set2) {
+        this.set2 = set2;
+    }
+
+    public Runtime.RangeSet getSet3() {
+        return this.set3;
+    }
+
+    public void setSet3(Runtime.RangeSet set3) {
+        this.set3 = set3;
     }
 
     public int getIndex() {
@@ -47,6 +65,10 @@ public class BitSetAccess {
         zeSet.excl(index);
         index = 5;
         test = (zeSet.contains(index));
+        zeSet.copyFrom(Runtime.RangeSet.plus(set2, set3));
+        zeSet.copyFrom(Runtime.RangeSet.minus(set2, set3));
+        zeSet.copyFrom(Runtime.RangeSet.mul(set2, set3));
+        zeSet.copyFrom(Runtime.RangeSet.div(set2, set3));
     }
 
     private void close() {

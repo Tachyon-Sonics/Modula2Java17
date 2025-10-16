@@ -14,6 +14,8 @@ public class SetAccess64 {
     // VAR
 
     private Runtime.RangeSet set = new Runtime.RangeSet(MySet_r);
+    private Runtime.RangeSet set2 = new Runtime.RangeSet(MySet_r);
+    private Runtime.RangeSet set3 = new Runtime.RangeSet(MySet_r);
     private long index;
     private boolean test;
 
@@ -24,6 +26,22 @@ public class SetAccess64 {
 
     public void setSet(Runtime.RangeSet set) {
         this.set = set;
+    }
+
+    public Runtime.RangeSet getSet2() {
+        return this.set2;
+    }
+
+    public void setSet2(Runtime.RangeSet set2) {
+        this.set2 = set2;
+    }
+
+    public Runtime.RangeSet getSet3() {
+        return this.set3;
+    }
+
+    public void setSet3(Runtime.RangeSet set3) {
+        this.set3 = set3;
     }
 
     public long getIndex() {
@@ -52,6 +70,10 @@ public class SetAccess64 {
         set.excl((int) index);
         index = 5;
         test = (set.contains((int) index));
+        set.copyFrom(Runtime.RangeSet.plus(set2, set3));
+        set.copyFrom(Runtime.RangeSet.minus(set2, set3));
+        set.copyFrom(Runtime.RangeSet.mul(set2, set3));
+        set.copyFrom(Runtime.RangeSet.div(set2, set3));
     }
 
     private void close() {
