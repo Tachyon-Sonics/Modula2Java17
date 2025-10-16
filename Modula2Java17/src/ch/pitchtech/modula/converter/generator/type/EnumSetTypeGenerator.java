@@ -33,7 +33,7 @@ public class EnumSetTypeGenerator extends Generator implements ITypePreInitializ
             // -> RangeSetType
             ICompilationUnit cu = (ICompilationUnit) enumerationTypeDef.getParentNode();
             RangeSetType rangeSetType = new RangeSetType(enumerationTypeDef.getSourceLocation(), cu,
-                    subrangeType.getTypeName(), subrangeType.getLowerBound(), subrangeType.getUpperBound());
+                    subrangeType.getTypeName(), false, subrangeType.getLowerBound(), subrangeType.getUpperBound());
             new RangeSetTypeGenerator(scopeUnit, rangeSetType).generate(result);
         } else if (enumerationType instanceof EnumerationType enumType) {
             result.ensureJavaImport(EnumSet.class);

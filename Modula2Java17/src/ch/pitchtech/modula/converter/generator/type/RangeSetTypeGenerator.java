@@ -58,7 +58,7 @@ public class RangeSetTypeGenerator extends Generator implements ITypeDefinitionG
     }
 
     public void generateInitialValue(ResultContext result) {
-        if (rangeSetType.getTypeName() != null) {
+        if (rangeSetType.getTypeName() != null && !rangeSetType.isInline()) {
             result.ensureJavaImport(Runtime.class);
             result.write("new Runtime.RangeSet(");
             qualifyIfNecessary(rangeSetType, result);

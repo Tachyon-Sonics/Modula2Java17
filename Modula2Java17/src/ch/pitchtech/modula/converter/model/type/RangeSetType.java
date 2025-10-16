@@ -10,14 +10,20 @@ import ch.pitchtech.modula.converter.model.source.SourceLocation;
 public class RangeSetType extends TypeBase implements IType, IByReferenceValueType {
     
     private final String typeName;
+    private final boolean inline;
     private final IExpression lowerBound;
     private final IExpression upperBound;
     
     
-    public RangeSetType(SourceLocation sLoc, IHasScope scopeUnit, String typeName,
+    /**
+     * @param inline whether the type is used inline, like "SET OF [0..15]" instead of "MySetType". In that case
+     * <tt>typeName</tt> is synthetic.
+     */
+    public RangeSetType(SourceLocation sLoc, IHasScope scopeUnit, String typeName, boolean inline,
             IExpression lowerBound, IExpression upperBound) {
         super(sLoc, scopeUnit);
         this.typeName = typeName;
+        this.inline = inline;
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
     }
@@ -27,6 +33,10 @@ public class RangeSetType extends TypeBase implements IType, IByReferenceValueTy
      */
     public String getTypeName() {
         return typeName;
+    }
+    
+    public boolean isInline() {
+        return inline;
     }
 
     public IExpression getLowerBound() {

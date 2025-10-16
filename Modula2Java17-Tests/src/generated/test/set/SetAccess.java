@@ -8,8 +8,8 @@ public class SetAccess {
 
     // VAR
 
-    private Runtime.RangeSet zeSet = new Runtime.RangeSet(new Runtime.Range(0, 31));
-    private long index;
+    private Runtime.RangeSet zeSet = new Runtime.RangeSet(0, 31);
+    private int index;
     private boolean test;
 
 
@@ -17,15 +17,15 @@ public class SetAccess {
         return this.zeSet;
     }
 
-    public void setZeSet(Runtime.RangeSet set) {
-        this.zeSet = set;
+    public void setZeSet(Runtime.RangeSet zeSet) {
+        this.zeSet = zeSet;
     }
 
-    public long getIndex() {
+    public int getIndex() {
         return this.index;
     }
 
-    public void setIndex(long index) {
+    public void setIndex(int index) {
         this.index = index;
     }
 
@@ -42,11 +42,11 @@ public class SetAccess {
 
     private void begin() {
         index = 4;
-        zeSet.incl((int) index);
+        zeSet.incl(index);
         index = 6;
-        zeSet.excl((int) index);
+        zeSet.excl(index);
         index = 5;
-        test = (zeSet.contains((int) index));
+        test = (zeSet.contains(index));
     }
 
     private void close() {

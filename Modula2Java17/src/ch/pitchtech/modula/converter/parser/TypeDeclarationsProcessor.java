@@ -92,7 +92,7 @@ public class TypeDeclarationsProcessor extends ProcessorBase {
                 // Regular TYPE
                 expect(definition, i + 1, "=");
                 Type_Context typeContext = (Type_Context) definition.getChild(i + 2);
-                List<IType> types = processType(typeName, typeContext);
+                List<IType> types = processType(typeName, false, typeContext);
                 IType mainType = primary(types);
                 for (IType type : types) {
                     TypeDefinition typeDefinition = new TypeDefinition(loc(ident), scopeUnit, 
@@ -119,7 +119,7 @@ public class TypeDeclarationsProcessor extends ProcessorBase {
                 IdentContext identContext = (IdentContext) typeDeclarationContext.getChild(0);
                 Type_Context typeContext = (Type_Context) typeDeclarationContext.getChild(2);
                 String typeName = identContext.getText();
-                List<IType> types = processType(typeName, typeContext);
+                List<IType> types = processType(typeName, false, typeContext);
                 IType mainType = primary(types);
                 for (IType type : types) {
                     TypeDefinition typeDefinition = new TypeDefinition(loc(identContext), scopeUnit,
@@ -131,7 +131,7 @@ public class TypeDeclarationsProcessor extends ProcessorBase {
         return result;
     }
     
-    List<IType> processType(String typeName, Type_Context typeContext) {
+    List<IType> processType(String typeName, boolean inline, Type_Context typeContext) {
         if (typeContext.getChild(0) instanceof SimpleTypeContext simpleType) {
             if (simpleType.getChild(0) instanceof QualidentContext qualident) {
                 if (qualident.getChildCount() == 1) {
@@ -210,7 +210,7 @@ public class TypeDeclarationsProcessor extends ProcessorBase {
                     IExpression end = processor.processConstantExpression(endExpr);
                     
                     // Add the "_r" suffix because typeName is the SET type, not the underlying range type (which is unnamed)
-                    RangeSetType rangeSetType = new RangeSetType(loc(subrangeType), scopeUnit, typeName + "_r", begin, end);
+                    RangeSetType rangeSetType = new RangeSetType(loc(subrangeType), scopeUnit, typeName + "_r", inline, begin, end);
                     return single(rangeSetType);
                 } else if (simpleType.getChild(0) instanceof QualidentContext qualidentContext) {
                     expectNbChild(qualidentContext, 1);
@@ -271,7 +271,7 @@ public class TypeDeclarationsProcessor extends ProcessorBase {
 
             // Element type            
             Type_Context targetTypeContext = (Type_Context) arrayTypeContext.getChild(nbChild - 1);
-            List<IType> results = processType(typeName, targetTypeContext);
+            List<IType> results = processType(typeName, inline, targetTypeContext);
             IType targetType = primary(results);
             
             IType result = targetType;
@@ -288,7 +288,7 @@ public class TypeDeclarationsProcessor extends ProcessorBase {
             expect(pointerType, 1, "TO");
             expect(pointerType, 2, Type_Context.class);
             Type_Context targetTypeContext = (Type_Context) pointerType.getChild(2);
-            List<IType> results = processType(typeName, targetTypeContext);
+            List<IType> results = processType(typeName, inline, targetTypeContext);
             IType targetType = primary(results);
             results.add(new PointerType(loc(targetTypeContext), scopeUnit, typeName, targetType));
             return results;
@@ -381,7 +381,7 @@ public class TypeDeclarationsProcessor extends ProcessorBase {
                     for (String identName : identNames)
                         typeName += "_" + StringUtils.toPascalCase(identName);
                     Type_Context typeContext0 = (Type_Context) fieldList.getChild(2);
-                    List<IType> types = processType(typeName, typeContext0);
+                    List<IType> types = processType(typeName, true, typeContext0);
                     for (IType type : types) {
                         if (Types.requiresExplicitDeclaration(type))
                             nestedTypes.add(type);

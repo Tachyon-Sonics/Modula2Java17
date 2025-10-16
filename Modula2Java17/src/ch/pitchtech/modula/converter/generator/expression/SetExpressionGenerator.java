@@ -42,6 +42,7 @@ public class SetExpressionGenerator extends Generator {
                         enumSetType.getSourceLocation(), 
                         enumSetType.getDeclaringScope(), 
                         subrangeType.getTypeName(),
+                        false,
                         subrangeType.getLowerBound(),
                         subrangeType.getUpperBound());
                 type = rangeSetType;
