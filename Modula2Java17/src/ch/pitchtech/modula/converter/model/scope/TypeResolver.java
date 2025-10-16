@@ -4,27 +4,53 @@ import java.util.BitSet;
 import java.util.Collections;
 
 import ch.pitchtech.modula.converter.compiler.CompilationException;
+import ch.pitchtech.modula.converter.compiler.CompilerOptions;
+import ch.pitchtech.modula.converter.compiler.DataModelType;
 import ch.pitchtech.modula.converter.model.Application;
 import ch.pitchtech.modula.converter.model.ICompilationUnit;
 import ch.pitchtech.modula.converter.model.builtin.BuiltInType;
+import ch.pitchtech.modula.converter.model.expression.ConstantLiteral;
 import ch.pitchtech.modula.converter.model.expression.IExpression;
 import ch.pitchtech.modula.converter.model.type.IType;
 import ch.pitchtech.modula.converter.model.type.LiteralType;
 import ch.pitchtech.modula.converter.model.type.OpaqueType;
 import ch.pitchtech.modula.converter.model.type.ProcedureType;
 import ch.pitchtech.modula.converter.model.type.QualifiedType;
+import ch.pitchtech.modula.converter.model.type.RangeSetType;
 import ch.pitchtech.modula.converter.model.type.TypeDefinition;
 
 public class TypeResolver {
 
     public static IType resolveType(IScope scope, IType type) {
+        IType result;
         if (type.getDeclaringScope() != null) {
-            return TypeResolver.resolveTypeImpl(type.getDeclaringScope().getScope(), type);
+            result = TypeResolver.resolveTypeImpl(type.getDeclaringScope().getScope(), type);
+        } else {
+            // Only built-in types have no explicit scope
+            if (!(type instanceof LiteralType literalType && literalType.isBuiltIn()))
+                throw new CompilationException(type, "Non-literal type has no scope (internal error)");
+            
+            result = type;
         }
-        // Only built-in types have no explicit scope
-        if (!(type instanceof LiteralType literalType && literalType.isBuiltIn()))
-            throw new CompilationException(type, "Non-literal type has no scope (internal error)");
-        return type; // Built-in type do not need to be resolved
+        
+        result = resolveAnyBuiltInType(type, result);
+
+        return result; // Other built-in type do not need to be resolved
+    }
+
+    /**
+     * If <tt>type</tt> resolves to a built-in type <tt>builtInType</tt>, check if that type must further
+     * be resolved. Actually this method only replaces built-in type {@link BuiltInType#BITSET} by
+     * a {@link RangeSetType} with bounds 0 and {@link DataModelType#getNbBits()} - 1.
+     */
+    private static IType resolveAnyBuiltInType(IType type, IType builtInType) {
+        if (builtInType instanceof LiteralType literalType && literalType.isBuiltInType(BuiltInType.BITSET)) {
+            int nbBits = CompilerOptions.get().getDataModel().getNbBits();
+            builtInType = new RangeSetType(null, type.getDeclaringScope(), "BITSET", true, 
+                    new ConstantLiteral(null, "0"), 
+                    new ConstantLiteral(null, String.valueOf(nbBits - 1)));
+        }
+        return builtInType;
     }
     
     private static IType resolveTypeImpl(IScope scope, IType type) {
