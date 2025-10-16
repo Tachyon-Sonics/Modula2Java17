@@ -5,9 +5,20 @@ import java.io.IOException;
 import org.junit.Test;
 
 import ch.pitchtech.modula.converter.compiler.DataModelType;
+import generated.test.set.SetAccess;
 import generated.test.set.SetAccess64;
 
 public class SetTest {
+    
+
+    @Test
+    public void testSetAccess() throws IOException {
+        CompilerHelper helper = new CompilerHelper("set");
+        helper.compile("SetAccess.mod");
+        
+        helper.assertCompilationResult(SetAccess.class, "import ch.pitchtech.modula.library.*;");
+    }
+    
 
     @Test
     public void testSetAccessCard64() throws IOException {

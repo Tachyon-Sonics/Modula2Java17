@@ -62,7 +62,7 @@ public class VariableDeclarationsProcessor extends ProcessorBase {
                 Type_Context typeContext0 = (Type_Context) variableDeclarationContext.getChild(2);
                 String typeName = "";
                 for (String identName : identNames)
-                    typeName += "_" + StringUtils.toPascalCase(identName);
+                    typeName += "_" + StringUtils.toPascalCase(identName); // FIXME
                 List<IType> types = new TypeDeclarationsProcessor(scopeUnit).processType(typeName, typeContext0);
                 for (IType type : types) {
                     if (Types.requiresExplicitDeclaration(type))
