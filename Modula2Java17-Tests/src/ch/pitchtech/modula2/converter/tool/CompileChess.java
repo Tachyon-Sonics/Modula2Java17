@@ -37,7 +37,7 @@ public class CompileChess {
         compilerOptions.setCharset(StandardCharsets.ISO_8859_1);
         compilerOptions.setTargetPackageMain("ch.pitchtech.modula.chess");
         compilerOptions.setTargetPackageLib("ch.pitchtech.modula.library");
-        compilerOptions.setDataModel(DataModelType.LOOSE_32_64);
+        compilerOptions.setDataModel(DataModelType.DM_32);
         Logger.setVerboseLevel(2);
         
         Compiler compiler = new Compiler(fileOptions, compilerOptions);

@@ -56,7 +56,7 @@ public class CompileGrotte {
                 "-" + CmdOptions.TARGET_LIBRARY_DIR.getName(), Path.of(TARGET_DIRECTORY_LIBRARY).toString(),
                 "-" + CmdOptions.TARGET_PACKAGE_MAIN.getName(), "ch.chaos.grotte",
                 "-" + CmdOptions.TARGET_PACKAGE_LIB.getName(), "ch.chaos.library",
-                "-" + CmdOptions.DATA_MODEL.getName(), DataModelType.LOOSE_16_32.getArgName()
+                "-" + CmdOptions.DATA_MODEL.getName(), DataModelType.DM_16.getArgName()
                 );
         Modula2JavaTranslator.main(args.toArray(String[]::new));
     }

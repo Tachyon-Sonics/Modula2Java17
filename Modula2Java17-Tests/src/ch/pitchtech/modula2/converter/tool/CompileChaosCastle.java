@@ -40,7 +40,7 @@ public class CompileChaosCastle {
         CompilerOptions compilerOptions = new CompilerOptions();
         compilerOptions.setTargetPackageMain("ch.chaos.castle");
         compilerOptions.setTargetPackageLib("ch.chaos.library");
-        compilerOptions.setDataModel(DataModelType.LOOSE_16_32);
+        compilerOptions.setDataModel(DataModelType.DM_16);
         
         Compiler compiler = new Compiler(fileOptions, compilerOptions);
         compiler.compile(chaosCastle);

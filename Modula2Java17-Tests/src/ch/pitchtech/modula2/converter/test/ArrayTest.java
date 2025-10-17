@@ -12,7 +12,7 @@ public class ArrayTest {
     @Test
     public void testArrayAccessCard64() throws IOException {
         CompilerHelper helper = new CompilerHelper("array");
-        helper.getCompilerOptions().setDataModel(DataModelType.STRICT_32_64);
+        helper.getCompilerOptions().setDataModel(DataModelType.DM_STRICT_32);
         helper.compile("ArrayAccess64.mod");
         
         helper.assertCompilationResult(ArrayAccess64.class, "import ch.pitchtech.modula.library.*;");

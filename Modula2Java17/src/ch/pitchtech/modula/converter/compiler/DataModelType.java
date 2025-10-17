@@ -8,6 +8,8 @@ import ch.pitchtech.modula.converter.model.builtin.BuiltInType;
  */
 public enum DataModelType implements IArgName {
     /**
+     * 16-bit data model.
+     * <p>
      * INTEGER and CARDINAL are 16-bit, LONGINT and LONGCARD are 32-bit.
      * <p>
      * All types (except BYTE) ar expanded to at least Java's <tt>int</tt>.
@@ -15,7 +17,7 @@ public enum DataModelType implements IArgName {
      * LONGINT and LONGCARD are expanded to Java's <tt>long</tt> for compatibility with
      * {@link #LOOSE_32_64}.
      */
-    LOOSE_16_32("16", 16, BuiltInType.INTEGER) {
+    DM_16("16", 16, BuiltInType.INTEGER) {
 
         @Override
         public int getJavaSize(BuiltInType type) {
@@ -41,16 +43,16 @@ public enum DataModelType implements IArgName {
         }
     },
     /**
+     * 32-bit data model (default).
+     * <p>
      * INTEGER and CARDINAL are 32-bit, LONGINT and LONGCARD are 64-bit.
      * <p>
      * All types (except BYTE) ar expanded to at least Java's <tt>int</tt>.
      * <p>
-     * Note that CARDINAL is mapped to <tt>int</tt>. It will hence only hold
-     * 31 bits, unless {@link CompilerOptions#isUnsignedCard32()} is <tt>true</tt>.
-     * <p>
-     * Similarly, LONGCARD will only hold 63 bits, unless {@link CompilerOptions#isUnsignedCard64()}.
+     * CARDINAL is mapped to <tt>int</tt> and may hence result in code using
+     * {@link Integer#compareUnsigned(int, int)} and similar. Same for LONGCARD.
      */
-    LOOSE_32_64("32", 32, BuiltInType.INTEGER) {
+    DM_32("32", 32, BuiltInType.INTEGER) {
 
         @Override
         public int getJavaSize(BuiltInType type) {
@@ -76,9 +78,13 @@ public enum DataModelType implements IArgName {
         }
     },
     /**
-     * INTEGER and CARDINAL are 16-bit, LONGINT and LONGCARD are 32-bit
+     * Strict 16-bit model.
+     * <p>
+     * SHORTINT and SHORTCARD are 8-bit, INTEGER and CARDINAL are 16-bit, LONGINT and LONGCARD are 32-bit.
+     * <p>
+     * Unlike {@link #DM_16}, all numeric types are mapped to Java types of exactly the same size.
      */
-    STRICT_16_32("s16", 16, BuiltInType.LONGINT) {
+    DM_STRICT_16("s16", 16, BuiltInType.LONGINT) {
 
         @Override
         public int getJavaSize(BuiltInType type) {
@@ -104,9 +110,13 @@ public enum DataModelType implements IArgName {
         }
     },
     /**
-     * INTEGER and CARDINAL are 32-bit, LONGINT is 64-bit, LONGCARD is 63-bit (uses <tt>long</tt>)
+     * Strict 32-bit model.
+     * <p>
+     * SHORTINT and SHORTCARD are 16-bit, INTEGER and CARDINAL are 32-bit, LONGINT and LONGCARD are 64-bit.
+     * <p>
+     * Unlike {@link #DM_32}, all numeric types are mapped to Java types of exactly the same size.
      */
-    STRICT_32_64("s32", 32, BuiltInType.INTEGER) {
+    DM_STRICT_32("s32", 32, BuiltInType.INTEGER) {
 
         @Override
         public int getJavaSize(BuiltInType type) {
@@ -143,11 +153,17 @@ public enum DataModelType implements IArgName {
         this.typeForJavaInt = typeForJavaInt;
     }
     
+    /**
+     * Name of this data model when used in the command line
+     */
     @Override
     public String getArgName() {
         return this.argName;
     }
     
+    /**
+     * The number of bits for the Modula-2 INTEGER, CARDINAL and WORD types, such as <tt>16</tt> or <tt>32</tt>
+     */
     public int getNbBits() {
         return this.nbBits;
     }

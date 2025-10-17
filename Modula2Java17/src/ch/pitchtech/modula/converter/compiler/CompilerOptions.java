@@ -10,7 +10,7 @@ public class CompilerOptions {
     
     private static final ThreadLocal<CompilerOptions> current = new ThreadLocal<>();
     
-    private DataModelType dataModel = DataModelType.LOOSE_32_64;
+    private DataModelType dataModel = DataModelType.DM_32;
     private Set<UnsignedType> exactUnsignedTypes = EnumSet.allOf(UnsignedType.class);
     private boolean euclideanDivMod = false;
     private boolean convertArrayOfCharToString = true;

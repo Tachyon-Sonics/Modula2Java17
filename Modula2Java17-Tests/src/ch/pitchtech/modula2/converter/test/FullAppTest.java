@@ -61,7 +61,7 @@ public class FullAppTest {
         CompilerOptions compilerOptions = new CompilerOptions();
         compilerOptions.setTargetPackageMain("ch.chaos.grotte");
         compilerOptions.setTargetPackageLib("ch.chaos.library");
-        compilerOptions.setDataModel(DataModelType.LOOSE_16_32);
+        compilerOptions.setDataModel(DataModelType.DM_16);
         CompilerHelper helper = new CompilerHelper(targetDir, fileOptions, compilerOptions);
         helper.compile(appModulaPath.resolve("Grotte.mod"));
         
@@ -120,7 +120,7 @@ public class FullAppTest {
         CompilerOptions compilerOptions = new CompilerOptions();
         compilerOptions.setTargetPackageMain("ch.chaos.castle");
         compilerOptions.setTargetPackageLib("ch.chaos.library");
-        compilerOptions.setDataModel(DataModelType.LOOSE_16_32);
+        compilerOptions.setDataModel(DataModelType.DM_16);
         CompilerHelper helper = new CompilerHelper(targetDir, fileOptions, compilerOptions);
         helper.compile(appModulaPath.resolve("ChaosCastle.mod"));
         
@@ -178,7 +178,7 @@ public class FullAppTest {
         compilerOptions.setTargetPackageMain("ch.pitchtech.modula.chess");
         compilerOptions.setTargetPackageLib("ch.pitchtech.modula.library");
         compilerOptions.setCharset(StandardCharsets.ISO_8859_1);
-        compilerOptions.setDataModel(DataModelType.LOOSE_32_64);
+        compilerOptions.setDataModel(DataModelType.DM_32);
         CompilerHelper helper = new CompilerHelper(targetDir, fileOptions, compilerOptions);
         helper.compile(appModulaPath.resolve("Modula2Chess.mi"));
         
