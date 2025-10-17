@@ -138,14 +138,22 @@ public class CompilerHelper {
      * or a SuppressWarnings clause.
      */
     public void assertCompilationResult(Class<?> expectedClass, String... ignoreLines) throws IOException {
+        assertCompilationResult(expectedClass.getSimpleName(), expectedClass, ignoreLines);
+    }
+    
+    public void assertCompilationResult(String generatedFileName, Class<?> expectedClass, String... ignoreLines) throws IOException {
         String className = expectedClass.getSimpleName();
         String packageName = expectedClass.getPackageName();
         
         // Retrieve generated file
         Path generatedFile = getTargetDir()
                 .resolve(packageName.replace('.', File.separatorChar))
-                .resolve(className + ".java");
+                .resolve(generatedFileName + ".java");
         String generated = cleanup(Files.readString(generatedFile));
+        
+        if (!generatedFileName.equals(className)) {
+            generated = generated.replace(generatedFileName, className);
+        }
         
         // Retrieve expected file
         Path expectedFile = Path.of("src")
