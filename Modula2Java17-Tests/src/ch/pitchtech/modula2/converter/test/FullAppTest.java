@@ -120,6 +120,7 @@ public class FullAppTest {
         CompilerOptions compilerOptions = new CompilerOptions();
         compilerOptions.setTargetPackageMain("ch.chaos.castle");
         compilerOptions.setTargetPackageLib("ch.chaos.library");
+        compilerOptions.setDataModel(DataModelType.LOOSE_16_32);
         CompilerHelper helper = new CompilerHelper(targetDir, fileOptions, compilerOptions);
         helper.compile(appModulaPath.resolve("ChaosCastle.mod"));
         
