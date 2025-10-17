@@ -78,7 +78,7 @@ public enum DataModelType implements IArgName {
     /**
      * INTEGER and CARDINAL are 16-bit, LONGINT and LONGCARD are 32-bit
      */
-    STRICT_16_32("s16", 16, BuiltInType.LONGINT) {
+    STRICT_16_32("s16", 16, BuiltInType.LONGINT) { // TODO (2) make unsigned types stricter size
 
         @Override
         public int getJavaSize(BuiltInType type) {
