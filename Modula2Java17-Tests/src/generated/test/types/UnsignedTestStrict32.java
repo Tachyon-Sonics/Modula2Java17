@@ -4,13 +4,13 @@ import ch.pitchtech.modula.runtime.HaltException;
 import ch.pitchtech.modula.runtime.Runtime;
 
 
-public class Unsigned16 {
+public class UnsignedTestStrict32 {
 
     // VAR
 
-    private int sc1;
-    private int sc2;
-    private int sc3;
+    private short sc1;
+    private short sc2;
+    private short sc3;
     private int c1;
     private int c2;
     private int c3;
@@ -20,27 +20,27 @@ public class Unsigned16 {
     private boolean t;
 
 
-    public int getSc1() {
+    public short getSc1() {
         return this.sc1;
     }
 
-    public void setSc1(int sc1) {
+    public void setSc1(short sc1) {
         this.sc1 = sc1;
     }
 
-    public int getSc2() {
+    public short getSc2() {
         return this.sc2;
     }
 
-    public void setSc2(int sc2) {
+    public void setSc2(short sc2) {
         this.sc2 = sc2;
     }
 
-    public int getSc3() {
+    public short getSc3() {
         return this.sc3;
     }
 
-    public void setSc3(int sc3) {
+    public void setSc3(short sc3) {
         this.sc3 = sc3;
     }
 
@@ -106,39 +106,39 @@ public class Unsigned16 {
     private void begin() {
         sc1 = 20;
         sc2 = 6;
-        sc3 = sc1 + sc2;
-        sc3 = sc1 - sc2;
-        sc3 = sc1 * sc2;
-        sc3 = sc1 / sc2;
-        sc3 = sc1 % sc2;
-        t = (sc1 < sc2);
-        t = (sc1 <= sc2);
-        t = (sc1 > sc2);
-        t = (sc1 >= sc2);
+        sc3 = (short) (sc1 + sc2);
+        sc3 = (short) (sc1 - sc2);
+        sc3 = (short) (sc1 * sc2);
+        sc3 = (short) (Integer.divideUnsigned(sc1, sc2));
+        sc3 = (short) (Integer.remainderUnsigned(sc1, sc2));
+        t = (Short.compareUnsigned(sc1, sc2) < 0);
+        t = (Short.compareUnsigned(sc1, sc2) <= 0);
+        t = (Short.compareUnsigned(sc1, sc2) > 0);
+        t = (Short.compareUnsigned(sc1, sc2) >= 0);
         t = (sc1 == sc2);
         c1 = 20;
         c2 = 6;
         c3 = c1 + c2;
         c3 = c1 - c2;
         c3 = c1 * c2;
-        c3 = c1 / c2;
-        c3 = c1 % c2;
-        t = (c1 < c2);
-        t = (c1 <= c2);
-        t = (c1 > c2);
-        t = (c1 >= c2);
+        c3 = Integer.divideUnsigned(c1, c2);
+        c3 = Integer.remainderUnsigned(c1, c2);
+        t = (Integer.compareUnsigned(c1, c2) < 0);
+        t = (Integer.compareUnsigned(c1, c2) <= 0);
+        t = (Integer.compareUnsigned(c1, c2) > 0);
+        t = (Integer.compareUnsigned(c1, c2) >= 0);
         t = (c1 == c2);
         lc1 = 20;
         lc2 = 6;
         lc3 = lc1 + lc2;
         lc3 = lc1 - lc2;
         lc3 = lc1 * lc2;
-        lc3 = lc1 / lc2;
-        lc3 = lc1 % lc2;
-        t = (lc1 < lc2);
-        t = (lc1 <= lc2);
-        t = (lc1 > lc2);
-        t = (lc1 >= lc2);
+        lc3 = Long.divideUnsigned(lc1, lc2);
+        lc3 = Long.remainderUnsigned(lc1, lc2);
+        t = (Long.compareUnsigned(lc1, lc2) < 0);
+        t = (Long.compareUnsigned(lc1, lc2) <= 0);
+        t = (Long.compareUnsigned(lc1, lc2) > 0);
+        t = (Long.compareUnsigned(lc1, lc2) >= 0);
         t = (lc1 == lc2);
     }
 
@@ -147,7 +147,7 @@ public class Unsigned16 {
 
     public static void main(String[] args) {
         Runtime.setArgs(args);
-        Unsigned16 instance = new Unsigned16();
+        UnsignedTestStrict32 instance = new UnsignedTestStrict32();
         try {
             instance.begin();
         } catch (HaltException ex) {

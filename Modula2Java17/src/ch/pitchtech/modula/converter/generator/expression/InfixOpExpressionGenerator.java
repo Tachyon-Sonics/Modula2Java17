@@ -53,6 +53,9 @@ public class InfixOpExpressionGenerator extends Generator {
             ">", "compareUnsigned| > 0",
             ">=", "compareUnsigned| >= 0");
     
+    // For these operators, byte and short must use Integer's methods
+    private final static Set<String> UNSIGNED_OPERATOR_PROMOTE = Set.of("DIV", "/", "MOD", "REM");
+    
     private final static Map<String, String> ENUM_SET_OPERATOR_MAP = Map.of(
             "+", "Runtime.plusSet",
             "-", "Runtime.minusSet",
@@ -269,6 +272,8 @@ public class InfixOpExpressionGenerator extends Generator {
         BuiltInType leftBit = BuiltInType.valueOf(((LiteralType) leftType).getName());
         BuiltInType rightBit = BuiltInType.valueOf(((LiteralType) rightType).getName());
         BuiltInType builtInType = (leftBit.getJavaSize() > rightBit.getJavaSize() ? leftBit : rightBit);
+        if (builtInType.getJavaSize() < 4 && UNSIGNED_OPERATOR_PROMOTE.contains(operator))
+            builtInType = BuiltInType.javaInt().get();
         
         result.write(builtInType.getBoxedType());
         result.write(".");

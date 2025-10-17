@@ -10,12 +10,15 @@ import org.junit.Test;
 import ch.pitchtech.modula.converter.compiler.DataModelType;
 import generated.test.types.Constants;
 import generated.test.types.DataModel;
+import generated.test.types.DataModel16;
+import generated.test.types.DataModelStrict16;
+import generated.test.types.DataModelStrict32;
 import generated.test.types.DoubleAlias;
 import generated.test.types.PointerArrayPointer;
-import generated.test.types.Unsigned;
-import generated.test.types.Unsigned16;
-import generated.test.types.UnsignedStrict16;
-import generated.test.types.UnsignedStrict32;
+import generated.test.types.UnsignedTest;
+import generated.test.types.UnsignedTest16;
+import generated.test.types.UnsignedTestStrict16;
+import generated.test.types.UnsignedTestStrict32;
 
 public class TypesTest {
     
@@ -71,38 +74,65 @@ public class TypesTest {
     }
     
     @Test
+    public void testDataModel16() throws IOException {
+        CompilerHelper helper = new CompilerHelper("types");
+        helper.getCompilerOptions().setDataModel(DataModelType.LOOSE_16_32);
+        helper.compile("DataModel.mod");
+        
+        helper.assertCompilationResult("DataModel", DataModel16.class, "import ch.pitchtech.modula.library.*;");
+    }
+    
+    @Test
+    public void testDataModelStrict32() throws IOException {
+        CompilerHelper helper = new CompilerHelper("types");
+        helper.getCompilerOptions().setDataModel(DataModelType.STRICT_32_64);
+        helper.compile("DataModel.mod");
+        
+        helper.assertCompilationResult("DataModel", DataModelStrict32.class, "import ch.pitchtech.modula.library.*;");
+    }
+    
+    @Test
+    public void testDataModelStrict16() throws IOException {
+        CompilerHelper helper = new CompilerHelper("types");
+        helper.getCompilerOptions().setDataModel(DataModelType.STRICT_16_32);
+        helper.compile("DataModel.mod");
+        
+        helper.assertCompilationResult("DataModel", DataModelStrict16.class, "import ch.pitchtech.modula.library.*;");
+    }
+    
+    @Test
     public void testUnsigned() throws IOException {
         CompilerHelper helper = new CompilerHelper("types");
-        helper.compile("Unsigned.mod");
+        helper.compile("UnsignedTest.mod");
         
-        helper.assertCompilationResult(Unsigned.class, "import ch.pitchtech.modula.library.*;");
+        helper.assertCompilationResult(UnsignedTest.class, "import ch.pitchtech.modula.library.*;");
     }
 
     @Test
     public void testUnsigned16() throws IOException {
         CompilerHelper helper = new CompilerHelper("types");
         helper.getCompilerOptions().setDataModel(DataModelType.LOOSE_16_32);
-        helper.compile("Unsigned.mod");
+        helper.compile("UnsignedTest.mod");
         
-        helper.assertCompilationResult("Unsigned", Unsigned16.class, "import ch.pitchtech.modula.library.*;");
+        helper.assertCompilationResult("UnsignedTest", UnsignedTest16.class, "import ch.pitchtech.modula.library.*;");
     }
 
-//    @Test
-//    public void testUnsignedStrict32() throws IOException {
-//        CompilerHelper helper = new CompilerHelper("types");
-//        helper.getCompilerOptions().setDataModel(DataModelType.STRICT_32_64);
-//        helper.compile("Unsigned.mod");
-//        
-//        helper.assertCompilationResult("Unsigned", UnsignedStrict32.class, "import ch.pitchtech.modula.library.*;");
-//    }
-//
-//    @Test
-//    public void testUnsignedStrict16() throws IOException {
-//        CompilerHelper helper = new CompilerHelper("types");
-//        helper.getCompilerOptions().setDataModel(DataModelType.STRICT_16_32);
-//        helper.compile("Unsigned.mod");
-//        
-//        helper.assertCompilationResult("Unsigned", UnsignedStrict16.class, "import ch.pitchtech.modula.library.*;");
-//    }
-//
+    @Test
+    public void testUnsignedStrict32() throws IOException {
+        CompilerHelper helper = new CompilerHelper("types");
+        helper.getCompilerOptions().setDataModel(DataModelType.STRICT_32_64);
+        helper.compile("UnsignedTest.mod");
+        
+        helper.assertCompilationResult("UnsignedTest", UnsignedTestStrict32.class, "import ch.pitchtech.modula.library.*;");
+    }
+
+    @Test
+    public void testUnsignedStrict16() throws IOException {
+        CompilerHelper helper = new CompilerHelper("types");
+        helper.getCompilerOptions().setDataModel(DataModelType.STRICT_16_32);
+        helper.compile("UnsignedTest.mod");
+        
+        helper.assertCompilationResult("UnsignedTest", UnsignedTestStrict16.class, "import ch.pitchtech.modula.library.*;");
+    }
+
 }

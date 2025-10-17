@@ -1,4 +1,4 @@
-MODULE Unsigned;
+MODULE UnsignedTest;
 
 	VAR
 		sc1, sc2, sc3: SHORTCARD;
@@ -47,4 +47,4 @@ BEGIN
 	t := (lc1 >= lc2);
 	t := (lc1 = lc2);
 
-END Unsigned.
+END UnsignedTest.

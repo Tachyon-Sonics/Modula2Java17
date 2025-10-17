@@ -78,7 +78,7 @@ public enum DataModelType implements IArgName {
     /**
      * INTEGER and CARDINAL are 16-bit, LONGINT and LONGCARD are 32-bit
      */
-    STRICT_16_32("s16", 16, BuiltInType.LONGINT) { // TODO (2) make unsigned types stricter size
+    STRICT_16_32("s16", 16, BuiltInType.LONGINT) {
 
         @Override
         public int getJavaSize(BuiltInType type) {
@@ -86,9 +86,9 @@ public enum DataModelType implements IArgName {
                 case SHORTINT -> 1;
                 case INTEGER -> 2;
                 case LONGINT -> 4;
-                case SHORTCARD -> 2;
-                case CARDINAL -> 4;
-                case LONGCARD -> 8;
+                case SHORTCARD -> 1;
+                case CARDINAL -> 2;
+                case LONGCARD -> 4;
                 default -> throw new IllegalArgumentException("Not an integer type: " + type);
             };
         }
@@ -114,8 +114,8 @@ public enum DataModelType implements IArgName {
                 case SHORTINT -> 2;
                 case INTEGER -> 4;
                 case LONGINT -> 8;
-                case SHORTCARD -> 4;
-                case CARDINAL -> 8;
+                case SHORTCARD -> 2;
+                case CARDINAL -> 4;
                 case LONGCARD -> 8;
                 default -> throw new IllegalArgumentException("Not an integer type: " + type);
             };

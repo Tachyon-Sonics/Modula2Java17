@@ -4,7 +4,7 @@ import ch.pitchtech.modula.runtime.HaltException;
 import ch.pitchtech.modula.runtime.Runtime;
 
 
-public class Unsigned {
+public class UnsignedTest {
 
     // VAR
 
@@ -147,7 +147,7 @@ public class Unsigned {
 
     public static void main(String[] args) {
         Runtime.setArgs(args);
-        Unsigned instance = new Unsigned();
+        UnsignedTest instance = new UnsignedTest();
         try {
             instance.begin();
         } catch (HaltException ex) {

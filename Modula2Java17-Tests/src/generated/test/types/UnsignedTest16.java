@@ -4,7 +4,7 @@ import ch.pitchtech.modula.runtime.HaltException;
 import ch.pitchtech.modula.runtime.Runtime;
 
 
-public class UnsignedStrict16 {
+public class UnsignedTest16 {
 
     // VAR
 
@@ -121,24 +121,24 @@ public class UnsignedStrict16 {
         c3 = c1 + c2;
         c3 = c1 - c2;
         c3 = c1 * c2;
-        c3 = Integer.divideUnsigned(c1, c2);
-        c3 = Integer.remainderUnsigned(c1, c2);
-        t = (Integer.compareUnsigned(c1, c2) < 0);
-        t = (Integer.compareUnsigned(c1, c2) <= 0);
-        t = (Integer.compareUnsigned(c1, c2) > 0);
-        t = (Integer.compareUnsigned(c1, c2) >= 0);
+        c3 = c1 / c2;
+        c3 = c1 % c2;
+        t = (c1 < c2);
+        t = (c1 <= c2);
+        t = (c1 > c2);
+        t = (c1 >= c2);
         t = (c1 == c2);
         lc1 = 20;
         lc2 = 6;
         lc3 = lc1 + lc2;
         lc3 = lc1 - lc2;
         lc3 = lc1 * lc2;
-        lc3 = Long.divideUnsigned(lc1, lc2);
-        lc3 = Long.remainderUnsigned(lc1, lc2);
-        t = (Long.compareUnsigned(lc1, lc2) < 0);
-        t = (Long.compareUnsigned(lc1, lc2) <= 0);
-        t = (Long.compareUnsigned(lc1, lc2) > 0);
-        t = (Long.compareUnsigned(lc1, lc2) >= 0);
+        lc3 = lc1 / lc2;
+        lc3 = lc1 % lc2;
+        t = (lc1 < lc2);
+        t = (lc1 <= lc2);
+        t = (lc1 > lc2);
+        t = (lc1 >= lc2);
         t = (lc1 == lc2);
     }
 
@@ -147,7 +147,7 @@ public class UnsignedStrict16 {
 
     public static void main(String[] args) {
         Runtime.setArgs(args);
-        UnsignedStrict16 instance = new UnsignedStrict16();
+        UnsignedTest16 instance = new UnsignedTest16();
         try {
             instance.begin();
         } catch (HaltException ex) {
