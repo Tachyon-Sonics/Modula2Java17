@@ -2,6 +2,7 @@ package ch.pitchtech.modula.converter.compiler;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -65,6 +66,10 @@ public class CompilerOptions {
      */
     public Set<UnsignedType> getExactUnsignedTypes() {
         return exactUnsignedTypes;
+    }
+    
+    public Collection<String> getExactUnsignedTypeNames() {
+        return exactUnsignedTypes.stream().map((ut) -> ut.getJavaType().getName()).toList();
     }
 
     public void setExactUnsignedTypes(Set<UnsignedType> exactUnsignedTypes) {

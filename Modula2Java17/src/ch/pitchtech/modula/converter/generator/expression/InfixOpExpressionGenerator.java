@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.Stack;
 
 import ch.pitchtech.modula.converter.compiler.CompilationException;
+import ch.pitchtech.modula.converter.compiler.CompilerOptions;
 import ch.pitchtech.modula.converter.generator.ArrayIndexHelper;
 import ch.pitchtech.modula.converter.generator.Generator;
 import ch.pitchtech.modula.converter.generator.ResultContext;
@@ -40,6 +41,12 @@ public class InfixOpExpressionGenerator extends Generator {
     private final static Map<String, String> EUCLIDEAN_OPERATOR_MAP = Map.of(
             "DIV", "eDiv",
             "MOD", "eMod");
+    
+    private final static Map<String, String> UNSIGNED_OPERATOR_MAP = Map.of(
+            "DIV", "divideUnsigned",
+            "MOD", "remainderUnsigned",
+            "<", "compareUnsigned| < 0",
+            ">", "compareUnsigned| > 0");
     
     private final static Map<String, String> ENUM_SET_OPERATOR_MAP = Map.of(
             "+", "Runtime.plusSet",
@@ -81,6 +88,45 @@ public class InfixOpExpressionGenerator extends Generator {
             return false;
         if (leftType instanceof IByReferenceValueType && rightType instanceof IByReferenceValueType)
             return true;
+        return false;
+    }
+    
+    public static boolean requiresUnsigned(ResultContext context, IExpression left, IExpression right,
+            IType leftType, IType rightType, String operator) { // TODO (1) tests
+        if (!UNSIGNED_OPERATOR_MAP.containsKey(operator))
+            return false;
+        if (leftType instanceof LiteralType literalLeftType && rightType instanceof LiteralType literalRightType) {
+            if (literalLeftType.isBuiltIn() && literalRightType.isBuiltIn()) {
+                BuiltInType leftBiType = BuiltInType.valueOf(literalLeftType.getName());
+                BuiltInType rightBiType = BuiltInType.valueOf(literalRightType.getName());
+                if (!leftBiType.isNumeric() || !rightBiType.isNumeric())
+                    return false;
+                if (leftBiType.isDecimal() || rightBiType.isDecimal())
+                    return false;
+                
+                boolean leftSigned = leftBiType.isSigned();
+                boolean rightSigned = rightBiType.isSigned();
+                Object leftValue = left.evaluateConstant();
+                if (leftValue instanceof Number number && number.longValue() >= 0)
+                    leftSigned = false; // This is a non-negative constant
+                Object rightValue = right.evaluateConstant();
+                if (rightValue instanceof Number number && number.longValue() >= 0)
+                    rightSigned = false; // This is a non-negative constant
+                
+                // If either operand is signed, use signed arithmetic
+                if (leftSigned || rightSigned)
+                    return false;
+                
+                BuiltInType highestType = (leftBiType.getModulaSize() > rightBiType.getModulaSize() ? leftBiType : rightBiType);
+                if (highestType.getJavaSize() > highestType.getModulaSize())
+                    return false; // The Java type is bigger and hence can accomodate all unsigned values
+                
+                if (!CompilerOptions.get().getExactUnsignedTypeNames().contains(highestType.getJavaType()))
+                    return false; // Not enabled in compiler options for this type
+                
+                return true;
+            }
+        }
         return false;
     }
     
@@ -129,6 +175,8 @@ public class InfixOpExpressionGenerator extends Generator {
             generateContentEqualityOp(result); // TODO test (seems not covered yet)
         } else if (requiresEuclidean(result, expression.getLeft(), expression.getRight(), leftType, rightType, expression.getOperator())) {
             generateEuclideanOp(result);
+        } else if (requiresUnsigned(result, expression.getLeft(), expression.getRight(), leftType, rightType, expression.getOperator())) {
+            generateUnsignedOp(result, leftType, rightType);
         } else if (leftType instanceof EnumerationType && rightType instanceof EnumerationType 
                 && ON_ENUM_ORDINAL_OPERATORS.contains(expression.getOperator())) {
             generateEnumOrdinalOp(result);
@@ -202,6 +250,31 @@ public class InfixOpExpressionGenerator extends Generator {
             result.write(".equals(");
             result.write(rightContext);
             result.write(")");
+        }
+    }
+    
+    private void generateUnsignedOp(ResultContext result, IType leftType, IType rightType) {
+        String operator = expression.getOperator();
+        ResultContext leftContext = result.subContext();
+        Expressions.getGenerator(scopeUnit, expression.getLeft()).generate(leftContext);
+        ResultContext rightContext = result.subContext();
+        Expressions.getGenerator(scopeUnit, expression.getRight()).generate(rightContext);
+        String[] methodNames = UNSIGNED_OPERATOR_MAP.get(operator).split("\\|");
+        
+        BuiltInType leftBit = BuiltInType.valueOf(((LiteralType) leftType).getName());
+        BuiltInType rightBit = BuiltInType.valueOf(((LiteralType) rightType).getName());
+        BuiltInType builtInType = (leftBit.getJavaSize() > rightBit.getJavaSize() ? leftBit : rightBit);
+        
+        result.write(builtInType.getBoxedType());
+        result.write(".");
+        result.write(methodNames[0]);
+        result.write("(");
+        result.write(leftContext);
+        result.write(", ");
+        result.write(rightContext);
+        result.write(")");
+        if (methodNames.length > 1) {
+            result.write(methodNames[1]);
         }
     }
     
