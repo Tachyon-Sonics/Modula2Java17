@@ -40,9 +40,8 @@ There are four sub-projects (these are Eclipse projects, with gradle support):
     - This can result in name clashes (and hence Java code that does not compile) if the camelCase version corresponds to another identifier. For example if you have a module `Clock` and a variable `clock`, then lowercase `clock` will be used in the Java code for *both*, which is likely to result in incorrect Java code that does not compile.
     - If the Modula-2 code use camelCase module names... well rename then to PascalCase until I handle this case. Yeah, that sucks, but remind I only did this project to resurect two old games I wrote in Modula-2...
 - `ARRAY [xx .. yy]`, where `xx` and `yy` are members of an enumeration is supported. However `ARRAY <EnumType>` and more generally `ARRAY <RangeType>` are not. `ARRAY [xx .. yy]` where `xx` and `yy` are integer constants works.
-- I think `BITSET` is broken. But `SET OF [0 .. 15]` should work.
 - Support for compile-time constants that involve arithmetic oprations (for instance in array bounds) is very limited.
-- RECORD with CASE support is very limited (and probably buggy). No C-like union is created, instead separate fields are generated for each case.
+- `RECORD` with `CASE` support is very limited (and probably buggy). No C-like union is created, instead separate fields are generated for each case.
 - No support for corroutines
 - No support for exceptions
 - The compiler generates Java source files but does not compile and / or execute them. You must do it manually using `javac` and `java` or using any Java IDE. More generally this project is not really suited for people that do not know about Java.
