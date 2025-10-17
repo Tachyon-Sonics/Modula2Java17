@@ -16,6 +16,7 @@ public class SetTest {
     @Test
     public void testSetAccess() throws IOException {
         CompilerHelper helper = new CompilerHelper("set");
+        helper.getCompilerOptions().setDataModel(DataModelType.LOOSE_16_32);
         helper.compile("SetAccess.mod");
         
         helper.assertCompilationResult(SetAccess.class, "import ch.pitchtech.modula.library.*;");
@@ -24,6 +25,7 @@ public class SetTest {
     @Test
     public void testBitSetAccess() throws IOException {
         CompilerHelper helper = new CompilerHelper("set");
+        helper.getCompilerOptions().setDataModel(DataModelType.LOOSE_16_32);
         helper.compile("BitSetAccess.mod");
         
         helper.assertCompilationResult(BitSetAccess.class, "import ch.pitchtech.modula.library.*;");
@@ -32,7 +34,7 @@ public class SetTest {
     @Test
     public void testSetAccessCard64() throws IOException {
         CompilerHelper helper = new CompilerHelper("set");
-        helper.getCompilerOptions().setDataModel(DataModelType.STRICT_32_64);
+        helper.getCompilerOptions().setDataModel(DataModelType.LOOSE_32_64);
         helper.compile("SetAccess64.mod");
         
         helper.assertCompilationResult(SetAccess64.class, "import ch.pitchtech.modula.library.*;");
@@ -41,6 +43,7 @@ public class SetTest {
     @Test
     public void testEnumSetAccess() throws IOException {
         CompilerHelper helper = new CompilerHelper("set");
+        helper.getCompilerOptions().setDataModel(DataModelType.LOOSE_16_32);
         helper.compile("EnumSetAccess.mod");
         
         helper.assertCompilationResult(EnumSetAccess.class, "import ch.pitchtech.modula.library.*;");

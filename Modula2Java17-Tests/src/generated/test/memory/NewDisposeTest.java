@@ -16,23 +16,23 @@ public class NewDisposeTest {
 
     private static class Point { // RECORD
 
-        private short x;
-        private short y;
+        private int x;
+        private int y;
 
 
-        public short getX() {
+        public int getX() {
             return this.x;
         }
 
-        public void setX(short x) {
+        public void setX(int x) {
             this.x = x;
         }
 
-        public short getY() {
+        public int getY() {
             return this.y;
         }
 
-        public void setY(short y) {
+        public void setY(int y) {
             this.y = y;
         }
 

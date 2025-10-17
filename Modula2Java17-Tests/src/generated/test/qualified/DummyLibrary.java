@@ -16,23 +16,23 @@ public class DummyLibrary {
 
     public static class DummyType { // RECORD
 
-        public short x;
-        public short y;
+        public int x;
+        public int y;
 
 
-        public short getX() {
+        public int getX() {
             return this.x;
         }
 
-        public void setX(short x) {
+        public void setX(int x) {
             this.x = x;
         }
 
-        public short getY() {
+        public int getY() {
             return this.y;
         }
 
-        public void setY(short y) {
+        public void setY(int y) {
             this.y = y;
         }
 
@@ -53,15 +53,15 @@ public class DummyLibrary {
 
     // VAR
 
-    public short DummyVariable;
+    public int DummyVariable;
     public DummyType DummyTypeVariable = new DummyType();
 
 
-    public short getDummyVariable() {
+    public int getDummyVariable() {
         return this.DummyVariable;
     }
 
-    public void setDummyVariable(short DummyVariable) {
+    public void setDummyVariable(int DummyVariable) {
         this.DummyVariable = DummyVariable;
     }
 
@@ -76,10 +76,10 @@ public class DummyLibrary {
 
     // PROCEDURE
 
-    public void DummyProcedure(int arg) {
+    public void DummyProcedure(long arg) {
     }
 
-    public int DummyFunction(int arg) {
+    public long DummyFunction(long arg) {
         return arg;
     }
 

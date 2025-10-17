@@ -19,59 +19,59 @@ public class Fractions {
 
     // VAR
 
-    private short i;
-    private short j;
-    private short m;
-    private short rem;
-    private short[] d = new short[N];
-    private short[] x = new short[N + 1];
+    private int i;
+    private int j;
+    private int m;
+    private int rem;
+    private int[] d = new int[N];
+    private int[] x = new int[N + 1];
 
 
-    public short getI() {
+    public int getI() {
         return this.i;
     }
 
-    public void setI(short i) {
+    public void setI(int i) {
         this.i = i;
     }
 
-    public short getJ() {
+    public int getJ() {
         return this.j;
     }
 
-    public void setJ(short j) {
+    public void setJ(int j) {
         this.j = j;
     }
 
-    public short getM() {
+    public int getM() {
         return this.m;
     }
 
-    public void setM(short m) {
+    public void setM(int m) {
         this.m = m;
     }
 
-    public short getRem() {
+    public int getRem() {
         return this.rem;
     }
 
-    public void setRem(short rem) {
+    public void setRem(int rem) {
         this.rem = rem;
     }
 
-    public short[] getD() {
+    public int[] getD() {
         return this.d;
     }
 
-    public void setD(short[] d) {
+    public void setD(int[] d) {
         this.d = d;
     }
 
-    public short[] getX() {
+    public int[] getX() {
         return this.x;
     }
 
-    public void setX(short[] x) {
+    public void setX(int[] x) {
         this.x = x;
     }
 
@@ -90,9 +90,9 @@ public class Fractions {
             do {
                 m++;
                 x[rem] = m;
-                rem = (short) (Base * rem);
-                d[m - 1] = (short) (rem / i);
-                rem = (short) (rem % i);
+                rem = Base * rem;
+                d[m - 1] = rem / i;
+                rem = rem % i;
             } while (x[rem] == 0);
             inOut.WriteInt(i, 6);
             inOut.WriteString(" 0.");

@@ -13,43 +13,43 @@ public class ByRefByValueSimple {
 
     // VAR
 
-    private short value;
+    private int value;
 
 
-    public short getValue() {
+    public int getValue() {
         return this.value;
     }
 
-    public void setValue(short value) {
+    public void setValue(int value) {
         this.value = value;
     }
 
 
     // PROCEDURE
 
-    private void ModifyByRef(/* VAR */ Runtime.IRef<Short> value) {
-        value.set((short) 42);
+    private void ModifyByRef(/* VAR */ Runtime.IRef<Integer> value) {
+        value.set(42);
     }
 
-    private void ModifyByValue(short value) {
+    private void ModifyByValue(int value) {
         value = 42;
     }
 
-    private void ModifyByRefByRef(/* VAR+WRT */ Runtime.IRef<Short> value) {
+    private void ModifyByRefByRef(/* VAR+WRT */ Runtime.IRef<Integer> value) {
         ModifyByRef(value);
     }
 
-    private void ModifyByRefByValue(/* var */ Runtime.IRef<Short> value) {
+    private void ModifyByRefByValue(/* var */ Runtime.IRef<Integer> value) {
         ModifyByValue(value.get());
     }
 
-    private void ModifyByValueByRef(/* WRT */ short _value) {
-        Runtime.Ref<Short> value = new Runtime.Ref<>(_value);
+    private void ModifyByValueByRef(/* WRT */ int _value) {
+        Runtime.Ref<Integer> value = new Runtime.Ref<>(_value);
 
         ModifyByRef(value);
     }
 
-    private void ModifyByValueByValue(short value) {
+    private void ModifyByValueByValue(int value) {
         ModifyByValue(value);
     }
 

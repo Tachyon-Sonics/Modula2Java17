@@ -13,45 +13,45 @@ public class ByRefByValueArrayElt {
 
     // VAR
 
-    private short[] value = new short[10];
+    private int[] value = new int[10];
 
 
-    public short[] getValue() {
+    public int[] getValue() {
         return this.value;
     }
 
-    public void setValue(short[] value) {
+    public void setValue(int[] value) {
         this.value = value;
     }
 
 
     // PROCEDURE
 
-    private void ModifyByRef(/* VAR */ short[] value) {
+    private void ModifyByRef(/* VAR */ int[] value) {
         value[0] = 42;
     }
 
-    private void ModifyByValue(short[] _value) {
-        short[] value = Runtime.copyOf(true, _value); // By-value and written argument
+    private void ModifyByValue(int[] _value) {
+        int[] value = Runtime.copyOf(true, _value); // By-value and written argument
 
         value[0] = 42;
     }
 
-    private void ModifyByRefByRef(/* VAR+WRT */ short[] value) {
+    private void ModifyByRefByRef(/* VAR+WRT */ int[] value) {
         ModifyByRef(value);
     }
 
-    private void ModifyByRefByValue(/* var */ short[] value) {
+    private void ModifyByRefByValue(/* var */ int[] value) {
         ModifyByValue(value);
     }
 
-    private void ModifyByValueByRef(/* WRT */ short[] _value) {
-        short[] value = Runtime.copyOf(true, _value); // By-value and written argument
+    private void ModifyByValueByRef(/* WRT */ int[] _value) {
+        int[] value = Runtime.copyOf(true, _value); // By-value and written argument
 
         ModifyByRef(value);
     }
 
-    private void ModifyByValueByValue(short[] value) {
+    private void ModifyByValueByValue(int[] value) {
         ModifyByValue(value);
     }
 

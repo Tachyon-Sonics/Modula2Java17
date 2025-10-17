@@ -138,13 +138,13 @@ public class InOut {
         System.out.print(str);
     }
     
-    public void ReadLongInt(IRef<Integer> n) {
+    public void ReadLongInt(IRef<Long> n) {
         IRef<String> line = new Ref<>();
         ReadString(line);
         if (!Done)
             return;
         try {
-            int value = Integer.parseInt(line.get());
+            long value = Long.parseLong(line.get());
             n.set(value);
         } catch (NumberFormatException ex) {
             Done = false;

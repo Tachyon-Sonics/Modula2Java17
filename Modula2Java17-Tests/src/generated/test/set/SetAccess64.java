@@ -16,7 +16,7 @@ public class SetAccess64 {
     private Runtime.RangeSet set = new Runtime.RangeSet(MySet_r);
     private Runtime.RangeSet set2 = new Runtime.RangeSet(MySet_r);
     private Runtime.RangeSet set3 = new Runtime.RangeSet(MySet_r);
-    private long index;
+    private int index;
     private boolean test;
 
 
@@ -44,11 +44,11 @@ public class SetAccess64 {
         this.set3 = set3;
     }
 
-    public long getIndex() {
+    public int getIndex() {
         return this.index;
     }
 
-    public void setIndex(long index) {
+    public void setIndex(int index) {
         this.index = index;
     }
 
@@ -65,11 +65,11 @@ public class SetAccess64 {
 
     private void begin() {
         index = 4;
-        set.incl((int) index);
+        set.incl(index);
         index = 6;
-        set.excl((int) index);
+        set.excl(index);
         index = 5;
-        test = (set.contains((int) index));
+        test = (set.contains(index));
         set = Runtime.RangeSet.plus(set2, set3);
         set = Runtime.RangeSet.minus(set2, set3);
         set = Runtime.RangeSet.mul(set2, set3);

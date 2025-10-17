@@ -19,86 +19,86 @@ public class PowersOf2 {
 
     // VAR
 
-    private short i;
-    private short j;
-    private short k;
-    private short exp;
-    private short carry;
-    private short rest;
-    private short t;
-    private short[] d = new short[M + 1];
-    private short[] f = new short[N + 1];
+    private int i;
+    private int j;
+    private int k;
+    private int exp;
+    private int carry;
+    private int rest;
+    private int t;
+    private int[] d = new int[M + 1];
+    private int[] f = new int[N + 1];
 
 
-    public short getI() {
+    public int getI() {
         return this.i;
     }
 
-    public void setI(short i) {
+    public void setI(int i) {
         this.i = i;
     }
 
-    public short getJ() {
+    public int getJ() {
         return this.j;
     }
 
-    public void setJ(short j) {
+    public void setJ(int j) {
         this.j = j;
     }
 
-    public short getK() {
+    public int getK() {
         return this.k;
     }
 
-    public void setK(short k) {
+    public void setK(int k) {
         this.k = k;
     }
 
-    public short getExp() {
+    public int getExp() {
         return this.exp;
     }
 
-    public void setExp(short exp) {
+    public void setExp(int exp) {
         this.exp = exp;
     }
 
-    public short getCarry() {
+    public int getCarry() {
         return this.carry;
     }
 
-    public void setCarry(short carry) {
+    public void setCarry(int carry) {
         this.carry = carry;
     }
 
-    public short getRest() {
+    public int getRest() {
         return this.rest;
     }
 
-    public void setRest(short rest) {
+    public void setRest(int rest) {
         this.rest = rest;
     }
 
-    public short getT() {
+    public int getT() {
         return this.t;
     }
 
-    public void setT(short t) {
+    public void setT(int t) {
         this.t = t;
     }
 
-    public short[] getD() {
+    public int[] getD() {
         return this.d;
     }
 
-    public void setD(short[] d) {
+    public void setD(int[] d) {
         this.d = d;
     }
 
-    public short[] getF() {
+    public int[] getF() {
         return this.f;
     }
 
-    public void setF(short[] f) {
+    public void setF(int[] f) {
         this.f = f;
     }
 
@@ -113,9 +113,9 @@ public class PowersOf2 {
         for (exp = 1; exp <= N; exp++) {
             carry = 0;
             for (i = 0; i < k; i++) {
-                t = (short) (2 * d[i] + carry);
+                t = 2 * d[i] + carry;
                 if (t >= 10) {
-                    d[i] = (short) (t - 10);
+                    d[i] = t - 10;
                     carry = 1;
                 } else {
                     d[i] = t;
@@ -139,9 +139,9 @@ public class PowersOf2 {
             inOut.WriteString("  0.");
             rest = 0;
             for (j = 1; j < exp; j++) {
-                rest = (short) (10 * rest + f[j]);
-                f[j] = (short) (rest / 2);
-                rest = (short) (rest % 2);
+                rest = 10 * rest + f[j];
+                f[j] = rest / 2;
+                rest = rest % 2;
                 inOut.Write((char) (f[j] + '0'));
             }
             f[exp] = 5;

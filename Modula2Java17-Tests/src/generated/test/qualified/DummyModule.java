@@ -12,24 +12,24 @@ public class DummyModule {
 
     // VAR
 
-    private int result;
-    private short temp;
+    private long result;
+    private int temp;
     private DummyLibrary.DummyType test = new DummyLibrary.DummyType();
 
 
-    public int getResult() {
+    public long getResult() {
         return this.result;
     }
 
-    public void setResult(int result) {
+    public void setResult(long result) {
         this.result = result;
     }
 
-    public short getTemp() {
+    public int getTemp() {
         return this.temp;
     }
 
-    public void setTemp(short temp) {
+    public void setTemp(int temp) {
         this.temp = temp;
     }
 

@@ -9,7 +9,7 @@ public class DoubleAlias {
     // TYPE
 
     @SuppressWarnings("unused")
-    private static class IntPtr extends Runtime.Ref<Short> {
+    private static class IntPtr extends Runtime.Ref<Integer> {
     }
 
 
@@ -17,7 +17,7 @@ public class DoubleAlias {
     // PROCEDURE
 
     @SuppressWarnings("unused")
-    private void Dummy(Runtime.IRef<Short> arg) {
+    private void Dummy(Runtime.IRef<Integer> arg) {
     }
 
 

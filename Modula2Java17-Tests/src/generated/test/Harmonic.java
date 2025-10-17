@@ -14,27 +14,27 @@ public class Harmonic {
 
     // VAR
 
-    private int i;
-    private int n;
+    private long i;
+    private long n;
     private double x;
     private double d;
     private double s1;
     private double s2;
 
 
-    public int getI() {
+    public long getI() {
         return this.i;
     }
 
-    public void setI(int i) {
+    public void setI(long i) {
         this.i = i;
     }
 
-    public int getN() {
+    public long getN() {
         return this.n;
     }
 
-    public void setN(int n) {
+    public void setN(long n) {
         this.n = n;
     }
 

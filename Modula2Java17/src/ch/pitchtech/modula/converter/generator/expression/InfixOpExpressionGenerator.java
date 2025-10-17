@@ -32,7 +32,8 @@ public class InfixOpExpressionGenerator extends Generator {
             "OR", "||",
             "AND", "&&",
             "DIV", "/",
-            "MOD", "%");
+            "MOD", "%",
+            "REM", "%");
     
     private final static Set<String> RELATION_OPERATORS = Set.of("=", "#", "<>");
     
@@ -44,9 +45,13 @@ public class InfixOpExpressionGenerator extends Generator {
     
     private final static Map<String, String> UNSIGNED_OPERATOR_MAP = Map.of(
             "DIV", "divideUnsigned",
+            "/", "divideUnsigned",
             "MOD", "remainderUnsigned",
+            "REM", "remainderUnsigned",
             "<", "compareUnsigned| < 0",
-            ">", "compareUnsigned| > 0");
+            "<=", "compareUnsigned| <= 0",
+            ">", "compareUnsigned| > 0",
+            ">=", "compareUnsigned| >= 0");
     
     private final static Map<String, String> ENUM_SET_OPERATOR_MAP = Map.of(
             "+", "Runtime.plusSet",

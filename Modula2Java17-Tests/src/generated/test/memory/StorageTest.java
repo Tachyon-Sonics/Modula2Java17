@@ -17,23 +17,23 @@ public class StorageTest {
 
     private static class Point { // RECORD
 
-        private short x;
-        private short y;
+        private int x;
+        private int y;
 
 
-        public short getX() {
+        public int getX() {
             return this.x;
         }
 
-        public void setX(short x) {
+        public void setX(int x) {
             this.x = x;
         }
 
-        public short getY() {
+        public int getY() {
             return this.y;
         }
 
-        public void setY(short y) {
+        public void setY(int y) {
             this.y = y;
         }
 
@@ -117,7 +117,7 @@ public class StorageTest {
         Storage.instance().begin();
         InOut.instance().begin();
 
-        storage.ALLOCATE(new Runtime.FieldRef<>(this::getPoint, this::setPoint).asAdrRef(), Runtime.sizeOf(4, Point.class));
+        storage.ALLOCATE(new Runtime.FieldRef<>(this::getPoint, this::setPoint).asAdrRef(), Runtime.sizeOf(8, Point.class));
         point.x = 10;
         point.y = 20;
         inOut.Write('(');
@@ -126,8 +126,8 @@ public class StorageTest {
         inOut.WriteInt(point.y, 2);
         inOut.Write(')');
         inOut.WriteLn();
-        storage.DEALLOCATE(new Runtime.FieldRef<>(this::getPoint, this::setPoint).asAdrRef(), Runtime.sizeOf(4, Point.class));
-        storage.ALLOCATE(new Runtime.FieldRef<>(this::getRectangle, this::setRectangle).asAdrRef(), Runtime.sizeOf(12, Rectangle.class));
+        storage.DEALLOCATE(new Runtime.FieldRef<>(this::getPoint, this::setPoint).asAdrRef(), Runtime.sizeOf(8, Point.class));
+        storage.ALLOCATE(new Runtime.FieldRef<>(this::getRectangle, this::setRectangle).asAdrRef(), Runtime.sizeOf(16, Rectangle.class));
         rectangle.topLeft.x = 42;
         rectangle.topLeft.y = 84;
         inOut.Write('(');
@@ -140,9 +140,9 @@ public class StorageTest {
             inOut.WriteString("NIL");
             inOut.WriteLn();
         }
-        storage.ALLOCATE(new Runtime.FieldExprRef<>(rectangle, Rectangle::getBottomRightPtr, Rectangle::setBottomRightPtr).asAdrRef(), Runtime.sizeOf(4, Point.class));
-        storage.DEALLOCATE(new Runtime.FieldExprRef<>(rectangle, Rectangle::getBottomRightPtr, Rectangle::setBottomRightPtr).asAdrRef(), Runtime.sizeOf(4, Point.class));
-        storage.DEALLOCATE(new Runtime.FieldRef<>(this::getRectangle, this::setRectangle).asAdrRef(), Runtime.sizeOf(12, Rectangle.class));
+        storage.ALLOCATE(new Runtime.FieldExprRef<>(rectangle, Rectangle::getBottomRightPtr, Rectangle::setBottomRightPtr).asAdrRef(), Runtime.sizeOf(8, Point.class));
+        storage.DEALLOCATE(new Runtime.FieldExprRef<>(rectangle, Rectangle::getBottomRightPtr, Rectangle::setBottomRightPtr).asAdrRef(), Runtime.sizeOf(8, Point.class));
+        storage.DEALLOCATE(new Runtime.FieldRef<>(this::getRectangle, this::setRectangle).asAdrRef(), Runtime.sizeOf(16, Rectangle.class));
     }
 
     private void close() {

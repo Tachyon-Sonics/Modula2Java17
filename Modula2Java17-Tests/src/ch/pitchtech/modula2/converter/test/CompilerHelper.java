@@ -1,5 +1,8 @@
 package ch.pitchtech.modula2.converter.test;
 
+import java.awt.GraphicsEnvironment;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -162,8 +165,11 @@ public class CompilerHelper {
         }
         
         // Compare
-        if (!expected.equals(generated))
+        if (!expected.equals(generated)) {
             System.out.println("*** Generated:\n" + generated);
+            if (!GraphicsEnvironment.isHeadless())
+                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(generated), null);
+        }
         Assert.assertEquals(expected, generated);
     }
     

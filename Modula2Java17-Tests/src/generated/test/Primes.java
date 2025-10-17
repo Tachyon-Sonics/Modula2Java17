@@ -20,71 +20,71 @@ public class Primes {
 
     // VAR
 
-    private short i;
-    private short k;
-    private short x;
-    private short inc;
-    private short lim;
-    private short square;
-    private short L;
+    private int i;
+    private int k;
+    private int x;
+    private int inc;
+    private int lim;
+    private int square;
+    private int L;
     private boolean prime;
-    private short[] P = new short[M + 1];
-    private short[] V = new short[M + 1];
+    private int[] P = new int[M + 1];
+    private int[] V = new int[M + 1];
 
 
-    public short getI() {
+    public int getI() {
         return this.i;
     }
 
-    public void setI(short i) {
+    public void setI(int i) {
         this.i = i;
     }
 
-    public short getK() {
+    public int getK() {
         return this.k;
     }
 
-    public void setK(short k) {
+    public void setK(int k) {
         this.k = k;
     }
 
-    public short getX() {
+    public int getX() {
         return this.x;
     }
 
-    public void setX(short x) {
+    public void setX(int x) {
         this.x = x;
     }
 
-    public short getInc() {
+    public int getInc() {
         return this.inc;
     }
 
-    public void setInc(short inc) {
+    public void setInc(int inc) {
         this.inc = inc;
     }
 
-    public short getLim() {
+    public int getLim() {
         return this.lim;
     }
 
-    public void setLim(short lim) {
+    public void setLim(int lim) {
         this.lim = lim;
     }
 
-    public short getSquare() {
+    public int getSquare() {
         return this.square;
     }
 
-    public void setSquare(short square) {
+    public void setSquare(int square) {
         this.square = square;
     }
 
-    public short getL() {
+    public int getL() {
         return this.L;
     }
 
-    public void setL(short L) {
+    public void setL(int L) {
         this.L = L;
     }
 
@@ -96,19 +96,19 @@ public class Primes {
         this.prime = prime;
     }
 
-    public short[] getP() {
+    public int[] getP() {
         return this.P;
     }
 
-    public void setP(short[] P) {
+    public void setP(int[] P) {
         this.P = P;
     }
 
-    public short[] getV() {
+    public int[] getV() {
         return this.V;
     }
 
-    public void setV(short[] V) {
+    public void setV(int[] V) {
         this.V = V;
     }
 
@@ -125,19 +125,19 @@ public class Primes {
         square = 9;
         for (i = 3; i <= N; i++) {
             do {
-                x = (short) (x + inc);
-                inc = (short) (6 - inc);
+                x = x + inc;
+                inc = 6 - inc;
                 if (square <= x) {
                     lim++;
                     V[lim] = square;
-                    square = (short) (P[lim + 1] * P[lim + 1]);
+                    square = P[lim + 1] * P[lim + 1];
                 }
                 k = 2;
                 prime = true;
                 while (prime && (k < lim)) {
                     k++;
                     if (V[k] < x)
-                        V[k] = (short) (V[k] + 2 * P[k]);
+                        V[k] = V[k] + 2 * P[k];
                     prime = x != V[k];
                 }
             } while (!prime);
