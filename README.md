@@ -173,15 +173,15 @@ The 16-bit data model is enabled by passing `-dm 16` to the compiler.
 | Modula-2 size (16-bit) | 1        | 1         | 2       | 2        | 4       | 4        |
 | Java (16-bit) | int      | int       | int     | int      | long    | long     |
 
-Notice that any Modula-2 type that is less than 4 bytes (except BYTE and WORD) is mapped to Java 4-bytes type `int`.
+Notice that any Modula-2 numeric type that is less than 4 bytes is mapped to Java 4-bytes type `int`.
 
 There are multiple reasons for this:
 
-- This makes the Java code clearer, with less type casts. For instance, Modula-2 `a := b + c;` (where `a`, `b` and `c` are of a 2 bytes type) results in `a = b + c;` instead of `a = (short) (b + c)`. Indeed, Java only defines arithmetic operators on `int` and `long`, which means that a lot of type casts are required when using `short` or `byte`.
+- This makes the Java code clearer, with less type casts. For instance, Modula-2 `a := b + c;` (where `a`, `b` and `c` are of a 2 bytes type) results in `a = b + c;` instead of `a = (short) (b + c)`. Indeed, Java only defines arithmetic operators on `int` and `long`, which means that a lot of type casts would be required if using `short` or `byte` instead of `int`.
 - The compiler assumes the code has no overflow. Hence if the code does not overflow with 1-byte or 2-byte integer types, it won't overflow when those are converted to 4 bytes.
 - Even if overflow is enabled (might be an option in a future version of the compiler), detecting overflow on `byte` and `short` can easily be done using `int`.
 
-The above table mentions `u-int` and `u-long`. These types do not exist is Java. This just means that `int` and `long` are used respectively, but that the compiler will generate code to properly simulate unsigned types; namely:
+The above table mentions `u-int` and `u-long`. These types do not exist is Java. This just means that `int` and `long` are used respectively, and that the compiler will generate code to properly simulate unsigned types; namely:
 
 - The `+`, `-`, `*`, `=` and `<>` operators use the corresponding Java operators, like for signed types. Indeed, the result of these operators are the same regardless of whether the arguments are interpreted as signed or unsigned.
 - The `/ ` and `MOD` operators use the `divideUnsigned()` and `remainderUnsigned()` methods of the `Integer` (for `u-int`) or `Long` (for `u-long`) class.
@@ -189,21 +189,23 @@ The above table mentions `u-int` and `u-long`. These types do not exist is Java.
 
 Notice that `LONGINT` and `LONGCARD` both use the Java `long` type in the 16-bit model, although `int` would be sufficient. The reason is that it allows the standard library to be the same for both memory models. Indeed, observe that the Java types for all numeric types are exactly the same in both data models.
 
+In the 16-bit data model, `CARDINAL`, which is 2 bytes, is mapped to `int` rather than `u-int`. Indeed, the Java `int` type already covers the range of an unsigned 2-bytes number, and hence the compiler does not need to use unsigned operators. This again assumes that the Modula-2 code is free from overflows.
+
 The Modula-2 size shown in the above tables is only used:
 
 - When the `SIZE` or `TSIZE` functions are used. However, code depending on the result of these functions is likely to be non-portable.
-- When converting to an argument of type `ARRAY OF BYTE`. Note however this conversion only works when an individual variable is used. It does not work with records or arrays.
+- When converting to an argument of type `ARRAY OF BYTE`. Note however that this conversion currently only works when an individual variable is used. It does not work with records or arrays.
 
-`BITSET` is mapped to `Runtime.RangeSet(0, 31)` in the 32-bit data model, and to `Runtime.RangeSet(0, 15)` in the 16-bit data model. The `Runtime.RangeSet` class itself is base on `java.util.BitSet`. Hence `BITSET` (and more generally all Modula-2 SETs) are using Java objects.
+`BITSET` is mapped to `Runtime.RangeSet(0, 31)` in the 32-bit data model, and to `Runtime.RangeSet(0, 15)` in the 16-bit data model. The `Runtime.RangeSet` class itself is based on `java.util.BitSet`. Hence `BITSET` (and more generally all Modula-2 SETs) are using Java objects.
 
 In addition to the 32-bit and 16-bit data models, the compiler also provides the "strict" 32-bit and the "strict" 16-bit data models. They are enabled using `-dm s32` and `-dm s16`, respectively. The following table shows the mapping to Java types:
 
 | Modula-2 type | SHORTINT | SHORTCARD | INTEGER | CARDINAL | LONGINT | LONGCARD |
 | ------------- | :------: | :-------: | :-----: | :------: | :-----: | :------: |
-| Modula-2 size (32-bit) | 2        | 2         | 4       | 4        | 8       | 8        |
-| Java (32-bit) | short    | u-short   | int     | u-int    | long    | u-long   | int   |
-| Modula-2 size (16-bit) | 1        | 1         | 2       | 2        | 4       | 4        |
-| Java (16-bit) | byte     | u-byte    | short  | u-short   | int     | u-int    | short |
+| Modula-2 size (strict 32-bit) | 2        | 2         | 4       | 4        | 8       | 8        |
+| Java (strict 32-bit) | short    | u-short   | int     | u-int    | long    | u-long   | int   |
+| Modula-2 size (strict 16-bit) | 1        | 1         | 2       | 2        | 4       | 4        |
+| Java (strict 16-bit) | byte     | u-byte    | short  | u-short   | int     | u-int    | short |
 
 Unlike the non-strict models, the "strict" models always use Java types whose size is exactly that of the Modula-2 type.
 
