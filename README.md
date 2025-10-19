@@ -26,15 +26,15 @@ There are four sub-projects (these are Eclipse projects, with gradle support):
     - An unrelated error message, or an error message referring to the wrong file / line number
 - There is no real standard library implementation, because the games I needed to convert used their own library that I rewrote in Java manually.
     - There is a *minimal* set of library-like definitions in the Modula2-Library subproject with Java implementations - these can be used as a starting point. Only the minimum to pass the tests have been implemented.
-    - More generally, compiling a .def file (`DEFINITION MODULE`) that has no corrresponding .mod file (`IMPLEMENTATION MODULE`) will result in the creation a stub Java implementation (if it does not already exists). The idea is that you can then implement it manually in Java by completing the generated stub code.
-    - This is the only way to interface Modula-2 code with Java. Inlining Java code is not supported
+    - More generally, compiling a .def file (`DEFINITION MODULE`) that has no corrresponding .mod file (`IMPLEMENTATION MODULE`) will result in the creation of a stub Java implementation (if it does not already exists). The idea is that you can then implement it manually in Java by completing the generated stub code.
+    - This is the *only* way to interface Modula-2 code with Java. Inlining Java code is not supported
 - There is no support for incremental compilation. You specify a .mod file that is the main MODULE, and all required dependencies will be detected and compiled
     - Although it is possible to compile an `IMPLEMENTATION MODULE`, mind that
         - It will be recompiled *again* if you compile a `MODULE` or `IMPLEMENTATION MODULE` that uses it;
         - This may result in *different* Java code. Indeed in some cases a global analysis is used to generate proper Java code.
 - Conversion of arbitrary types to `WORD` or `BYTE` is not supported.
 - Minimal support for type-casting is provided using the `VAL(<type>, <value>)` function only.
-     - Conversion of arbitrary values to `ARRAY OF BYTE` arguments is provided but with extremely limited support (only basic types - no record or arrays). However, it strictly follows a 16-bit, big-endian data model.
+     - Conversion of arbitrary values to `ARRAY OF BYTE` arguments is provided but with extremely limited support (only basic types - no record or arrays). However, it strictly follows a 32-bit (default) or 16-bit, big-endian data model.
 - There is no graphical user interface. More generally, this tool is *not* suited for the developement of new Modula-2 projects (due to all the previous points). The purpose is to convert legacy Modula-2 code to Java once, and then to basically forget the original Modula-2 code and to continue working exclusively with the generated Java code.
 - The compiler assumes that module names are PascalCase, and will use the camelCase version for the corresponding instances in the Java code.
     - This can result in name clashes (and hence Java code that does not compile) if the camelCase version corresponds to another identifier. For example if you have a module `Clock` and a variable `clock`, then lowercase `clock` will be used in the Java code for *both*, which is likely to result in incorrect Java code that does not compile.
@@ -153,9 +153,9 @@ As an example, please refer to the `CompileGrotte` or `CompileChaosCastle` class
 
 ### Data types
 
-The compiler provides 4 data models, that determines how to map Modula-2 types to Java types.
+The compiler provides 4 data models, that determine how to map Modula-2 types to Java types.
 
-First, the following types are always mapped the same way, regardless of the data model (values for size are in bytes):
+First, the following types are always mapped the same way, regardless of the data model (values for "Modula-2 size" are in bytes):
 
 | Modula-2 type | BYTE  | BOOLEAN | CHAR  | REAL  | LONGREAL | ADDRESS |
 | ------------- | :---: | :-----: | :---: | :---: | :------: | :-----: |
@@ -184,19 +184,19 @@ There are multiple reasons for this:
 The above table mentions `u-int` and `u-long`. These types do not exist is Java. This just means that `int` and `long` are used respectively, and that the compiler will generate code to properly simulate unsigned types; namely:
 
 - The `+`, `-`, `*`, `=` and `<>` operators use the corresponding Java operators, like for signed types. Indeed, the result of these operators are the same regardless of whether the arguments are interpreted as signed or unsigned.
-- The `/ ` and `MOD` operators use the `divideUnsigned()` and `remainderUnsigned()` methods of the `Integer` (for `u-int`) or `Long` (for `u-long`) class.
+- The `/` and `MOD` operators use the `divideUnsigned()` and `remainderUnsigned()` methods of the `Integer` (for `u-int`) or `Long` (for `u-long`) class.
 - The `<`, `<=`, `>` and `>=` operators use the `compareUnsigned()` methods of the `Integer` (for `u-int`) or `Long` (for `u-long`) class.
 
 Notice that `LONGINT` and `LONGCARD` both use the Java `long` type in the 16-bit model, although `int` would be sufficient. The reason is that it allows the standard library to be the same for both memory models. Indeed, observe that the Java types for all numeric types are exactly the same in both data models.
 
-In the 16-bit data model, `CARDINAL`, which is 2 bytes, is mapped to `int` rather than `u-int`. Indeed, the Java `int` type already covers the range of an unsigned 2-bytes number, and hence the compiler does not need to use unsigned operators. This again assumes that the Modula-2 code is free from overflows.
+In the 16-bit data model, `CARDINAL`, which is 2 bytes, is mapped to `int` rather than `u-int`. Indeed, the Java `int` type already covers the range of an unsigned 2-bytes number, and hence the compiler does not need to use unsigned helper methods. This again assumes that the Modula-2 code is free from overflows.
 
-The Modula-2 size shown in the above tables is only used:
+The values on the "Modula-2 size" rows in the above tables are only used:
 
 - When the `SIZE` or `TSIZE` functions are used. However, code depending on the result of these functions is likely to be non-portable.
 - When converting to an argument of type `ARRAY OF BYTE`. Note however that this conversion currently only works when an individual variable is used. It does not work with records or arrays.
 
-`BITSET` is mapped to `Runtime.RangeSet(0, 31)` in the 32-bit data model, and to `Runtime.RangeSet(0, 15)` in the 16-bit data model. The `Runtime.RangeSet` class itself is based on `java.util.BitSet`. Hence `BITSET` (and more generally all Modula-2 SETs) are using Java objects.
+`BITSET` is mapped to `Runtime.RangeSet(0, 31)` in the 32-bit data model, and to `Runtime.RangeSet(0, 15)` in the 16-bit data model. The `Runtime.RangeSet` class itself is based on `java.util.BitSet`. Hence `BITSET` (and more generally all Modula-2 SETs) are using Java objects behind the scene.
 
 In addition to the 32-bit and 16-bit data models, the compiler also provides the "strict" 32-bit and the "strict" 16-bit data models. They are enabled using `-dm s32` and `-dm s16`, respectively. The following table shows the mapping to Java types:
 
@@ -207,7 +207,7 @@ In addition to the 32-bit and 16-bit data models, the compiler also provides the
 | Modula-2 size (strict 16-bit) | 1        | 1         | 2       | 2        | 4       | 4        |
 | Java (strict 16-bit) | byte     | u-byte    | short  | u-short   | int     | u-int    | short |
 
-Unlike the non-strict models, the "strict" models always use Java types whose size is exactly that of the Modula-2 type.
+Unlike the non-strict models, the "strict" models always use Java types whose size are exactly those of the Modula-2 type.
 
 These "strict" data models are *not* recommanded, and are not actively supported. The reasons are:
 
