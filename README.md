@@ -157,21 +157,21 @@ The compiler provides 4 data models, that determines how to map Modula-2 types t
 
 First, the following types are always mapped the same way, regardless of the data model:
 
-| Modula-2 type | BYTE | BOOLEAN | CHAR | REAL  | LONGREAL | ADDRESS |
-| ------------- | ---- | ------- | ---- | ----- | -------- | ------- |
-| Modula-2 size | 1    | 1       | 2    | 4     | 8        |         |
-| Java type     | byte | boolean | char | float | double   | Object  |
+| Modula-2 type | BYTE  | BOOLEAN | CHAR  | REAL  | LONGREAL | ADDRESS |
+| ------------- | :---: | :-----: | :---: | :---: | :------: | :-----: |
+| Modula-2 size | 1     | 1       | 2     | 4     | 8        |         |
+| Java type     | byte  | boolean | char  | float | double   | Object  |
 
 
 The following table shows the mapping for the other Modula-2 types, using the 32-bit (default) and 16-bit data models.
 The 16-bit data model is enabled by passing `-dm 16` to the compiler.
 
-| Modula-2 type | SHORTINT | SHORTCARD | INTEGER | CARDINAL | LONGINT | LONGCARD | WORD  | BITSET |
-| ------------- | -------- | --------- | ------- | -------- | ------- | -------- | ----  | ------ |
-| Modula-2 size (32-bit) | 2        | 2         | 4       | 4        | 8       | 8        | 4     | 4      |
-| Java (32-bit) | int      | int       | int     | u-int     | long    | u-long    | int   | Runtime.RangeSet(0, 31) |
-| Modula-2 size (16-bit) | 1        | 1         | 2       | 2        | 4       | 4        | 2     | 2      |
-| Java (16-bit) | int      | int       | int     | int      | long    | long     | short | Runtime.RangeSet(0, 15) |
+| Modula-2 type | SHORTINT | SHORTCARD | INTEGER | CARDINAL | LONGINT | LONGCARD |
+| ------------- | :------: | :-------: | :-----: | :------: | :-----: | :------: |
+| Modula-2 size (32-bit) | 2        | 2         | 4       | 4        | 8       | 8        |
+| Java (32-bit) | int      | int       | int     | u-int     | long    | u-long    |
+| Modula-2 size (16-bit) | 1        | 1         | 2       | 2        | 4       | 4        |
+| Java (16-bit) | int      | int       | int     | int      | long    | long     |
 
 Notice that any Modula-2 type that is less than 4 bytes (except BYTE and WORD) is mapped to Java 4-bytes type `int`.
 
@@ -194,14 +194,16 @@ The Modula-2 size shown in the above tables is only used:
 - When the `SIZE` or `TSIZE` functions are used. However, code depending on the result of these functions is likely to be non-portable.
 - When converting to an argument of type `ARRAY OF BYTE`. Note however this conversion only works when an individual variable is used. It does not work with records or arrays.
 
+`BITSET` is mapped to `Runtime.RangeSet(0, 31)` in the 32-bit data model, and to `Runtime.RangeSet(0, 15)` in the 16-bit data model. The `Runtime.RangeSet` class itself is base on `java.util.BitSet`. Hence `BITSET` (and more generally all Modula-2 SETs) are using Java objects.
+
 In addition to the 32-bit and 16-bit data models, the compiler also provides the "strict" 32-bit and the "strict" 16-bit data models. They are enabled using `-dm s32` and `-dm s16`, respectively. The following table shows the mapping to Java types:
 
-| Modula-2 type | SHORTINT | SHORTCARD | INTEGER | CARDINAL | LONGINT | LONGCARD | WORD  | BITSET |
-| ------------- | -------- | --------- | ------- | -------- | ------- | -------- | ----  | ------ |
-| Modula-2 size (32-bit) | 2        | 2         | 4       | 4        | 8       | 8        | 4     | 4      |
-| Java (32-bit) | short    | u-short   | int     | u-int    | long    | u-long   | int   | Runtime.RangeSet(0, 31) |
-| Modula-2 size (16-bit) | 1        | 1         | 2       | 2        | 4       | 4        | 2     | 2      |
-| Java (16-bit) | byte     | u-byte    | short  | u-short   | int     | u-int    | short | Runtime.RangeSet(0, 15) |
+| Modula-2 type | SHORTINT | SHORTCARD | INTEGER | CARDINAL | LONGINT | LONGCARD |
+| ------------- | :------: | :-------: | :-----: | :------: | :-----: | :------: |
+| Modula-2 size (32-bit) | 2        | 2         | 4       | 4        | 8       | 8        |
+| Java (32-bit) | short    | u-short   | int     | u-int    | long    | u-long   | int   |
+| Modula-2 size (16-bit) | 1        | 1         | 2       | 2        | 4       | 4        |
+| Java (16-bit) | byte     | u-byte    | short  | u-short   | int     | u-int    | short |
 
 Unlike the non-strict models, the "strict" models always use Java types whose size is exactly that of the Modula-2 type.
 
