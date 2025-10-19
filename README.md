@@ -155,7 +155,7 @@ As an example, please refer to the `CompileGrotte` or `CompileChaosCastle` class
 
 The compiler provides 4 data models, that determines how to map Modula-2 types to Java types.
 
-First, the following types are always mapped the same way, regardless of the data model:
+First, the following types are always mapped the same way, regardless of the data model (values for size are in bytes):
 
 | Modula-2 type | BYTE  | BOOLEAN | CHAR  | REAL  | LONGREAL | ADDRESS |
 | ------------- | :---: | :-----: | :---: | :---: | :------: | :-----: |
