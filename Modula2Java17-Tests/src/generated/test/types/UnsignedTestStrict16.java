@@ -109,8 +109,8 @@ public class UnsignedTestStrict16 {
         sc3 = (byte) (sc1 + sc2);
         sc3 = (byte) (sc1 - sc2);
         sc3 = (byte) (sc1 * sc2);
-        sc3 = (byte) (Integer.divideUnsigned(sc1, sc2));
-        sc3 = (byte) (Integer.remainderUnsigned(sc1, sc2));
+        sc3 = (byte) (Byte.toUnsignedInt(sc1) / Byte.toUnsignedInt(sc2));
+        sc3 = (byte) (Byte.toUnsignedInt(sc1) % Byte.toUnsignedInt(sc2));
         t = (Byte.compareUnsigned(sc1, sc2) < 0);
         t = (Byte.compareUnsigned(sc1, sc2) <= 0);
         t = (Byte.compareUnsigned(sc1, sc2) > 0);
@@ -121,8 +121,8 @@ public class UnsignedTestStrict16 {
         c3 = (short) (c1 + c2);
         c3 = (short) (c1 - c2);
         c3 = (short) (c1 * c2);
-        c3 = (short) (Integer.divideUnsigned(c1, c2));
-        c3 = (short) (Integer.remainderUnsigned(c1, c2));
+        c3 = (short) (Short.toUnsignedInt(c1) / Short.toUnsignedInt(c2));
+        c3 = (short) (Short.toUnsignedInt(c1) % Short.toUnsignedInt(c2));
         t = (Short.compareUnsigned(c1, c2) < 0);
         t = (Short.compareUnsigned(c1, c2) <= 0);
         t = (Short.compareUnsigned(c1, c2) > 0);

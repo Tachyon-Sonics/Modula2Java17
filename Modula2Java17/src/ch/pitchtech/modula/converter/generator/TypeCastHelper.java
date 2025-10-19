@@ -105,7 +105,24 @@ public class TypeCastHelper {
                 
                 BuiltInType btTarget = BuiltInType.valueOf(literalTargetType.getName());
                 BuiltInType btValue = BuiltInType.valueOf(literalValueType.getName());
-                if (!constantAssignment) {
+                boolean needTypeCast = !constantAssignment;
+                
+                /*
+                 * assigning a constant to a short or byte does not need a type cast, unless the constant is too big
+                 * for short or byte. This can happen when the short or byte is unsigned (eg. assigning 255 to a unsigned byte).
+                 */
+                if (constantAssignment && btTarget.isNumeric() && !btTarget.isDecimal()) {
+                    Object constantValue = value.evaluateConstant();
+                    if (constantValue instanceof Number number) {
+                        int targetSize = btTarget.getJavaSize();
+                        if (targetSize < 4) { // byte or short
+                            long maxSignedValue = (1L << (targetSize * 8 - 1)); // 128 (byte) or 32768 (short)
+                            if (number.longValue() >= maxSignedValue || number.longValue() < -maxSignedValue)
+                                needTypeCast = true;
+                        }
+                    }
+                }
+                if (needTypeCast) {
                     int targetSize = btTarget.getJavaSize();
                     int valueSize = btValue.getJavaSize();
                     

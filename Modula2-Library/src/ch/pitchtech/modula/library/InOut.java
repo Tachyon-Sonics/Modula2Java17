@@ -138,6 +138,17 @@ public class InOut {
         System.out.print(str);
     }
     
+    public void WriteCard(int value, long n) {
+        String str = "" + Integer.toUnsignedLong(value);
+        if (str.length() < n) {
+            StringBuilder prefix = new StringBuilder();
+            for (int k = 0; k < n - str.length(); k++)
+                prefix.append(' ');
+            str = prefix.toString() + str;
+        }
+        System.out.print(str);
+    }
+    
     public void ReadLongInt(IRef<Long> n) {
         IRef<String> line = new Ref<>();
         ReadString(line);

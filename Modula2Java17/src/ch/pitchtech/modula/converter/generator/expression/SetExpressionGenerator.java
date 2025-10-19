@@ -118,7 +118,6 @@ public class SetExpressionGenerator extends Generator {
                 result.write(")");
             }
         } else {
-            // TODO handle BITSET
             throw new CompilerException(setExpression, "Unhandled type {0}", type);
         }
     }

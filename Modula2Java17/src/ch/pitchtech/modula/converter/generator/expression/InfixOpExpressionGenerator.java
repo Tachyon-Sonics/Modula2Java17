@@ -100,7 +100,7 @@ public class InfixOpExpressionGenerator extends Generator {
     }
     
     public static boolean requiresUnsigned(ResultContext context, IExpression left, IExpression right,
-            IType leftType, IType rightType, String operator) { // TODO (1) tests
+            IType leftType, IType rightType, String operator) {
         if (!UNSIGNED_OPERATOR_MAP.containsKey(operator))
             return false;
         if (leftType instanceof LiteralType literalLeftType && rightType instanceof LiteralType literalRightType) {
@@ -174,7 +174,7 @@ public class InfixOpExpressionGenerator extends Generator {
         if (expression.getOperator().equals("IN")) {
             generateInOp(result, leftType, rightType);
         } else if (leftType instanceof EnumSetType && rightType instanceof EnumSetType) {
-            generateSetOp(result, true); // TODO Z handle BITSET too
+            generateSetOp(result, true);
         } else if (leftType instanceof RangeSetType && rightType instanceof RangeSetType) {
             generateSetOp(result, false);
         } else if (isAddress(leftType) && isAddress(rightType) && ADDRESS_OPERATOR_MAP.containsKey(expression.getOperator())) {
@@ -272,19 +272,39 @@ public class InfixOpExpressionGenerator extends Generator {
         BuiltInType leftBit = BuiltInType.valueOf(((LiteralType) leftType).getName());
         BuiltInType rightBit = BuiltInType.valueOf(((LiteralType) rightType).getName());
         BuiltInType builtInType = (leftBit.getJavaSize() > rightBit.getJavaSize() ? leftBit : rightBit);
-        if (builtInType.getJavaSize() < 4 && UNSIGNED_OPERATOR_PROMOTE.contains(operator))
-            builtInType = BuiltInType.javaInt().get();
         
-        result.write(builtInType.getBoxedType());
-        result.write(".");
-        result.write(methodNames[0]);
-        result.write("(");
-        result.write(leftContext);
-        result.write(", ");
-        result.write(rightContext);
-        result.write(")");
-        if (methodNames.length > 1) {
-            result.write(methodNames[1]);
+        if (builtInType.getJavaSize() < 4 && UNSIGNED_OPERATOR_PROMOTE.contains(operator)) {
+            // divideUnsigned and remainderUnsigned do not exist on Byte and Short. Convert to int
+            
+            /*
+             * Random note: it seems that (for two short operands)
+             *   (short) (Integer.divideUnsigned(x, y))
+             * also work, but this is woodoo I do not really like...
+             */
+            result.write(builtInType.getBoxedType());
+            result.write(".toUnsignedInt(");
+            result.write(leftContext);
+            result.write(") ");
+            if (OPERATOR_MAP.containsKey(operator))
+                operator = OPERATOR_MAP.get(operator);
+            result.write(operator); // signed 'int' is large enough to hold an unsigned byte or short. Hence use signed operator
+            result.write(" ");
+            result.write(builtInType.getBoxedType());
+            result.write(".toUnsignedInt(");
+            result.write(rightContext);
+            result.write(")");
+        } else {
+            result.write(builtInType.getBoxedType());
+            result.write(".");
+            result.write(methodNames[0]);
+            result.write("(");
+            result.write(leftContext);
+            result.write(", ");
+            result.write(rightContext);
+            result.write(")");
+            if (methodNames.length > 1) {
+                result.write(methodNames[1]);
+            }
         }
     }
     

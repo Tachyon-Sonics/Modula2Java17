@@ -109,8 +109,8 @@ public class UnsignedTestStrict32 {
         sc3 = (short) (sc1 + sc2);
         sc3 = (short) (sc1 - sc2);
         sc3 = (short) (sc1 * sc2);
-        sc3 = (short) (Integer.divideUnsigned(sc1, sc2));
-        sc3 = (short) (Integer.remainderUnsigned(sc1, sc2));
+        sc3 = (short) (Short.toUnsignedInt(sc1) / Short.toUnsignedInt(sc2));
+        sc3 = (short) (Short.toUnsignedInt(sc1) % Short.toUnsignedInt(sc2));
         t = (Short.compareUnsigned(sc1, sc2) < 0);
         t = (Short.compareUnsigned(sc1, sc2) <= 0);
         t = (Short.compareUnsigned(sc1, sc2) > 0);
