@@ -249,11 +249,27 @@ public class ResultContext {
                     // Only emit each comment once
                     if (!emittedCommentLines.contains(comment.getLine())) {
                         String javaComment = CommentConverter.convertToJavaComment(comment.getText());
-                        writeLine(javaComment);
+                        writeMultiLineComment(javaComment);
                         emittedCommentLines.add(comment.getLine());
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Write a potentially multi-line comment with proper indentation on each line.
+     *
+     * @param comment the comment text (may contain newlines)
+     */
+    private void writeMultiLineComment(String comment) {
+        String[] lines = comment.split("\n", -1);
+        for (int i = 0; i < lines.length; i++) {
+            if (i == lines.length - 1 && lines[i].isEmpty()) {
+                // Don't write a trailing empty line
+                break;
+            }
+            writeLine(lines[i]);
         }
     }
 

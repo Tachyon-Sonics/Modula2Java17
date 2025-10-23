@@ -27,11 +27,11 @@ public class NestedComments {
     private void begin() {
         /* This is a nested comment (* inner comment *) outer continues */
         x = 42;
-        /* Multi-level nesting
-       (* level 2
-          (* level 3 *)
-       level 2 again *)
-    level 1 again */
+        /*Multi-level nesting
+              (* level 2
+                 (* level 3 *)
+              level 2 again *)
+           level 1 again */
         x = (short) (x + 1);
         /* Comment with (* nested (* double nested *) *) still in comment */
         x = (short) (x * 2);
