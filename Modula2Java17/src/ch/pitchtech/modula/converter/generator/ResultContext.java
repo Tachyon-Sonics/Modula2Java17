@@ -239,9 +239,10 @@ public class ResultContext {
 
         int targetLine = location.startLine();
 
-        // Find comments that appear just before this element (within 2 lines)
-        // This handles both same-line comments and comments on preceding lines
-        for (int line = Math.max(1, targetLine - 2); line <= targetLine; line++) {
+        // Find comments that appear just before this element (within 10 lines)
+        // This handles both same-line comments and comments on preceding lines,
+        // including multi-line nested comments that may span several lines
+        for (int line = Math.max(1, targetLine - 10); line <= targetLine; line++) {
             List<CommentExtractor.Comment> comments = commentsByLine.get(line);
             if (comments != null) {
                 for (CommentExtractor.Comment comment : comments) {

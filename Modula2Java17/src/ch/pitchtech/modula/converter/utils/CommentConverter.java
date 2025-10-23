@@ -14,7 +14,7 @@ public class CommentConverter {
      * Conversion rules:
      * <ul>
      * <li>Remove outer (* and *) delimiters</li>
-     * <li>Replace nested (* and *) to avoid syntax errors</li>
+     * <li>Preserve nested (* and *) as they don't conflict with Java syntax</li>
      * <li>Convert to Java block comment format</li>
      * <li>Preserve formatting and whitespace</li>
      * </ul>
@@ -33,10 +33,8 @@ public class CommentConverter {
             content = content.substring(2, content.length() - 2);
         }
 
-        // Replace nested comment delimiters to avoid Java syntax errors
-        // Replace (* with /* and *) with */
-        content = content.replace("(*", "/*");
-        content = content.replace("*)", "*/");
+        // Nested (* and *) delimiters are kept as-is since they don't conflict
+        // with Java's /* */ comment syntax
 
         // Build Java comment with proper formatting
         return "/*" + content + "*/";
@@ -106,9 +104,8 @@ public class CommentConverter {
             content = content.substring(2, content.length() - 2);
         }
 
-        // Replace nested comment delimiters
-        content = content.replace("(*", "/*");
-        content = content.replace("*)", "*/");
+        // Nested (* and *) delimiters are kept as-is since they don't conflict
+        // with Java's /* */ comment syntax
 
         // Build Javadoc comment
         return "/**" + content + "*/";
