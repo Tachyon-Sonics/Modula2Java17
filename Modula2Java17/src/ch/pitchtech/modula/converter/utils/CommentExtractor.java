@@ -45,6 +45,24 @@ public class CommentExtractor {
         public String toString() {
             return "Comment[line=" + line + ", col=" + column + ", text=" + text + "]";
         }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
+            Comment other = (Comment) obj;
+            return line == other.line &&
+                   column == other.column &&
+                   text.equals(other.text);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = text.hashCode();
+            result = 31 * result + line;
+            result = 31 * result + column;
+            return result;
+        }
     }
 
     /**

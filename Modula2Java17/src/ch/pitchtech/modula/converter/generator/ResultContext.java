@@ -36,7 +36,7 @@ public class ResultContext {
 
     // Comment management
     private TreeMap<Integer, List<CommentExtractor.Comment>> commentsByLine;
-    private Set<Integer> emittedCommentLines = new HashSet<>();
+    private Set<CommentExtractor.Comment> emittedComments = new HashSet<>();
     
 
     public ResultContext(CompilerOptions compilerOptions) {
@@ -177,7 +177,7 @@ public class ResultContext {
         result.requiredModuleInstances = this.requiredModuleInstances;
         result.allocatedNames = this.allocatedNames;
         result.commentsByLine = this.commentsByLine;
-        result.emittedCommentLines = this.emittedCommentLines;
+        result.emittedComments = this.emittedComments;
         result.pushScope(getScope());
         return result;
     }
@@ -246,11 +246,11 @@ public class ResultContext {
             List<CommentExtractor.Comment> comments = commentsByLine.get(line);
             if (comments != null) {
                 for (CommentExtractor.Comment comment : comments) {
-                    // Only emit each comment once
-                    if (!emittedCommentLines.contains(comment.getLine())) {
+                    // Only emit each comment instance once
+                    if (!emittedComments.contains(comment)) {
                         String javaComment = CommentConverter.convertToJavaComment(comment.getText());
                         writeMultiLineComment(javaComment);
-                        emittedCommentLines.add(comment.getLine());
+                        emittedComments.add(comment);
                     }
                 }
             }
