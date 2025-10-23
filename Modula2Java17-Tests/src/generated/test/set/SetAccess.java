@@ -1,8 +1,3 @@
-/* Test set arithmetic operators */
-/* Union: set3 should contain {1, 3, 5, 7} */
-/* Difference: set3 should contain {1} */
-/* Intersection: set3 should contain {3, 5} */
-/* Symmetric difference: set3 should contain {1, 7} */
 package generated.test.set;
 
 import ch.pitchtech.modula.runtime.HaltException;
@@ -86,15 +81,20 @@ public class SetAccess {
         zeSet.excl(index);
         index = 5;
         test = (zeSet.contains(index));
+        /* Test set arithmetic operators */
         set1.incl(1);
         set1.incl(3);
         set1.incl(5);
         set2.incl(3);
         set2.incl(5);
         set2.incl(7);
+        /* Union: set3 should contain {1, 3, 5, 7} */
         set3 = Runtime.RangeSet.plus(set1, set2);
+        /* Difference: set3 should contain {1} */
         set3 = Runtime.RangeSet.minus(set1, set2);
+        /* Intersection: set3 should contain {3, 5} */
         set3 = Runtime.RangeSet.mul(set1, set2);
+        /* Symmetric difference: set3 should contain {1, 7} */
         set3 = Runtime.RangeSet.div(set1, set2);
     }
 

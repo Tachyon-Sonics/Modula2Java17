@@ -73,16 +73,24 @@ public class ModuleGenerator extends CompilationUnitGenerator {
         }
         if (!dependencies.isEmpty() && !module.getBeginStatements().isEmpty())
             result.writeLn();
-        for (IStatement statement : module.getBeginStatements())
+        for (IStatement statement : module.getBeginStatements()) {
+            if (statement instanceof SourceElement sourceElement) {
+                result.writeCommentsFor(sourceElement.getSourceLocation());
+            }
             Statements.getGenerator(module, statement).generate(result);
+        }
         result.decIndent();
         result.writeLine("}");
         result.writeLn();
         
         result.writeLine("private void close() {");
         result.incIndent();
-        for (IStatement statement : module.getCloseStatements())
+        for (IStatement statement : module.getCloseStatements()) {
+            if (statement instanceof SourceElement sourceElement) {
+                result.writeCommentsFor(sourceElement.getSourceLocation());
+            }
             Statements.getGenerator(module, statement).generate(result);
+        }
         if (!dependencies.isEmpty() && !module.getCloseStatements().isEmpty())
             result.writeLn();
         for (int i = dependencies.size() - 1; i >= 0; i--) {

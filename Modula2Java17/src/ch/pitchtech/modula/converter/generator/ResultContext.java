@@ -2,21 +2,28 @@ package ch.pitchtech.modula.converter.generator;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+import java.util.TreeMap;
 import java.util.TreeSet;
+
+import org.antlr.v4.runtime.CommonTokenStream;
 
 import ch.pitchtech.modula.converter.compiler.CompilerOptions;
 import ch.pitchtech.modula.converter.model.expression.IExpression;
 import ch.pitchtech.modula.converter.model.scope.IHasScope;
 import ch.pitchtech.modula.converter.model.scope.IScope;
 import ch.pitchtech.modula.converter.model.scope.TypeResolver;
+import ch.pitchtech.modula.converter.model.source.SourceLocation;
 import ch.pitchtech.modula.converter.model.type.IType;
 import ch.pitchtech.modula.converter.model.type.ProcedureType;
+import ch.pitchtech.modula.converter.utils.CommentConverter;
+import ch.pitchtech.modula.converter.utils.CommentExtractor;
 
 public class ResultContext {
-    
+
     private final CompilerOptions compilerOptions;
     private final boolean main;
     private final StringBuilder builder = new StringBuilder();
@@ -26,15 +33,45 @@ public class ResultContext {
     private Set<String> allocatedNames = new HashSet<>();
     private int indent;
     private Map<IExpression, IType> requestedTypes = new HashMap<>();
+
+    // Comment management
+    private TreeMap<Integer, List<CommentExtractor.Comment>> commentsByLine;
+    private Set<Integer> emittedCommentLines = new HashSet<>();
     
-    
+
     public ResultContext(CompilerOptions compilerOptions) {
-        this(compilerOptions, true);
+        this(compilerOptions, true, null);
     }
-    
+
+    public ResultContext(CompilerOptions compilerOptions, CommonTokenStream tokenStream) {
+        this(compilerOptions, true, tokenStream);
+    }
+
     public ResultContext(CompilerOptions compilerOptions, boolean main) {
+        this(compilerOptions, main, null);
+    }
+
+    public ResultContext(CompilerOptions compilerOptions, boolean main, CommonTokenStream tokenStream) {
         this.compilerOptions = compilerOptions;
         this.main = main;
+        if (tokenStream != null) {
+            initializeComments(tokenStream);
+        }
+    }
+
+    /**
+     * Initialize the comment map from the token stream.
+     * Comments are indexed by their starting line number for efficient lookup.
+     */
+    private void initializeComments(CommonTokenStream tokenStream) {
+        List<CommentExtractor.Comment> allComments = CommentExtractor.extractComments(tokenStream);
+        commentsByLine = new TreeMap<>();
+
+        for (CommentExtractor.Comment comment : allComments) {
+            commentsByLine
+                .computeIfAbsent(comment.getLine(), k -> new java.util.ArrayList<>())
+                .add(comment);
+        }
     }
     
     public CompilerOptions getCompilerOptions() {
@@ -134,11 +171,13 @@ public class ResultContext {
     }
     
     public ResultContext subContext() {
-        ResultContext result = new ResultContext(this.compilerOptions, false);
+        ResultContext result = new ResultContext(this.compilerOptions, false, null);
         result.indent = this.indent;
         result.requiredJavaImports = this.requiredJavaImports;
         result.requiredModuleInstances = this.requiredModuleInstances;
         result.allocatedNames = this.allocatedNames;
+        result.commentsByLine = this.commentsByLine;
+        result.emittedCommentLines = this.emittedCommentLines;
         result.pushScope(getScope());
         return result;
     }
@@ -185,7 +224,38 @@ public class ResultContext {
             throw new IllegalStateException("Freeing unused name: " + name);
         allocatedNames.remove(name);
     }
-    
+
+    /**
+     * Write comments that appear immediately before the given source location.
+     * This method finds comments on the lines just before the element and emits them
+     * with proper indentation.
+     *
+     * @param location the source location of the code element
+     */
+    public void writeCommentsFor(SourceLocation location) {
+        if (commentsByLine == null || location == null) {
+            return;
+        }
+
+        int targetLine = location.startLine();
+
+        // Find comments that appear just before this element (within 2 lines)
+        // This handles both same-line comments and comments on preceding lines
+        for (int line = Math.max(1, targetLine - 2); line <= targetLine; line++) {
+            List<CommentExtractor.Comment> comments = commentsByLine.get(line);
+            if (comments != null) {
+                for (CommentExtractor.Comment comment : comments) {
+                    // Only emit each comment once
+                    if (!emittedCommentLines.contains(comment.getLine())) {
+                        String javaComment = CommentConverter.convertToJavaComment(comment.getText());
+                        writeLine(javaComment);
+                        emittedCommentLines.add(comment.getLine());
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public String toString() {
         return builder.toString();

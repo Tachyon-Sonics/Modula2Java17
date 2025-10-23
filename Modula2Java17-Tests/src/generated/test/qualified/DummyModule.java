@@ -1,11 +1,3 @@
-/* Qualified type access */
-/* Qualified procedure call */
-/* Qualified function call */
-/* Qualified constant access */
-/* Qualified var accesses, read, write */
-/* Access to var of qualified type */
-/* Access to qualified var of qualified type */
-/* Qualified arg and result */
 package generated.test.qualified;
 
 import ch.pitchtech.modula.runtime.HaltException;
@@ -22,6 +14,7 @@ public class DummyModule {
 
     private int result;
     private short temp;
+    /* Qualified type access */
     private DummyLibrary.DummyType test = new DummyLibrary.DummyType();
 
 
@@ -62,17 +55,24 @@ public class DummyModule {
     private void begin() {
         DummyLibrary.instance().begin();
 
+        /* Qualified procedure call */
         dummyLibrary.DummyProcedure(42);
+        /* Qualified function call */
         result = dummyLibrary.DummyFunction(42);
+        /* Qualified constant access */
         result = DummyLibrary.DummyConst;
+        /* Qualified var accesses, read, write */
         temp = dummyLibrary.DummyVariable;
         dummyLibrary.DummyVariable = temp;
+        /* Access to var of qualified type */
         test.x = 10;
         temp = test.x;
+        /* Access to qualified var of qualified type */
         temp = dummyLibrary.DummyTypeVariable.x;
         dummyLibrary.DummyTypeVariable.y = temp;
         dummyLibrary.DummyTypeVariable.copyFrom(test);
         test.copyFrom(dummyLibrary.DummyTypeVariable);
+        /* Qualified arg and result */
         test.copyFrom(TestProc(test));
         test.copyFrom(dummyLibrary.TestFunction(test));
     }
