@@ -40,6 +40,8 @@ import ch.pitchtech.modula.converter.parser.DefinitionModuleProcessor;
 import ch.pitchtech.modula.converter.parser.ImplementationModuleProcessor;
 import ch.pitchtech.modula.converter.parser.ModuleProcessor;
 import ch.pitchtech.modula.converter.transform.Transforms;
+import ch.pitchtech.modula.converter.utils.CommentConverter;
+import ch.pitchtech.modula.converter.utils.CommentExtractor;
 import ch.pitchtech.modula.converter.utils.Logger;
 
 public class Compiler {
@@ -168,9 +170,12 @@ public class Compiler {
         
         // Step 2: lexer + parser
         Lexer lexer = new m2pim4Lexer(CharStreams.fromString(content));
-        TokenStream tokenStream = new CommonTokenStream(lexer);
+        CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         m2pim4Parser parser = new m2pim4Parser(tokenStream);
-        
+
+        // Store the token stream for comment extraction later
+        m2sourceFile.setTokenStream(tokenStream);
+
         parser.addParseListener(new m2pim4BaseListener() {
 
             /**
@@ -195,7 +200,7 @@ public class Compiler {
                 }
                 super.exitImportList(ctx);
             }
-            
+
         });
         CompilationUnitContext cuContext = parser.compilationUnit();
         return cuContext;
@@ -250,10 +255,13 @@ public class Compiler {
         Path m2sourceFile = sourceFile.getPath();
         Logger.log(2, "  {0}", m2sourceFile);
         CurrentFile.setCurrentFile(m2sourceFile);
-        
+
         // Step 5: code generation
         ResultContext result = new ResultContext(application.getCompilerOptions());
-        
+
+        // Extract and convert comments from the token stream
+        String fileHeaderComments = extractFileHeaderComments(sourceFile);
+
         if (compilationUnit instanceof DefinitionModule definitionModule) {
             Path m2implFile = m2sourceFile.resolveSibling(m2sourceFile.getFileName().toString().replace(".def", ".mod"));
             if (!Files.isRegularFile(m2implFile)) {
@@ -270,14 +278,62 @@ public class Compiler {
         } else if (compilationUnit instanceof ImplementationModule implementationModule) {
             new ImplementationModuleGenerator(implementationModule).generate(result);
             Path javaImplFile = targetPackageDir.resolve(implementationModule.getName() + ".java");
-            Files.writeString(javaImplFile, result.toString());
+            String javaCode = prependComments(fileHeaderComments, result.toString());
+            Files.writeString(javaImplFile, javaCode);
             Logger.log(2, "  --> {0}", javaImplFile);
         } else if (compilationUnit instanceof ch.pitchtech.modula.converter.model.Module module) {
             new ModuleGenerator(module).generate(result);
             Path javaImplFile = targetPackageDir.resolve(module.getName() + ".java");
-            Files.writeString(javaImplFile, result.toString());
+            String javaCode = prependComments(fileHeaderComments, result.toString());
+            Files.writeString(javaImplFile, javaCode);
             Logger.log(2, "  --> {0}", javaImplFile);
         }
+    }
+
+    /**
+     * Extracts comments that appear at the beginning of the file (before the MODULE/DEFINITION keyword).
+     * These comments are typically copyright notices, file headers, or module documentation.
+     *
+     * @param sourceFile the source file
+     * @return Java-formatted header comments, or empty string if none
+     */
+    private String extractFileHeaderComments(SourceFile sourceFile) {
+        CommonTokenStream tokenStream = sourceFile.getTokenStream();
+        if (tokenStream == null) {
+            return "";
+        }
+
+        List<CommentExtractor.Comment> allComments = CommentExtractor.extractComments(tokenStream);
+        if (allComments.isEmpty()) {
+            return "";
+        }
+
+        // Extract comments at the beginning of the file (typically line 1-10)
+        // These are usually file headers, copyright notices, etc.
+        StringBuilder headerComments = new StringBuilder();
+        for (CommentExtractor.Comment comment : allComments) {
+            // Include all comments (we'll convert them all for now)
+            String javaComment = CommentConverter.convertToJavaComment(comment.getText());
+            headerComments.append(javaComment).append("\n");
+        }
+
+        return headerComments.toString();
+    }
+
+    /**
+     * Prepends header comments to the generated Java code.
+     * Comments are inserted at the very beginning of the file, before the package statement.
+     *
+     * @param headerComments the converted header comments
+     * @param javaCode the generated Java code
+     * @return the Java code with comments prepended
+     */
+    private String prependComments(String headerComments, String javaCode) {
+        if (headerComments == null || headerComments.isEmpty()) {
+            return javaCode;
+        }
+
+        return headerComments + javaCode;
     }
     
 }

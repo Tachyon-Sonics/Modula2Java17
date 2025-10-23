@@ -1,3 +1,8 @@
+/* Test set arithmetic operators */
+/* Union: set3 should contain {1, 3, 5, 7} */
+/* Difference: set3 should contain {1} */
+/* Intersection: set3 should contain {3, 5} */
+/* Symmetric difference: set3 should contain {1, 7} */
 package generated.test.set;
 
 import ch.pitchtech.modula.runtime.HaltException;

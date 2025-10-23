@@ -1,3 +1,11 @@
+/* Qualified type access */
+/* Qualified procedure call */
+/* Qualified function call */
+/* Qualified constant access */
+/* Qualified var accesses, read, write */
+/* Access to var of qualified type */
+/* Access to qualified var of qualified type */
+/* Qualified arg and result */
 package generated.test.qualified;
 
 import ch.pitchtech.modula.runtime.HaltException;
