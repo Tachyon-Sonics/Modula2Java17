@@ -117,7 +117,21 @@ public class AssignmentGenerator extends Generator {
                         result.write(", ");
                         writeValueWithProperCast(result, scopeUnit, targetType, value, valueType, false, false);
                     }
-                } else if (targetType instanceof RangeSetType || targetType instanceof RecordType) {
+                } else if (targetType instanceof RangeSetType) {
+                    Expressions.getGenerator(scopeUnit, target).generate(result);
+                    if (value instanceof InfixOpExpression) {
+                        // The value is a set expression, which is already a copy
+                        result.write(" = ");
+                        if (value.isComplex(result)) {
+                            result.write("("); // This should never be the case...
+                        } else {
+                            closeParenthese = false;
+                        }
+                    } else {
+                        result.write(".copyFrom(");
+                    }
+                    writeValueWithProperCast(result, scopeUnit, targetType, value, valueType, false, false);
+                } else if (targetType instanceof RecordType) {
                     Expressions.getGenerator(scopeUnit, target).generate(result);
                     result.write(".copyFrom(");
                     writeValueWithProperCast(result, scopeUnit, targetType, value, valueType, false, false);

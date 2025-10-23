@@ -10,10 +10,15 @@ public class SetAccess {
 
     private static final Runtime.Range _ZeSet_r = new Runtime.Range(0, 31);
 
+    private static final Runtime.Range _Set1_Set2_Set3_r = new Runtime.Range(0, 31);
+
 
     // VAR
 
     private Runtime.RangeSet zeSet = new Runtime.RangeSet(_ZeSet_r);
+    private Runtime.RangeSet set1 = new Runtime.RangeSet(_Set1_Set2_Set3_r);
+    private Runtime.RangeSet set2 = new Runtime.RangeSet(_Set1_Set2_Set3_r);
+    private Runtime.RangeSet set3 = new Runtime.RangeSet(_Set1_Set2_Set3_r);
     private int index;
     private boolean test;
 
@@ -24,6 +29,30 @@ public class SetAccess {
 
     public void setZeSet(Runtime.RangeSet zeSet) {
         this.zeSet = zeSet;
+    }
+
+    public Runtime.RangeSet getSet1() {
+        return this.set1;
+    }
+
+    public void setSet1(Runtime.RangeSet set1) {
+        this.set1 = set1;
+    }
+
+    public Runtime.RangeSet getSet2() {
+        return this.set2;
+    }
+
+    public void setSet2(Runtime.RangeSet set2) {
+        this.set2 = set2;
+    }
+
+    public Runtime.RangeSet getSet3() {
+        return this.set3;
+    }
+
+    public void setSet3(Runtime.RangeSet set3) {
+        this.set3 = set3;
     }
 
     public int getIndex() {
@@ -52,6 +81,16 @@ public class SetAccess {
         zeSet.excl(index);
         index = 5;
         test = (zeSet.contains(index));
+        set1.incl(1);
+        set1.incl(3);
+        set1.incl(5);
+        set2.incl(3);
+        set2.incl(5);
+        set2.incl(7);
+        set3 = Runtime.RangeSet.plus(set1, set2);
+        set3 = Runtime.RangeSet.minus(set1, set2);
+        set3 = Runtime.RangeSet.mul(set1, set2);
+        set3 = Runtime.RangeSet.div(set1, set2);
     }
 
     private void close() {
