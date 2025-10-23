@@ -1,4 +1,4 @@
-// Generated from src\ch\pitchtech\modula\converter\antlr\m2\m2pim4.g4 by ANTLR 4.12.0
+// Generated from src/ch/pitchtech/modula/converter/antlr/m2/m2pim4.g4 by ANTLR 4.12.0
 package ch.pitchtech.modula.converter.antlr.m2;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -10,6 +10,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  * which can be extended to create a listener which only needs to handle a subset
  * of the available methods.
  */
+@SuppressWarnings("CheckReturnValue")
 public class m2pim4BaseListener implements m2pim4Listener {
 	/**
 	 * {@inheritDoc}

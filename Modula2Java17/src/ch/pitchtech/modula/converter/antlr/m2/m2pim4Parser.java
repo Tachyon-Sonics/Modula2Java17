@@ -1,4 +1,4 @@
-// Generated from src\ch\pitchtech\modula\converter\antlr\m2\m2pim4.g4 by ANTLR 4.12.0
+// Generated from src/ch/pitchtech/modula/converter/antlr/m2/m2pim4.g4 by ANTLR 4.12.0
 package ch.pitchtech.modula.converter.antlr.m2;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
