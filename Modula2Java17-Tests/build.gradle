@@ -11,13 +11,23 @@ dependencies {
     implementation project(':Modula2-Runtime')
     implementation project(':Modula2-Library')
 
-    implementation("junit:junit:4.13.2")
+    implementation 'junit:junit:4.13.2'
 }
 
 
 sourceSets {
 	main.java.srcDirs = ['src']
 	main.resources.srcDirs = ['src']
+}
+
+test {
+    useJUnit()
+    testClassesDirs = sourceSets.main.output.classesDirs
+    classpath = sourceSets.main.runtimeClasspath
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
 }
 
 java {

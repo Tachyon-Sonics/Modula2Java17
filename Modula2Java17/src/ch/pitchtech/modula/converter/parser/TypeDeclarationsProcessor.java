@@ -474,8 +474,13 @@ public class TypeDeclarationsProcessor extends ProcessorBase {
                     typeName = "_" + allocateName(baseName);
                     namedType.setName(typeName);
                 }
+                // For RangeSetType, the internal name has "_r" suffix, but TypeDefinition name should not
+                String typeDefinitionName = typeName;
+                if (type instanceof RangeSetType && typeName.endsWith("_r")) {
+                    typeDefinitionName = typeName.substring(0, typeName.length() - 2);
+                }
                 TypeDefinition typeDefinition = new TypeDefinition(((SourceElement) type).getSourceLocation(),
-                        type.getDeclaringScope(), typeName, type);
+                        type.getDeclaringScope(), typeDefinitionName, type);
                 target.add(typeDefinition);
             } else {
                 throw new CompilerException(type, "Cannot create definition for nested unnamed type {0}", type);

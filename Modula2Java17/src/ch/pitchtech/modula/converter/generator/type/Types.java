@@ -70,7 +70,7 @@ public class Types {
     }
     
     public static boolean requiresExplicitDeclaration(IType type) {
-        if (type instanceof RecordType || type instanceof ProcedureType || type instanceof EnumerationType) {
+        if (type instanceof RecordType || type instanceof ProcedureType || type instanceof EnumerationType || type instanceof RangeSetType) {
             assert type instanceof INamedType;
             return true;
         }

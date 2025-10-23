@@ -7,13 +7,13 @@ import ch.pitchtech.modula.converter.model.source.SourceLocation;
 /**
  * SET OF [&lt;lower&gt;..&gt;upper&gt;]
  */
-public class RangeSetType extends TypeBase implements IType, IByReferenceValueType {
-    
-    private final String typeName;
+public class RangeSetType extends TypeBase implements IType, IByReferenceValueType, INamedType {
+
+    private String typeName;
     private final IExpression lowerBound;
     private final IExpression upperBound;
-    
-    
+
+
     public RangeSetType(SourceLocation sLoc, IHasScope scopeUnit, String typeName,
             IExpression lowerBound, IExpression upperBound) {
         super(sLoc, scopeUnit);
@@ -21,12 +21,22 @@ public class RangeSetType extends TypeBase implements IType, IByReferenceValueTy
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
     }
-    
+
     /**
      * @return null if not named
      */
     public String getTypeName() {
         return typeName;
+    }
+
+    @Override
+    public String getName() {
+        return typeName;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.typeName = name;
     }
 
     public IExpression getLowerBound() {
