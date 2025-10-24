@@ -21,6 +21,16 @@ import ch.pitchtech.modula.converter.model.type.TypeDefinition;
 
 public class TypeResolver {
 
+    /**
+     * Resolve the given type.
+     * <ul>
+     * <li>If the type is a user-defined type (<tt>TYPE MyType = ...</tt>), return the underlying type (resolving
+     * the full chain of aliases if necessary)</li>
+     * <li>If the type is a known Modula-2 structure (record, array, etc), return it as is</li>
+     * <li>If the type is a built-in type (INTEGER, etc), return it as is, except <tt>BITSET</tt> that is treated
+     * as an alias to {@link RangeSetType} (to simplify compilation)</li>
+     * </ul>
+     */
     public static IType resolveType(IScope scope, IType type) {
         IType result;
         if (type.getDeclaringScope() != null) {
@@ -56,24 +66,42 @@ public class TypeResolver {
         return type;
     }
     
+    /**
+     * Resolve the given type, that is known not to be a built-in type.
+     */
     private static IType resolveTypeImpl(IScope scope, IType type) {
         if (type instanceof LiteralType literalType) {
+            assert !literalType.isBuiltIn(); // Should have been cought by resolveType()
+            // Literal user-defined type: use the scope in argument
             if (!(scope instanceof ScopeResolver))
                 scope = new ScopeResolver(scope);
             return resolveTypeImpl(scope, literalType.getName());
         } else if (type instanceof QualifiedType qualifiedType) {
+            // Qualified user-defined type: use the qualifier (a module) as scope
             IScope qualifiedScope = qualifiedType.getDeclaringModule().getExportScope();
             return resolveTypeImpl(qualifiedScope, qualifiedType.getName());
         }
+        // Anything else: an existing Modula-2 structure (record, array, etc). Return as is.
         return type;
     }
 
+    /**
+     * Resolve the given type that is known to be a user-defined type
+     * @param scope the scope in which the type name is used
+     * @param typeName the name of the user-defined type
+     */
     private static IType resolveTypeImpl(IScope scope, String typeName) {
+        // Find the type definition in the given scope
         TypeDefinition typeDefinition = scope.resolveType(typeName);
         if (typeDefinition == null)
             throw new CompilationException(scope, "Could not resolve type: " + typeName);
+        
+        // If the type definition is an alias to another type definition, get the root one.
         typeDefinition = getRootType(typeDefinition, scope);
+        
+        // Extract the type from the type definition
         if (typeDefinition.isOpaque()) {
+            // For an opaque type definition, the underlying type was not specified and is hence null.
             ICompilationUnit cu = (ICompilationUnit) typeDefinition.getParentNode();
             return new OpaqueType(typeDefinition.getSourceLocation(), cu, typeDefinition.getName());
         } else {
@@ -82,8 +110,10 @@ public class TypeResolver {
     }
     
     /**
-     * Resolve the given type until we get a "root" type, that is, a type that is built-in, or a
-     * type that is not a literal. The reason is that a literal type that is not built-in is 
+     * Resolve the given type definition until we get a "root" type definitoon, that is, one whose
+     * type that is built-in, or a type that is not a literal.
+     * <p>
+     * The reason is that a literal type that is not built-in is 
      * just an "alias" to the real type (like 'TYPE Alias = RootType')
      */
     private static TypeDefinition getRootType(TypeDefinition typeDefinition, IScope scope) {
