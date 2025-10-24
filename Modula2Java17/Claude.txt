@@ -1,0 +1,4 @@
+Comment handling:
+- Unused methods (convertToJavadocComment, shouldBeJavadoc (also not really correct))
+- Immutable class not created as record
+- Use hard-coded up to 5 lines before statement to find comment

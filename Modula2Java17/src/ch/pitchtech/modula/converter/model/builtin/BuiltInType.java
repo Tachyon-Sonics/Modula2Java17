@@ -20,7 +20,7 @@ public enum BuiltInType {
     LONGREAL(8, 8, "double", "Double", true, true, true),
     CHAR(1, 1, "char", "Character"),
     BOOLEAN(1, 1, "boolean", "Boolean"),
-    BITSET(4, 2, "Runtime.RangSet", "Runtime.RangSet"),
+    BITSET(4, 2, "Runtime.RangeSet", "Runtime.RangeSet"),
     ADDRESS(8, 4, "Object", "Object"),
     PROC(8, 4, "Runnable", "Runnable"),
     BYTE(1, 1, "byte", "Byte"),

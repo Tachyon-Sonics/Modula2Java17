@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.antlr.v4.runtime.CommonTokenStream;
+
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4Parser.CompilationUnitContext;
 import ch.pitchtech.modula.converter.model.ICompilationUnit;
 
@@ -36,6 +38,7 @@ public class SourceFile implements Comparable<SourceFile> {
     
     private CompilationUnitContext cuContext;
     private ICompilationUnit compilationUnit;
+    private CommonTokenStream tokenStream;
     
     
     public SourceFile(Path path) {
@@ -64,6 +67,14 @@ public class SourceFile implements Comparable<SourceFile> {
     
     public void setCompilationUnit(ICompilationUnit compilationUnit) {
         this.compilationUnit = compilationUnit;
+    }
+
+    public CommonTokenStream getTokenStream() {
+        return tokenStream;
+    }
+
+    public void setTokenStream(CommonTokenStream tokenStream) {
+        this.tokenStream = tokenStream;
     }
 
     @Override

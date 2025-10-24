@@ -668,7 +668,7 @@ fragment CHARACTER
 
 
 COMMENT
-   : '(*' .*? '*)' -> skip
+   : '(*' ( COMMENT | . )*? '*)' -> channel(HIDDEN)
    ;
 
 

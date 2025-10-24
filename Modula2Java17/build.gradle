@@ -61,3 +61,8 @@ task release(type: Zip){
     dependsOn ':Modula2-Library:sourcesJar'
     into('Modula2Java17')
 }
+
+task regenerateGrammar(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'ch.pitchtech.modula.converter.antlr.BuildJavaCodeFromGrammar'
+}

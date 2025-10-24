@@ -15,7 +15,6 @@ import java.util.function.Consumer;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
-import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import ch.pitchtech.modula.converter.antlr.m2.m2pim4BaseListener;
@@ -168,9 +167,12 @@ public class Compiler {
         
         // Step 2: lexer + parser
         Lexer lexer = new m2pim4Lexer(CharStreams.fromString(content));
-        TokenStream tokenStream = new CommonTokenStream(lexer);
+        CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         m2pim4Parser parser = new m2pim4Parser(tokenStream);
         
+        // Store the token stream for comment extraction later
+        m2sourceFile.setTokenStream(tokenStream);
+
         parser.addParseListener(new m2pim4BaseListener() {
 
             /**
@@ -252,7 +254,7 @@ public class Compiler {
         CurrentFile.setCurrentFile(m2sourceFile);
         
         // Step 5: code generation
-        ResultContext result = new ResultContext(application.getCompilerOptions());
+        ResultContext result = new ResultContext(application.getCompilerOptions(), sourceFile.getTokenStream());
         
         if (compilationUnit instanceof DefinitionModule definitionModule) {
             Path m2implFile = m2sourceFile.resolveSibling(m2sourceFile.getFileName().toString().replace(".def", ".mod"));
