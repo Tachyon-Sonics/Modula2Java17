@@ -186,6 +186,7 @@ The above table mentions `u-int` and `u-long`. These types do not exist is Java.
 - The `+`, `-`, `*`, `=` and `<>` operators use the corresponding Java operators, like for signed types. Indeed, the result of these operators are the same regardless of whether the arguments are interpreted as signed or unsigned.
 - The `/` and `MOD` operators use the `divideUnsigned()` and `remainderUnsigned()` methods of the `Integer` (for `u-int`) or `Long` (for `u-long`) class.
 - The `<`, `<=`, `>` and `>=` operators use the `compareUnsigned()` methods of the `Integer` (for `u-int`) or `Long` (for `u-long`) class.
+- Assigning an unsigned variable to another variable of a larger size (e.g. `CARDINAL` to `LONGCARD` or `LONGINT`) will use the `toUnsignedInt()` or `toUnsignedLong()` methods of the `Byte`, `Short` or `Integer` classes as appropriate.
 
 Notice that `LONGINT` and `LONGCARD` both use the Java `long` type in the 16-bit model, although `int` would be sufficient. The reason is that it allows the standard library to be the same for both memory models. Indeed, observe that the Java types for all numeric types are exactly the same in both data models.
 
