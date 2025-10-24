@@ -234,12 +234,22 @@ This feature is enabled by the `-lu` command-line option, with a comma-separated
 Obviously, when this option is used, if a value of an unsigned type exceed the maximum value of its signed counterpart, undefined behavior will result as the value might become negative. This option generates simpler Java code, but is less compatible and should be used with care.
 
 
-### Records
+### Records, Arrays and Sets
 
 Record types result in Java classes (and *not* in Java records, which are immutable). All members of a record are public fields of the Java class. However, the compiler *also* generates getter and setter for every field.
 
 The public fields allow the Java code to be as close as possible to the Modula-2 code, i.e. for example `item.x = item.y` instead of `item.setX(item.getY())`.
 The getter and setter are required in some cases though, see later about arguments by reference.
+
+A variable of a `RECORD` type and a variable that is a `POINTER` to the same record type will result in the same Java declaration, namely a variable of the Java class corresponding to the record. However, different code is generated when these variables are assigned. For the `POINTER TO RECORD` variable, a Modula-2 assignment results in a simple Java assignment. However, for the `RECORD` variable, the Modula-2 assignment results in a call to the `copyFrom` helper methods that is generated in every Java classes corresponding to a `RECORD`.
+
+Similarly, the `RECORD` variable uses the `newCopy` helper method when passed to a non-`VAR` argument.
+
+Modula-2 arrays are mapped to Java arrays. Note that in Java, array indexes exclusively use the `int` type. As such, the maximum size of an array is limited to 2<sup>31</sup> - 1. If your Modula-2 code uses arrays larger than that, this will result in non-working Java code.
+
+`SET OF` over an interval and `BITSET` are mapped to the `Runtime.RangeSet` class from the Modula-2 runtime. This class is similar to a `java.util.BitSet`, but with strictly enforced bounds, passed to the constructor. For instance, `BITSET` is mapped to a `new Runtime.RangeSet(0, 31)` in the 32-bit data model, and `new Runtime.RangeSet(0, 15)` in the 16-bit data model. `SET OF` over an enumerated type is mapped to the `Runtime.EnumSet` class.
+
+Enumerations and sets are quite different in Modula-2 and Java, hence quite a lot of boilerplate code and helper methods can be generated in the Java code when used. Note that Modula-2 enumerated types are mapped to Java `enum` types.
 
 
 ### Nested Procedures
