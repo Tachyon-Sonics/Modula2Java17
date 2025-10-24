@@ -8,7 +8,6 @@ import java.lang.reflect.InvocationTargetException;
 import org.junit.Test;
 
 import ch.pitchtech.modula.converter.compiler.DataModelType;
-import ch.pitchtech.modula.converter.compiler.UnsignedType;
 import generated.test.types.Card16Test;
 import generated.test.types.Card8Test;
 import generated.test.types.Constants;
