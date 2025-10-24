@@ -1,4 +1,12 @@
 Comment handling:
-- Unused methods (convertToJavadocComment, shouldBeJavadoc (also not really correct))
+- Unused methods (convertToJavadocComment, shouldBeJavadoc (also not really correct)), getCommentsBefore, getCommentsBetween
 - Immutable class not created as record
 - Use hard-coded up to 5 lines before statement to find comment
+- Failed to add new CommentTest to the RootSuite
+- Not handled (most of them understandable):
+  - /* and */ inside Modula-2 comment
+  - (*** -> create a javadoc comment
+  - DEFINITION modules
+
+- Fooled by the CompileHelper that allows ignoring added/removed lines
+  -> struggle + wrong conclusion (Schrödinger)

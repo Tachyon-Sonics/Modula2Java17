@@ -12,6 +12,7 @@ import org.junit.runners.Suite;
     ArgumentsTest.class,
     ArrayTest.class,
     SetTest.class,
+    CommentTest.class,
 })
 public class FastRootSuite {
 

@@ -14,7 +14,7 @@ import ch.pitchtech.modula.converter.model.Comment;
  * Comments are sent to the HIDDEN channel during lexing and can be retrieved
  * for conversion to Java comment syntax.
  */
-public class CommentExtractor {
+public class CommentExtractor { // TODO (2) also extract and preserve comments from DEFINITION MODULES
 
     /**
      * Extracts all comments from the given token stream.
@@ -47,47 +47,4 @@ public class CommentExtractor {
         return comments;
     }
 
-    /**
-     * Gets all comments that appear before a given line number.
-     * Useful for extracting comments that document a declaration.
-     *
-     * @param tokenStream the token stream
-     * @param beforeLine the line number (exclusive)
-     * @return list of comments before the given line
-     */
-    public static List<Comment> getCommentsBefore(CommonTokenStream tokenStream, int beforeLine) {
-        List<Comment> allComments = extractComments(tokenStream);
-        List<Comment> result = new ArrayList<>();
-
-        for (Comment comment : allComments) {
-            if (comment.line() < beforeLine) {
-                result.add(comment);
-            } else {
-                break; // Comments are in source order
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Gets all comments that appear on or between two line numbers.
-     *
-     * @param tokenStream the token stream
-     * @param startLine the start line (inclusive)
-     * @param endLine the end line (inclusive)
-     * @return list of comments in the given range
-     */
-    public static List<Comment> getCommentsBetween(CommonTokenStream tokenStream, int startLine, int endLine) {
-        List<Comment> allComments = extractComments(tokenStream);
-        List<Comment> result = new ArrayList<>();
-
-        for (Comment comment : allComments) {
-            if (comment.line() >= startLine && comment.line() <= endLine) {
-                result.add(comment);
-            }
-        }
-
-        return result;
-    }
 }

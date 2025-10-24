@@ -244,7 +244,7 @@ public class ResultContext {
 
         int targetLine = location.startLine();
 
-        // Find comments that appear just before this element (within 10 lines)
+        // Find comments that appear just before this element (within 10 lines) // TODO (1) review this hard coded '10'
         // This handles both same-line comments and comments on preceding lines,
         // including multi-line nested comments that may span several lines
         for (int line = Math.max(1, targetLine - 10); line <= targetLine; line++) {

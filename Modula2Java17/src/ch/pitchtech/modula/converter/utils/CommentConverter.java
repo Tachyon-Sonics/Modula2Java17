@@ -13,8 +13,12 @@ public class CommentConverter {
      * <p>
      * Conversion rules:
      * <ul>
-     * <li>Convert outer (* and *) delimiters to /* and *&#47;</li>
-     * <li>Preserve nested (* and *) as they don't conflict with Java syntax</li>
+     * <li>Convert outer <tt>(*</tt> and <tt>*)</tt> delimiters to <tt>/*</tt> and <tt>*&#47;</tt></li>
+     * <li>Preserve nested <tt>(*</tt> and <tt>*)</tt> as they don't conflict with Java syntax</li>
+     * <li>Convert any existing <tt>/*</tt> or <tt>*&#47;</tt> instead of a Modula-2 comment to
+     * <tt>(*</tt> or <tt>*)</tt> so that they do not interfere with the Java comment</li>
+     * <li>Replace any initial <tt>*</tt> by <tt>★</tt> so that we do not accidentally create a
+     * Javadoc comment</li>
      * <li>Normalize indentation by removing common leading whitespace</li>
      * </ul>
      *
@@ -31,9 +35,18 @@ public class CommentConverter {
         if (content.startsWith("(*") && content.endsWith("*)")) {
             content = content.substring(2, content.length() - 2);
         }
+        
+        // Replace any starting "*"('s) so that we do not create a javadoc comment
+        for (int i = 0; i < content.length() && content.charAt(i) == '*'; i++) {
+            content = content.substring(0, i) + "★" + content.substring(i + 1);
+        }
 
         // Nested (* and *) delimiters are kept as-is since they don't conflict
         // with Java's /* */ comment syntax
+        
+        // Check for and replace Java-style comment inside of Modula-2 comment
+        content = content.replace("/*", "(*");
+        content = content.replace("*/", "*)");
 
         // Normalize indentation: remove common leading whitespace from all lines
         content = normalizeIndentation(content);
@@ -54,6 +67,12 @@ public class CommentConverter {
         if (lines.length <= 1) {
             return text;
         }
+        
+        // Get existing "base" identation, based on the number of spaces after the begin of the comment
+        int baseIdent = 0;
+        for (int i = 0; i < text.length() && text.charAt(i) == ' '; i++) {
+            baseIdent++;
+        }
 
         // Find minimum indentation (ignoring empty lines)
         int minIndent = Integer.MAX_VALUE;
@@ -66,6 +85,7 @@ public class CommentConverter {
                 minIndent = Math.min(minIndent, indent);
             }
         }
+        minIndent -= baseIdent;
 
         // Remove common indentation from all lines
         if (minIndent > 0 && minIndent < Integer.MAX_VALUE) {

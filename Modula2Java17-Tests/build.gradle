@@ -20,6 +20,43 @@ sourceSets {
 	main.resources.srcDirs = ['src']
 }
 
+test {
+    useJUnit()
+    testClassesDirs = sourceSets.main.output.classesDirs
+    classpath = sourceSets.main.runtimeClasspath
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
+    // Run only FastRootSuite by default (tests that don't require external projects)
+    include '**/FastRootSuite.class'
+}
+
+// Task to run all tests including those requiring external projects
+task testFull(type: Test) {
+    useJUnit()
+    testClassesDirs = sourceSets.main.output.classesDirs
+    classpath = sourceSets.main.runtimeClasspath
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
+    // Run RootSuite which includes FastRootSuite + FullAppTest
+    include '**/RootSuite.class'
+}
+
+// Task to run any test without filters (useful for individual test development)
+task testAny(type: Test) {
+    useJUnit()
+    testClassesDirs = sourceSets.main.output.classesDirs
+    classpath = sourceSets.main.runtimeClasspath
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
+    // No include filter - runs any test specified with --tests
+}
+
 java {
 	sourceCompatibility = JavaVersion.VERSION_17
 	targetCompatibility = JavaVersion.VERSION_17
