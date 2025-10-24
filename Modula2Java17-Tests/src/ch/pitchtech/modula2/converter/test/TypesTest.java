@@ -8,6 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.junit.Test;
 
 import ch.pitchtech.modula.converter.compiler.DataModelType;
+import ch.pitchtech.modula.converter.compiler.UnsignedType;
 import generated.test.types.Card16Test;
 import generated.test.types.Card8Test;
 import generated.test.types.Constants;
@@ -21,6 +22,7 @@ import generated.test.types.UnsignedCast;
 import generated.test.types.UnsignedCast32;
 import generated.test.types.UnsignedTest;
 import generated.test.types.UnsignedTest16;
+import generated.test.types.UnsignedTestLoose32;
 import generated.test.types.UnsignedTestStrict16;
 import generated.test.types.UnsignedTestStrict32;
 
@@ -128,6 +130,16 @@ public class TypesTest {
         helper.compile("UnsignedTest.mod");
         
         helper.assertCompilationResult("UnsignedTest", UnsignedTestStrict32.class, "import ch.pitchtech.modula.library.*;");
+    }
+
+    @Test
+    public void testUnsignedLoose32() throws IOException {
+        CompilerHelper helper = new CompilerHelper("types");
+        helper.getCompilerOptions().setDataModel(DataModelType.DM_STRICT_32);
+        helper.getCompilerOptions().getExactUnsignedTypes().clear();
+        helper.compile("UnsignedTest.mod");
+        
+        helper.assertCompilationResult("UnsignedTest", UnsignedTestLoose32.class, "import ch.pitchtech.modula.library.*;");
     }
 
     @Test

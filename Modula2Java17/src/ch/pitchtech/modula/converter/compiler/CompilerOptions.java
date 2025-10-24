@@ -62,7 +62,6 @@ public class CompilerOptions {
      * <p>
      * If an unisgned type is excluded, it will use the signed Java operators, and hence
      * effectivly hold one less bit (such as 32 bits for CARD32 and 63 bits for CARD64).
-     * TODO (3) implement
      */
     public Set<UnsignedType> getExactUnsignedTypes() {
         return exactUnsignedTypes;

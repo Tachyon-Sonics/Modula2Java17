@@ -97,7 +97,11 @@ public class CommandLine {
                 }
 
                 // Apply option
-                option.apply(value, fileOptions, compilerOptions);
+                try {
+                    option.apply(value, fileOptions, compilerOptions);
+                } catch (IllegalArgumentException ex) {
+                    return ex.getMessage();
+                }
             } else {
                 // Input file
                 Path inputFile = Path.of(arg);

@@ -2,12 +2,14 @@ package ch.pitchtech.modula.converter.cmd;
 
 import java.nio.charset.Charset;
 import java.nio.file.Path;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.StringJoiner;
 
 import ch.pitchtech.modula.converter.compiler.CompilerOptions;
 import ch.pitchtech.modula.converter.compiler.DataModelType;
 import ch.pitchtech.modula.converter.compiler.FileOptions;
+import ch.pitchtech.modula.converter.compiler.UnsignedType;
 import ch.pitchtech.modula.converter.utils.Logger;
 
 // TODO (1) option to use the standard library. Split into ISO and Mocka
@@ -97,6 +99,26 @@ public class CmdOptions {
         
     };
     
+    public final static CmdOption LOOSE_UNSIGNED = new CmdOption("lu", "loose-unsigned", OptionType.STRING,
+            "[8][,16][,32][,64]", "Unsigned types to handle as signed (default none)") {
+
+        @Override
+        public void apply(Object value, FileOptions fileOptions, CompilerOptions compilerOptions) {
+            String str = String.valueOf(value);
+            EnumSet<UnsignedType> exactUnsignedTypes = EnumSet.allOf(UnsignedType.class);
+            String[] elements = str.split("\\,");
+            for (String item : elements) {
+                UnsignedType ut = UnsignedType.fromName(item.trim());
+                if (ut != null) {
+                    exactUnsignedTypes.remove(ut);
+                } else {
+                    throw new IllegalArgumentException("Illegal value: \"" + item + "\". Possible values are 8,16,32,64");
+                }
+            }
+            compilerOptions.setExactUnsignedTypes(exactUnsignedTypes);
+        }
+    };
+    
     public final static CmdOption VERBOSE = new CmdOption("v", "verbose", OptionType.INTEGER,
             "<level>", "Set verbose level between 0 and 2") {
         
@@ -109,7 +131,7 @@ public class CmdOptions {
     
     public final static List<CmdOption> getAllOptions() {
         return List.of(SOURCE_DIR, TARGET_MAIN_DIR, TARGET_LIBRARY_DIR, TARGET_PACKAGE_MAIN, TARGET_PACKAGE_LIB,
-                DATA_MODEL, VERBOSE);
+                DATA_MODEL, LOOSE_UNSIGNED, VERBOSE);
     }
 
 }

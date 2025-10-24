@@ -4,6 +4,7 @@ import java.util.List;
 
 import ch.pitchtech.modula.converter.compiler.CompilationException;
 import ch.pitchtech.modula.converter.compiler.CompilerException;
+import ch.pitchtech.modula.converter.compiler.CompilerOptions;
 import ch.pitchtech.modula.converter.generator.expression.ArrayAccessGenerator;
 import ch.pitchtech.modula.converter.generator.expression.Expressions;
 import ch.pitchtech.modula.converter.generator.expression.IdentifierGenerator;
@@ -152,6 +153,7 @@ public class TypeCastHelper {
                     boolean needValueCast = (valueBoxed && targetSize < valueSize); // (long)
                     boolean needUnsignedUpcast = (targetSize > valueSize) 
                             && btValue.isAnyCardinal()
+                            && CompilerOptions.get().getExactUnsignedTypes().contains(btValue.getUnsignedType())
                             && btValue.getJavaSize() <= btValue.getModulaSize(); // upcast from unsigned type (such as CARDINAL)
                     if (needTargetCast) {
                         preValueContext.write("(" + btTarget.getJavaType() + ") ");

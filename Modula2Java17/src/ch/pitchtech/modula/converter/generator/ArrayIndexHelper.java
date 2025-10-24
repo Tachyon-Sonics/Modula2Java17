@@ -1,5 +1,6 @@
 package ch.pitchtech.modula.converter.generator;
 
+import ch.pitchtech.modula.converter.compiler.CompilerOptions;
 import ch.pitchtech.modula.converter.generator.expression.Expressions;
 import ch.pitchtech.modula.converter.model.builtin.BuiltInType;
 import ch.pitchtech.modula.converter.model.expression.IExpression;
@@ -27,7 +28,8 @@ public class ArrayIndexHelper {
                     postIndexContext.write(")");
                 }
             } else if (builtInType.isAnyCardinal()
-                    && builtInType.getJavaSize() <= builtInType.getJavaSize()) {
+                    && CompilerOptions.get().getExactUnsignedTypes().contains(builtInType.getUnsignedType())
+                    && builtInType.getJavaSize() <= builtInType.getModulaSize()) {
                 if (builtInType.getJavaType().equals("short")) {
                     // Unsigned short as index
                     preIndexContext.write("Short.toUnsignedInt(");

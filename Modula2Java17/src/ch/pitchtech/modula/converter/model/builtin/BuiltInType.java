@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 import ch.pitchtech.modula.converter.compiler.CompilationException;
 import ch.pitchtech.modula.converter.compiler.CompilerOptions;
 import ch.pitchtech.modula.converter.compiler.DataModelType;
+import ch.pitchtech.modula.converter.compiler.UnsignedType;
 import ch.pitchtech.modula.converter.model.scope.IScope;
 
 public enum BuiltInType {
@@ -137,6 +138,15 @@ public enum BuiltInType {
      */
     public boolean isAnyCardinal() {
         return isNumeric() && !isDecimal() && !isSigned();
+    }
+    
+    /**
+     * Get as an {@link UnsignedType}, or <tt>null</tt> if this built-in type is not an unisgned type
+     */
+    public UnsignedType getUnsignedType() {
+        if (!isAnyCardinal())
+            return null;
+        return UnsignedType.fromJava(getJavaType());
     }
     
     public static BuiltInType forJavaSize(int javaSize) {
