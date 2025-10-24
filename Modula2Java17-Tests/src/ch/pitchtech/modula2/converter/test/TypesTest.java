@@ -17,6 +17,8 @@ import generated.test.types.DataModelStrict16;
 import generated.test.types.DataModelStrict32;
 import generated.test.types.DoubleAlias;
 import generated.test.types.PointerArrayPointer;
+import generated.test.types.UnsignedCast;
+import generated.test.types.UnsignedCast32;
 import generated.test.types.UnsignedTest;
 import generated.test.types.UnsignedTest16;
 import generated.test.types.UnsignedTestStrict16;
@@ -163,6 +165,36 @@ public class TypesTest {
         String output = executor.execute(Card16Test::main);
         // 65535 / 255 as CARD16 (unsigned short), should be 257
         assertEquals("257", output.trim());
+    }
+    
+    @Test
+    public void testUnsignedCast16() throws IOException, InvocationTargetException {
+        CompilerHelper helper = new CompilerHelper("types");
+        helper.getCompilerOptions().setDataModel(DataModelType.DM_STRICT_16);
+        helper.compile("UnsignedCast.mod");
+        
+        helper.assertCompilationResult(UnsignedCast.class);
+
+        ExecuteHelper executor = new ExecuteHelper();
+        String output = executor.execute(UnsignedCast::main);
+        String[] lines = output.split("\n");
+        assertEquals("42", lines[0].trim());
+        assertEquals("42", lines[1].trim());
+    }
+
+    @Test
+    public void testUnsignedCast32() throws IOException, InvocationTargetException {
+        CompilerHelper helper = new CompilerHelper("types");
+        helper.getCompilerOptions().setDataModel(DataModelType.DM_STRICT_32);
+        helper.compile("UnsignedCast.mod");
+        
+        helper.assertCompilationResult("UnsignedCast", UnsignedCast32.class);
+
+        ExecuteHelper executor = new ExecuteHelper();
+        String output = executor.execute(UnsignedCast32::main);
+        String[] lines = output.split("\n");
+        assertEquals("42", lines[0].trim());
+        assertEquals("42", lines[1].trim());
     }
 
 }

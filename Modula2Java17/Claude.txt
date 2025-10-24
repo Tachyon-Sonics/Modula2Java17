@@ -1,3 +1,15 @@
+BITSET handling:
+- found a typo
+- correctly identified TypeResolver, checked how "PROC" is handled
+  - then hard coded "BITSET" string in TypeResolver
+  
+Inline SET OF
+- Different approach, reused logic of inline records
+- Strange "_r" suffix filtering, although properly commented
+
+Optimize SET operation (remove copyFrom)
+- Ok
+
 Comment handling:
 - Unused methods (convertToJavadocComment, shouldBeJavadoc (also not really correct)), getCommentsBefore, getCommentsBetween
 - Immutable class not created as record

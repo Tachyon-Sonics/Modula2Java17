@@ -131,6 +131,14 @@ public enum BuiltInType {
         return decimal;
     }
     
+    /**
+     * Whether this is a numeric, non decimal, unsigned type.
+     * <tt>true</tt> for <tt>SHORTCARD</tt>, <tt>CARDINAL</tt> and <tt>LONGCARD</tt>
+     */
+    public boolean isAnyCardinal() {
+        return isNumeric() && !isDecimal() && !isSigned();
+    }
+    
     public static BuiltInType forJavaSize(int javaSize) {
         for (BuiltInType bit : BuiltInType.values()) {
             if (bit.getJavaSize() == javaSize)

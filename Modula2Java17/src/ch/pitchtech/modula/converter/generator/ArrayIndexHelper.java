@@ -14,6 +14,7 @@ public class ArrayIndexHelper {
      * a Java array access (or any other construct requiring an <tt>int</tt>).
      * <p>
      * Basically, this will generate a downcast to <tt>int</tt> if the expression is <tt>long</tt>.
+     * TODO (3) try to reuse TypeCastHelper.handleNumericCast
      */
     public static void castToIntIndex(IExpression indexExpr, ResultContext preIndexContext, ResultContext postIndexContext) {
         IType indexType = preIndexContext.resolveType(indexExpr);
@@ -25,6 +26,21 @@ public class ArrayIndexHelper {
                     preIndexContext.write("(");
                     postIndexContext.write(")");
                 }
+            } else if (builtInType.isAnyCardinal()
+                    && builtInType.getJavaSize() <= builtInType.getJavaSize()) {
+                if (builtInType.getJavaType().equals("short")) {
+                    // Unsigned short as index
+                    preIndexContext.write("Short.toUnsignedInt(");
+                    postIndexContext.write(")");
+                } else if (builtInType.getJavaType().equals("byte")) {
+                    // Unsigned byte as index
+                    preIndexContext.write("Byte.toUnsignedInt(");
+                    postIndexContext.write(")");
+                }
+                /*
+                 * Unsigned int: just use as is, value > 2^31 won't work anyway.
+                 * Unsigned long: cast to int by first 'if' block above
+                 */
             }
         }
     }

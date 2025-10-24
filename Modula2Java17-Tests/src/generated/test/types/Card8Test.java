@@ -51,7 +51,7 @@ public class Card8Test {
         sc1 = (byte) 255;
         sc2 = 17;
         sc3 = (byte) (Byte.toUnsignedInt(sc1) / Byte.toUnsignedInt(sc2));
-        inOut.WriteCard(sc3, (short) 2);
+        inOut.WriteCard((short) Byte.toUnsignedInt(sc3), (short) 2);
         inOut.WriteLn();
     }
 

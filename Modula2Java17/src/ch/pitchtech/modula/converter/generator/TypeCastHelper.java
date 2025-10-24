@@ -67,7 +67,7 @@ public class TypeCastHelper {
             IHasScope scopeUnit) {
         ResultContext result = null;
 
-        result = handleNumericDownCast(targetType, targetBoxed, valueType, value, constantAssignment, preValueContext, scopeUnit);
+        result = handleNumericCast(targetType, targetBoxed, valueType, value, constantAssignment, preValueContext, postValueContext, scopeUnit);
         if (result != null)
             return result;
         
@@ -92,10 +92,8 @@ public class TypeCastHelper {
         return null; // preValueContext and postValueContext have been filled. Continue without supplying a full replacement
     }
     
-    // TODO (1) cardinal upcast should use toUnsignedXxx methods
-
-    private ResultContext handleNumericDownCast(IType targetType, boolean targetBoxed, IType valueType, IExpression value,
-            boolean constantAssignment, ResultContext preValueContext, IHasScope scopeUnit) {
+    private ResultContext handleNumericCast(IType targetType, boolean targetBoxed, IType valueType, IExpression value,
+            boolean constantAssignment, ResultContext preValueContext, ResultContext postValueContext, IHasScope scopeUnit) {
         if (targetType instanceof LiteralType literalTargetType && valueType instanceof LiteralType literalValueType) {
             if (literalTargetType.isBuiltIn() && literalValueType.isBuiltIn()) {
                 // Check if value is boxed
@@ -113,7 +111,7 @@ public class TypeCastHelper {
                  * assigning a constant to a short or byte does not need a type cast, unless the constant is too big
                  * for short or byte. This can happen when the short or byte is unsigned (eg. assigning 255 to a unsigned byte).
                  */
-                if (constantAssignment && btTarget.isNumeric() && !btTarget.isDecimal()) {
+                if (constantAssignment && btTarget.isAnyCardinal()) {
                     Object constantValue = value.evaluateConstant();
                     if (constantValue instanceof Number number) {
                         int targetSize = btTarget.getJavaSize();
@@ -152,8 +150,21 @@ public class TypeCastHelper {
 
                     boolean needTargetCast = (targetSize < valueSize || (targetBoxed && (targetSize != valueSize))); // (int)
                     boolean needValueCast = (valueBoxed && targetSize < valueSize); // (long)
+                    boolean needUnsignedUpcast = (targetSize > valueSize) 
+                            && btValue.isAnyCardinal()
+                            && btValue.getJavaSize() <= btValue.getModulaSize(); // upcast from unsigned type (such as CARDINAL)
                     if (needTargetCast) {
                         preValueContext.write("(" + btTarget.getJavaType() + ") ");
+                    }
+                    if (needUnsignedUpcast) {
+                        if (targetSize == 8) {
+                            preValueContext.write(btValue.getBoxedType() + ".toUnsignedLong(");
+                        } else if (targetSize == 4) {
+                            preValueContext.write(btValue.getBoxedType() + ".toUnsignedInt(");
+                        } else if (targetSize == 2) { // There is no toUnsignedShort() method
+                            preValueContext.write("(short) " + btValue.getBoxedType() + ".toUnsignedInt(");
+                        }
+                        postValueContext.write(")");
                     }
                     if (needValueCast) {
                         preValueContext.write("(" + btValue.getJavaType() + ") ");
