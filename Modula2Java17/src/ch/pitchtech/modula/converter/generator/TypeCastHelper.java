@@ -91,6 +91,8 @@ public class TypeCastHelper {
         
         return null; // preValueContext and postValueContext have been filled. Continue without supplying a full replacement
     }
+    
+    // TODO (1) cardinal upcast should use toUnsignedXxx methods
 
     private ResultContext handleNumericDownCast(IType targetType, boolean targetBoxed, IType valueType, IExpression value,
             boolean constantAssignment, ResultContext preValueContext, IHasScope scopeUnit) {
