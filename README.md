@@ -16,6 +16,21 @@ There are four sub-projects (these are Eclipse projects, with gradle support):
 - **Modula2Java17-Tests**: automated tests (JUnit 4)
 
 
+## Version history
+
+### 0.9.0
+
+Initial release
+
+### In progress
+
+- Data models to control how Modula-2 types are mapped to Java types
+- Implemented `BITSET` properly
+- More accurate unsigned types handling
+- Various bugfixes
+- Preserve and convert Modula-2 comments into Java comments
+
+
 ## Limitations
 
 - Imports using the `FROM <module> IMPORT ...` syntax should work well. Imports using `IMPORT <module>` are not well tested as I never used them. `EXPORT` keyword (in `EXPORT QUALIFIED` for instance) is not supported.
@@ -71,15 +86,18 @@ The compiler is provided a command-line tool only. It accepts zero or more optio
 
 ### Compiler options
 
-- `-p` or `--package` <package>: name of the Java package to use for the generated Java source files. Default `org.modula2.generated`
-- `-o` or `--output` <dir>: target directory in which to generate Java code. Defaults to current directory. Note that the Java package structure will be created inside of that directory
+- `-p` or `--package` &lt;package&gt;: name of the Java package to use for the generated Java source files. Default `org.modula2.generated`
+- `-o` or `--output` &lt;dir&gt;: target directory in which to generate Java code. Defaults to current directory. Note that the Java package structure will be created inside of that directory
 - `-pl` or `--package-library`: name of the Java package to use for the Java source files that are part of the "library" (Default `org.modula2.generated.library`)
     - The "library" corresponds to any .def files that have no corresponding .mod files. The assumption is that the implementation will be done manually in Java for these definitions.
     - If the Java files do not exist yet, the compiler will generate stub files (with method bodies that throw an `UnsupportedOperationException`) so that they can be completed manually.
     - If the Java files already exist, there are not modified.
 - `-ol` or `--output-library`: target directory for the Java files of the "library". Default to the same as `-o`, but another value can be specified, for instance if you want to put them in a different Java project.
-- `-s` or `--source` <dir>: specify an additional directory in which to look for Modula-2 source files. This options can be specified multiple times to add multiple source directories.
-- `-dm` or `--data-model` `16|32`: choose 16-bit or 32-bit data model (size of the `INTEGER` Modula-2 type). Default 32-bit.
+- `-s` or `--source` &lt;dir&gt;: specify an additional directory in which to look for Modula-2 source files. This options can be specified multiple times to add multiple source directories.
+- `-dm` or `--data-model` `16|32|s16|s32`: choose between 16-bit or 32-bit default or strict data model (size of the `INTEGER` Modula-2 type). Default 32-bit non-strict.
+- `-lu` or `--loose-unsigned` &lt;size&gt;\[,&lt;size&gt;...\]: treat unsigned variables of the given sizes (in bits) as signed. For example `-lu 32,64`.
+- `-te` or `--text-encoding` &lt;charset&gt;: the charset / text encoding of the Modula-2 sources. Any value recognized by Java's `Charset.forName` is allowed, such as `ISO-8859-1`. Default `UTF-8`. Note that the *generated Java code* always uses UTF-8 encoding! This option is only used to parse the Modula-2 code.
+- `-v` or `--verbose` &lt;level&gt;: verbosity level between 0 and 2 (included). Default 1.
 
 
 ### Examples
@@ -103,7 +121,7 @@ The stub java implementations contain all methods, but without any implementatio
 
 The stub java implementations are not generated again if they already exist. To generate them again, you must delete them.
 
-The generated Java code may use helper classes from the `ch.pitchtech.modula.runtime` to support some Modula-2 constructs. These helper classes are found in `Modula2-Runtime.jar`, and their sources are in the `Modula2-Runtime` project. Hence to compile the generated Java file you must add `Modula2-Runtime.jar` to the Java classpath.
+The generated Java code may use helper classes from the `ch.pitchtech.modula.runtime` to support some Modula-2 constructs. These helper classes are found in `Modula2-Runtime.jar`, and their sources are in the `Modula2-Runtime` project. Hence to compile and execute the generated Java file you must add `Modula2-Runtime.jar` to the Java classpath.
 
 
 #### Example 2:
@@ -161,12 +179,12 @@ First, the following types are always mapped the same way, regardless of the dat
 
 | Modula-2 type | BYTE  | BOOLEAN | CHAR  | REAL  | LONGREAL | ADDRESS |
 | ------------- | :---: | :-----: | :---: | :---: | :------: | :-----: |
-| Modula-2 size | 8     | 8       | 16    | 32    | 64       |         |
+| Modula-2 size | 8     | 8       | 8     | 32    | 64       |         |
 | Java type     | byte  | boolean | char  | float | double   | Object  |
 
 
 The following table shows the mapping for the other Modula-2 types, using the 32-bit (default) and 16-bit data models.
-The 16-bit data model is enabled by passing `-dm 16` to the compiler.
+The 16-bit data model is enabled by passing `-dm 16` to the compiler. As a reminer, in Java `byte` is 8 bits, `short` is 16 bits, `int` is 32 bits and `long` is 64 bits; all the four are signed.
 
 | Modula-2 type | SHORTINT | SHORTCARD | INTEGER | CARDINAL | LONGINT | LONGCARD |
 | ------------- | :------: | :-------: | :-----: | :------: | :-----: | :------: |
@@ -241,27 +259,29 @@ Record types result in Java classes (and *not* in Java records, which are immuta
 The public fields allow the Java code to be as close as possible to the Modula-2 code, i.e. for example `item.x = item.y` instead of `item.setX(item.getY())`.
 The getter and setter are required in some cases though, see later about arguments by reference.
 
-A variable of a `RECORD` type and a variable that is a `POINTER` to the same record type will result in the same Java declaration, namely a variable of the Java class corresponding to the record. However, different code is generated when these variables are assigned. For the `POINTER TO RECORD` variable, a Modula-2 assignment results in a simple Java assignment. However, for the `RECORD` variable, the Modula-2 assignment results in a call to the `copyFrom` helper methods that is generated in every Java classes corresponding to a `RECORD`.
+A variable of a `RECORD` type and a variable that is a `POINTER` to the same record type will result in the same Java declaration, namely a variable of the Java class corresponding to the record. However, different code is generated when these variables are assigned. For the `POINTER TO RECORD` variable, a Modula-2 assignment results in a simple Java assignment. However, for the `RECORD` variable, the Modula-2 assignment results in a call to the `copyFrom` helper methods that is generated in every Java classes corresponding to a `RECORD`. Furthermore, in the variable declaration, the `RECORD` variable is initialized with a default instance whereas the `POINTER` variable is left to the default `null` value.
 
 Similarly, the `RECORD` variable uses the `newCopy` helper method when passed to a non-`VAR` argument.
 
 Modula-2 arrays are mapped to Java arrays. Note that in Java, array indexes exclusively use the `int` type. As such, the maximum size of an array is limited to 2<sup>31</sup> - 1. If your Modula-2 code uses arrays larger than that, this will result in non-working Java code.
 
-`SET OF` over an interval and `BITSET` are mapped to the `Runtime.RangeSet` class from the Modula-2 runtime. This class is similar to a `java.util.BitSet`, but with strictly enforced bounds, passed to the constructor. For instance, `BITSET` is mapped to a `new Runtime.RangeSet(0, 31)` in the 32-bit data model, and `new Runtime.RangeSet(0, 15)` in the 16-bit data model. `SET OF` over an enumerated type is mapped to the `Runtime.EnumSet` class.
+`SET OF` over an interval and `BITSET` are mapped to the `Runtime.RangeSet` class from the Modula-2 runtime. This class is similar to a `java.util.BitSet`, but with strictly enforced bounds, passed to the constructor. For instance, `BITSET` is mapped to a `new Runtime.RangeSet(0, 31)` in the 32-bit data model, and `new Runtime.RangeSet(0, 15)` in the 16-bit data model.
 
-Enumerations and sets are quite different in Modula-2 and Java, hence quite a lot of boilerplate code and helper methods can be generated in the Java code when used. Note that Modula-2 enumerated types are mapped to Java `enum` types.
+A Modula-2 enumerated type is converted to a Java `enum`. A `SET OF` over an enumerated type is mapped to `java.util.EnumSet`.
+
+Enumerations and sets are quite different in Modula-2 and Java, hence quite a lot of boilerplate code and helper methods can be generated in the Java code when used.
 
 
 ### Nested Procedures
 
 Nested procedures (`PROCEDURE` inside of another `PROCEDURE`) are supported. In the Java code they are flattened out. The name of a procedure "Toto" nested in procedure "Titi" will result in a Java method named "Titi_Toto".
 
-In Modula-2, a nested procedure has access to all constants and variables of the enclosing procedure. The compiler tries to analyse exactly what constants and variables are _actually_ accessed, and pass only those as additional arguments to the resulting nested procedure when converted in Java.
+In Modula-2, a nested procedure has access to all constants and variables of the enclosing procedure. The compiler tries to analyse exactly what constants and variables are *actually* accessed, and pass only those as additional arguments to the resulting nested procedure when converted in Java.
 
 
 ### Arguments by value (default) and by reference (using `VAR`)
 
-Java is only by-value. However, Modula-2 records are converted to Java objects, and Modula-2 arrays are converted to Java arrays. Those are both references in Java. Although a reference itself is passed by value in Java, it corresponds to the by-reference semantics of Modula-2 because the _content_ is modifiable.
+Java is only by-value. However, Modula-2 records are converted to Java objects, and Modula-2 arrays are converted to Java arrays. Those are both references in Java. Although a reference itself is passed by value in Java, it corresponds to the by-reference semantics of Modula-2 because the *content* is modifiable.
 
 If a record or array is passed by reference in Modula-2 (using `VAR`), the Java code is straightforward.
 
@@ -271,7 +291,7 @@ If a simple type (primitive type, pointer, enum, etc) is passed by value in Modu
 
 If a simple type is passed by reference in Modula-2 (using `VAR`), the compiler will wrap it into a subclass of the `ch.pitchtech.modula.runtime.Runtime.IRef` interface that is part of the runtime:
 
-- For a member of a record, or a variable of a module, a `FieldRef` is used (or a `FieldExprRef` if accessing an element of an _expression_ of record type). The `FieldRef` uses the getter and setters of that field or variable, which is why getters and setters are always generated, even if the fields are `public`.
+- For a member of a record, or a variable of a module, a `FieldRef` is used (or a `FieldExprRef` if accessing an element of an *expression* of record type). The `FieldRef` uses the getter and setters of that field or variable, which is why getters and setters are always generated, even if the fields are `public`.
 - For an array element, an `ArrayElementRef` is used
 - For a variable local to a procedure, the variable itself is wrapped into a `Ref`. Basically this is equivalent to converting it to a POINTER and dereferencing it on every usage, except when passed as `VAR` argument.
 
@@ -284,7 +304,7 @@ Note: The `IRef` interface is a basic implementation of a "reference" or "pointe
 
 Procedure types are supported; a procedure type is converted to a Java interface with a single method, and the `@FunctionalInterface` annotation.
 
-A procedure used as an expression (when assigned to a variable of a procedure type), is converted to the Java 8 `module::procedure` syntax. Whenever a procedure is used as an expression, a `final` Java field with the `module::procedure` value is created next to it. This field is then used in the code instead of repeating the `module::procedure` expression everywhere. This is necessary to support equality/inequality comparison of variables of procedure type, because in Java every instance of the _same_ `module::procedure` expression results in a _different_ lambda (that are _not_ equal, even if they refer to the same class and method).
+A procedure used as an expression (when assigned to a variable of a procedure type), is converted to the Java 8 `module::procedure` syntax. Whenever a procedure is used as an expression, a `final` Java field with the `module::procedure` value is created next to it. This field is then used in the code instead of repeating the `module::procedure` expression everywhere. This is necessary to support equality/inequality comparison of variables of procedure type, because in Java every instance of the *same* `module::procedure` expression results in a *different* lambda (that are *not* equal, even if they refer to the same class and method).
 
 
 ### Memory management
@@ -298,7 +318,7 @@ Calling `DISPOSE` on a pointer whose referenced object is still referenced by an
 
 With *correct* Modula-2 code, the semantics are practically similar.
 
-`ALLOCATE` and `DEALLOCATE` from `Storage` (implemented in the "Modula2-Library" project) are partially supported, but _only_ if the code properly uses `SIZE` or `TSIZE` exacly once before each call to `ALLOCATE` or `DEALLOCATE`. They also only work for pointers to `RECORD`s.
+`ALLOCATE` and `DEALLOCATE` from `Storage` (implemented in the "Modula2-Library" project) are partially supported, but *only* if the code properly uses `SIZE` or `TSIZE` exacly once before each call to `ALLOCATE` or `DEALLOCATE`. They also only work for pointers to `RECORD`s.
 They result in Java code that is more complex, but equivalent to `NEW` and `DISPOSE`.
 
 For example, the following is ok (assuming `point` is a `POINTER TO Point`, etc):
@@ -381,8 +401,8 @@ VAR
 ```
 
 - After pass 1, there is a "VAR" block, with two declaration lists. The first declaration list declares two variables "p1" and "p2" of type "Point", and the second list declares one variable "x" of type "INTEGER". "Point" is just an identifier at this stage, defined only by the `"Point"` string.
-    - The code is modelled by the antlr-generated classes of the `ch.pitchtech.modula.converter.antlr.m2` package. The model is close to the exact syntax of the original code.
-- After pass 2, the structure of the original code is abstracted. For instance, the fact there was two declaration lists is lost. What remains is that the enclosing module or procedure has three local variables: "p1" of type "Point", "p2" of type "Point" and "x" of type "INTEGER". "Point" is still just an identifier at this stage.
+    - The code is modelled by the antlr-generated classes of the `ch.pitchtech.modula.converter.antlr.m2` package. The model is close to the exact syntax of the original code. In particular it still contains all the tokens like the `VAR` keyword or the punctuations `,`, `:`, `;`, etc.
+- After pass 2, the structure of the original code is abstracted. For instance, the fact there was two declaration lists is lost. What remains is that the enclosing module or procedure has three local variables: "p1" of type "Point", "p2" of type "Point" and "x" of type "INTEGER". "Point" is still just an identifier at this stage. Modula-2 keywords and punctuations are no longer stored.
     - The code is now modelled by the classes of the `ch.pitchtech.modula.model` package and subpackages.
 - After the "Hidden pass" (scope resolution), the nature of the "Point" type is now known (for example a RECORD with all its fields - it depends on the remainder of the code that is not shown here). After this pass, for every occurrences of "p1", "p2" or "x" in the code, it is also known where these variables are declared and what their types are. This pass also resolves ambiguities (such as a field in a "WITH" statement having priority over a variable of the same name).
 - After pass 3, the compiler may for example know that a given procedure never reads "x", or never writes "p1", which can be used to optimize the generated code (such as "VAR" arguments, or nested procedures accessing variables of the enclosing one).
