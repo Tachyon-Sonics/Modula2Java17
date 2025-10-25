@@ -13,8 +13,10 @@ Optimize SET operation (remove copyFrom)
 Comment handling:
 - Unused methods (convertToJavadocComment, shouldBeJavadoc (also not really correct)), getCommentsBefore, getCommentsBetween
 - Immutable class not created as record
-- Use hard-coded up to 5 lines before statement to find comment
-- Failed to add new CommentTest to the RootSuite
+- Funny: first made a comment with /* */ inside, notice it did not compile, fixed it
+- Use hard-coded up to 10 lines before statement to find comment
+  - Was first hard-coded to 2, then moved to 10, then hallucinate about an extra comment being "taken". I had to tell him there was no error
+- Failed to add new CommentTest to the RootSuite (maybe because by default with gradle all tests are discovered)
 - Not handled (most of them understandable):
   - /* and */ inside Modula-2 comment
   - (*** -> create a javadoc comment
