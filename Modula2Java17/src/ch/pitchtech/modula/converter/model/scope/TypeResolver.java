@@ -11,6 +11,7 @@ import ch.pitchtech.modula.converter.model.ICompilationUnit;
 import ch.pitchtech.modula.converter.model.builtin.BuiltInType;
 import ch.pitchtech.modula.converter.model.expression.ConstantLiteral;
 import ch.pitchtech.modula.converter.model.expression.IExpression;
+import ch.pitchtech.modula.converter.model.source.SourceLocation;
 import ch.pitchtech.modula.converter.model.type.IType;
 import ch.pitchtech.modula.converter.model.type.LiteralType;
 import ch.pitchtech.modula.converter.model.type.OpaqueType;
@@ -51,7 +52,7 @@ public class TypeResolver {
     /**
      * If {@code type} is a built-in type, check if that type must further be replaced.
      * <p>
-     * Actually this method only replaces the built-in type {@link BuiltInType#BITSET} by
+     * Currently this method only replaces the built-in type {@link BuiltInType#BITSET} by
      * a {@link RangeSetType} with bounds 0 and {@link DataModelType#getNbBits()} - 1.
      * <p>
      * In all other cases, {@code type} is returned unmodified.
@@ -59,9 +60,10 @@ public class TypeResolver {
     private static IType replaceAnyBuiltInType(IHasScope scopeUnit, IType type) {
         if (type instanceof LiteralType literalType && literalType.isBuiltInType(BuiltInType.BITSET)) {
             int nbBits = CompilerOptions.get().getDataModel().getNbBits();
-            type = new RangeSetType(null, scopeUnit, "BITSET", true, 
-                    new ConstantLiteral(null, "0"), 
-                    new ConstantLiteral(null, String.valueOf(nbBits - 1)));
+            SourceLocation sLoc = literalType.getSourceLocation();
+            type = new RangeSetType(sLoc, scopeUnit, "BITSET", true, 
+                    new ConstantLiteral(sLoc, "0"), 
+                    new ConstantLiteral(sLoc, String.valueOf(nbBits - 1)));
         }
         return type;
     }

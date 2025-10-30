@@ -1,6 +1,7 @@
 BITSET handling:
 - found a typo
 - correctly identified TypeResolver, checked how "PROC" is handled
+- correctly identified non-trivial arguments (SourceLocation)
   - then hard coded "BITSET" string in TypeResolver
   
 Inline SET OF
@@ -21,6 +22,7 @@ Comment handling:
   - /* and */ inside Modula-2 comment
   - (*** -> create a javadoc comment
   - DEFINITION modules
+  - Last comment / after "END Module" ?
 
 - Fooled by the CompileHelper that allows ignoring added/removed lines
   -> struggle + wrong conclusion (Schrödinger)
