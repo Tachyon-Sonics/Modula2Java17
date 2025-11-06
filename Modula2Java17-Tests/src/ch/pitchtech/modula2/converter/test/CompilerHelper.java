@@ -63,12 +63,12 @@ public class CompilerHelper {
         if (subDir != null)
             m2srcDir = m2srcDir.resolve(subDir);
         fileOptions.addM2sourceDir(m2srcDir);
-        fileOptions.addM2sourceDir(getModulaLibraryPath());
+        fileOptions.addM2sourceDir(getModulaIsoLibraryPath());
         fileOptions.setTargetMainDir(targetDir);
         fileOptions.setTargetLibraryDir(getJavaLibraryPath());
         compilerOptions = new CompilerOptions();
         compilerOptions.setTargetPackageMain("generated.test" + (subDir == null ? "" : "." + subDir));
-        compilerOptions.setTargetPackageLib("ch.pitchtech.modula.library");
+        compilerOptions.setTargetPackageLib("ch.pitchtech.modula.library.iso");
     }
     
     public CompilerHelper(Path targetDir, FileOptions fileOptions, CompilerOptions compilerOptions) {
@@ -82,12 +82,12 @@ public class CompilerHelper {
         temporaryDirs.add(tempDir);
     }
     
-    // The "modula-2" folder in the "Modula2-Library" project
-    private static Path getModulaLibraryPath() {
+    // The folder with ISO stdlib .def files in "Modula2-Library" project
+    private static Path getModulaIsoLibraryPath() {
         Path sourcePath = Path.of("modula-2");
         Path testProjectDir = sourcePath.toAbsolutePath().getParent();
         Path modulaLibraryProjectDir = testProjectDir.getParent().resolve("Modula2-Library");
-        return modulaLibraryProjectDir.resolve("modula-2");
+        return modulaLibraryProjectDir.resolve("modula-2").resolve("iso");
     }
     
     // The "src" folder in the "Modula2-Library" project

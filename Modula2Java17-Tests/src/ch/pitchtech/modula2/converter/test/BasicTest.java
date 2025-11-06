@@ -29,7 +29,7 @@ public class BasicTest {
         CompilerHelper helper = new CompilerHelper();
         helper.compile("Basic.mod");
         helper.assertCompilationResult(Basic.class, 
-                "import ch.pitchtech.modula.library.*;"); // This import is not needed);
+                "import ch.pitchtech.modula.library.iso.*;"); // This import is not needed);
     }
     
     /*

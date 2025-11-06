@@ -17,7 +17,7 @@ import ch.pitchtech.modula.converter.utils.Logger;
 public class CompileChess {
 
     private final static String SOURCE_DIRECTORY_MAIN = "../../Modula2-Examples/Modula2Chess/src";
-    private final static String SOURCE_DIRECTORY_LIBRARY = "../../Modula2Java17/Modula2-Library/modula-2";
+    private final static String SOURCE_DIRECTORY_LIBRARY = "../../Modula2Java17/Modula2-Library/modula-2/mocka";
     
     private final static String TARGET_DIRECTORY_MAIN = "../../Modula2-Examples/Modula2Chess/java";
     private final static String TARGET_DIRECTORY_LIBRARY = "../../Modula2Java17/Modula2-Library/src";
@@ -36,7 +36,7 @@ public class CompileChess {
         CompilerOptions compilerOptions = new CompilerOptions();
         compilerOptions.setCharset(StandardCharsets.ISO_8859_1);
         compilerOptions.setTargetPackageMain("ch.pitchtech.modula.chess");
-        compilerOptions.setTargetPackageLib("ch.pitchtech.modula.library");
+        compilerOptions.setTargetPackageLib("ch.pitchtech.modula.library.mocka");
         compilerOptions.setDataModel(DataModelType.DM_32);
         Logger.setVerboseLevel(2);
         

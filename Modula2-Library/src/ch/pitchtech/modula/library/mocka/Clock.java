@@ -1,4 +1,4 @@
-package ch.pitchtech.modula.library;
+package ch.pitchtech.modula.library.mocka;
 
 public class Clock {
 

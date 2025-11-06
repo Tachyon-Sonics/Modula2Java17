@@ -39,7 +39,7 @@ public class TypesTest {
 
         // Check compilation result
         helper.assertCompilationResult(DoubleAlias.class,
-                "import ch.pitchtech.modula.library.*;", // Unnecessary import
+                "import ch.pitchtech.modula.library.iso.*;", // Unnecessary import
                 "    @SuppressWarnings(\"unused\")");
     }
     
@@ -51,7 +51,7 @@ public class TypesTest {
 
         // Check compilation result
         helper.assertCompilationResult(PointerArrayPointer.class,
-                "import ch.pitchtech.modula.library.*;", // Unnecessary import
+                "import ch.pitchtech.modula.library.iso.*;", // Unnecessary import
                 "    @SuppressWarnings(\"unused\")",
                 "    @SuppressWarnings(\"unchecked\")");
         
@@ -67,7 +67,7 @@ public class TypesTest {
         helper.getCompilerOptions().setDataModel(DataModelType.DM_16);
         helper.compile("Constants.mod");
         
-        helper.assertCompilationResult(Constants.class, "import ch.pitchtech.modula.library.*;");
+        helper.assertCompilationResult(Constants.class, "import ch.pitchtech.modula.library.iso.*;");
     }
     
     @Test
@@ -75,7 +75,7 @@ public class TypesTest {
         CompilerHelper helper = new CompilerHelper("types");
         helper.compile("DataModel.mod");
         
-        helper.assertCompilationResult(DataModel.class, "import ch.pitchtech.modula.library.*;");
+        helper.assertCompilationResult(DataModel.class, "import ch.pitchtech.modula.library.iso.*;");
     }
     
     @Test
@@ -84,7 +84,7 @@ public class TypesTest {
         helper.getCompilerOptions().setDataModel(DataModelType.DM_16);
         helper.compile("DataModel.mod");
         
-        helper.assertCompilationResult("DataModel", DataModel16.class, "import ch.pitchtech.modula.library.*;");
+        helper.assertCompilationResult("DataModel", DataModel16.class, "import ch.pitchtech.modula.library.iso.*;");
     }
     
     @Test
@@ -93,7 +93,7 @@ public class TypesTest {
         helper.getCompilerOptions().setDataModel(DataModelType.DM_STRICT_32);
         helper.compile("DataModel.mod");
         
-        helper.assertCompilationResult("DataModel", DataModelStrict32.class, "import ch.pitchtech.modula.library.*;");
+        helper.assertCompilationResult("DataModel", DataModelStrict32.class, "import ch.pitchtech.modula.library.iso.*;");
     }
     
     @Test
@@ -102,7 +102,7 @@ public class TypesTest {
         helper.getCompilerOptions().setDataModel(DataModelType.DM_STRICT_16);
         helper.compile("DataModel.mod");
         
-        helper.assertCompilationResult("DataModel", DataModelStrict16.class, "import ch.pitchtech.modula.library.*;");
+        helper.assertCompilationResult("DataModel", DataModelStrict16.class, "import ch.pitchtech.modula.library.iso.*;");
     }
     
     @Test
@@ -110,7 +110,7 @@ public class TypesTest {
         CompilerHelper helper = new CompilerHelper("types");
         helper.compile("UnsignedTest.mod");
         
-        helper.assertCompilationResult(UnsignedTest.class, "import ch.pitchtech.modula.library.*;");
+        helper.assertCompilationResult(UnsignedTest.class, "import ch.pitchtech.modula.library.iso.*;");
     }
 
     @Test
@@ -119,7 +119,7 @@ public class TypesTest {
         helper.getCompilerOptions().setDataModel(DataModelType.DM_16);
         helper.compile("UnsignedTest.mod");
         
-        helper.assertCompilationResult("UnsignedTest", UnsignedTest16.class, "import ch.pitchtech.modula.library.*;");
+        helper.assertCompilationResult("UnsignedTest", UnsignedTest16.class, "import ch.pitchtech.modula.library.iso.*;");
     }
 
     @Test
@@ -128,7 +128,7 @@ public class TypesTest {
         helper.getCompilerOptions().setDataModel(DataModelType.DM_STRICT_32);
         helper.compile("UnsignedTest.mod");
         
-        helper.assertCompilationResult("UnsignedTest", UnsignedTestStrict32.class, "import ch.pitchtech.modula.library.*;");
+        helper.assertCompilationResult("UnsignedTest", UnsignedTestStrict32.class, "import ch.pitchtech.modula.library.iso.*;");
     }
 
     @Test
@@ -138,7 +138,7 @@ public class TypesTest {
         helper.getCompilerOptions().getExactUnsignedTypes().clear();
         helper.compile("UnsignedTest.mod");
         
-        helper.assertCompilationResult("UnsignedTest", UnsignedTestLoose32.class, "import ch.pitchtech.modula.library.*;");
+        helper.assertCompilationResult("UnsignedTest", UnsignedTestLoose32.class, "import ch.pitchtech.modula.library.iso.*;");
     }
 
     @Test
@@ -147,7 +147,7 @@ public class TypesTest {
         helper.getCompilerOptions().setDataModel(DataModelType.DM_STRICT_16);
         helper.compile("UnsignedTest.mod");
         
-        helper.assertCompilationResult("UnsignedTest", UnsignedTestStrict16.class, "import ch.pitchtech.modula.library.*;");
+        helper.assertCompilationResult("UnsignedTest", UnsignedTestStrict16.class, "import ch.pitchtech.modula.library.iso.*;");
     }
     
     @Test

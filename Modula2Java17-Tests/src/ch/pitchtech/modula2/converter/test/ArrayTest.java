@@ -15,7 +15,7 @@ public class ArrayTest {
         helper.getCompilerOptions().setDataModel(DataModelType.DM_STRICT_32);
         helper.compile("ArrayAccess64.mod");
         
-        helper.assertCompilationResult(ArrayAccess64.class, "import ch.pitchtech.modula.library.*;");
+        helper.assertCompilationResult(ArrayAccess64.class, "import ch.pitchtech.modula.library.iso.*;");
     }
 
 }

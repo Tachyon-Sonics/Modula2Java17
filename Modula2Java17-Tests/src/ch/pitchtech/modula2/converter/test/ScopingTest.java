@@ -25,7 +25,7 @@ public class ScopingTest {
         // Check compilation result
         helper.assertCompilationResult(DummyLibrary.class);
         helper.assertCompilationResult(DummyModule.class,
-                "import ch.pitchtech.modula.library.*;");
+                "import ch.pitchtech.modula.library.iso.*;");
         
         // Check that the resulting Java class runs without errors
         ExecuteHelper executor = new ExecuteHelper();

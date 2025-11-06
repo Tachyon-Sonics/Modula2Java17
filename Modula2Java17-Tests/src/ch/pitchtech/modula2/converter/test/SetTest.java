@@ -19,7 +19,7 @@ public class SetTest {
         helper.getCompilerOptions().setDataModel(DataModelType.DM_16);
         helper.compile("SetAccess.mod");
         
-        helper.assertCompilationResult(SetAccess.class, "import ch.pitchtech.modula.library.*;");
+        helper.assertCompilationResult(SetAccess.class, "import ch.pitchtech.modula.library.iso.*;");
     }
     
     @Test
@@ -28,7 +28,7 @@ public class SetTest {
         helper.getCompilerOptions().setDataModel(DataModelType.DM_16);
         helper.compile("BitSetAccess.mod");
         
-        helper.assertCompilationResult(BitSetAccess.class, "import ch.pitchtech.modula.library.*;");
+        helper.assertCompilationResult(BitSetAccess.class, "import ch.pitchtech.modula.library.iso.*;");
     }
 
     @Test
@@ -37,7 +37,7 @@ public class SetTest {
         helper.getCompilerOptions().setDataModel(DataModelType.DM_32);
         helper.compile("SetAccess64.mod");
         
-        helper.assertCompilationResult(SetAccess64.class, "import ch.pitchtech.modula.library.*;");
+        helper.assertCompilationResult(SetAccess64.class, "import ch.pitchtech.modula.library.iso.*;");
     }
     
     @Test
@@ -46,7 +46,7 @@ public class SetTest {
         helper.getCompilerOptions().setDataModel(DataModelType.DM_16);
         helper.compile("EnumSetAccess.mod");
         
-        helper.assertCompilationResult(EnumSetAccess.class, "import ch.pitchtech.modula.library.*;");
+        helper.assertCompilationResult(EnumSetAccess.class, "import ch.pitchtech.modula.library.iso.*;");
     }
     
 }

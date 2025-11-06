@@ -1,6 +1,6 @@
 package generated.test.arguments;
 
-import ch.pitchtech.modula.library.*;
+import ch.pitchtech.modula.library.iso.*;
 import ch.pitchtech.modula.runtime.HaltException;
 import ch.pitchtech.modula.runtime.Runtime;
 

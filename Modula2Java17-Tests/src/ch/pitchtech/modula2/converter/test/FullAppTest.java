@@ -165,7 +165,7 @@ public class FullAppTest {
                     + "\nMake sure you checkout this repo/project in order to run this test."
                     + "\nOr launch the FastRootSuite instead of the RootSuite to skip tests requiring other projects.");
         }
-        Path libModulaPath = getStdLibModulaPath();
+        Path libModulaPath = getMockaLibModulaPath();
         if (!Files.isDirectory(libModulaPath)) {
             throw new UnsupportedOperationException(
                     "The 'Modula2-Library' project cannot be found at " + libModulaPath.toString());
@@ -176,7 +176,7 @@ public class FullAppTest {
         fileOptions.setTargetLibraryDir(targetDir);
         CompilerOptions compilerOptions = new CompilerOptions();
         compilerOptions.setTargetPackageMain("ch.pitchtech.modula.chess");
-        compilerOptions.setTargetPackageLib("ch.pitchtech.modula.library");
+        compilerOptions.setTargetPackageLib("ch.pitchtech.modula.library.mocka");
         compilerOptions.setCharset(StandardCharsets.ISO_8859_1);
         compilerOptions.setDataModel(DataModelType.DM_32);
         CompilerHelper helper = new CompilerHelper(targetDir, fileOptions, compilerOptions);
@@ -232,9 +232,9 @@ public class FullAppTest {
     }
 
     // The "modula-2" folder in the given project
-    private static Path getStdLibModulaPath() {
+    private static Path getMockaLibModulaPath() {
         Path projectPath = getProjectPath("Modula2Java17", "Modula2-Library");
-        return projectPath.resolve("modula-2");
+        return projectPath.resolve("modula-2").resolve("mocka");
     }
 
     // The "src" folder in the given project
