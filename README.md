@@ -29,6 +29,7 @@ Initial release
 - More accurate unsigned types handling
 - Various bugfixes
 - Preserve and convert Modula-2 comments into Java comments
+- Split standard library into ISO and Mocka (and possibly more)
 
 
 ## Limitations
@@ -129,10 +130,10 @@ The generated Java code may use helper classes from the `ch.pitchtech.modula.run
 For this example, it is necessary to first decompress the `Modula2-Library-sources.jar` file into a directory named `Modula2-Library` (or any other directory - but you may then need to adjust the corresponding paths in the command line below).
 
 ```
-java -jar Modula2Java17.jar -s "Modula2-Library/modula-2" -ol "Modula2-Library/src" -pl ch.pitchtech.modula.library -p org.example MyModule.mod
+java -jar Modula2Java17.jar -s "Modula2-Library/modula-2" -ol "Modula2-Library/src" -pl ch.pitchtech.modula.library.iso -p org.example MyModule.mod
 ```
 
-This will compile `MyModule.mod` and all its dependencies, using the provided standard library (that is *very incomplete*, basically just `InOut` and `Storage`). The generated Java files are placed in a package named `org.example`. The Java files will import classes of the standard library in the `ch.pitchtech.modula.library` package; hence you must add `Modula2-Library.jar` to the Java classpath to compile the resulting Java code. As usual, `Modula2-Runtime.jar` is required as well.
+This will compile `MyModule.mod` and all its dependencies, using the provided ISO standard library (that is *very incomplete*, basically just `InOut` and `Storage`). The generated Java files are placed in a package named `org.example`. The Java files will import classes of the standard library in the `ch.pitchtech.modula.library.iso` package; hence you must add `Modula2-Library.jar` to the Java classpath to compile the resulting Java code. As usual, `Modula2-Runtime.jar` is required as well.
 
 Note: file and directory paths can use either `/` or `\` on Windows.
 
