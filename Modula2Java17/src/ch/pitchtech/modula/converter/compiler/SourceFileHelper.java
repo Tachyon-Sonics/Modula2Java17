@@ -1,8 +1,13 @@
 package ch.pitchtech.modula.converter.compiler;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 
 public class SourceFileHelper {
     
@@ -12,7 +17,7 @@ public class SourceFileHelper {
 
     public static boolean isDefinition(SourceFile sourceFile) {
         for (String extension : DEFINITION_EXTENSIONS) {
-            if (sourceFile.getPath().toString().toLowerCase().endsWith(extension)) {
+            if (sourceFile.getFileName().toLowerCase().endsWith(extension)) {
                 return true;
             }
         }
@@ -52,7 +57,28 @@ public class SourceFileHelper {
         if (importedModuleName.equals("SYSTEM"))
             return null;
         Path path = lookup(currentFile.getPath().getParent(), importedModuleName, fileOptions, DEFINITION_EXTENSIONS);
+        
         if (path == null || !Files.isRegularFile(path)) {
+            if (fileOptions.getStandardLibrary() != null) {
+                // Look into specified standard library
+                Path libraryArchive = new File(fileOptions.getLibraryArchive()).toPath();
+                if (Files.isRegularFile(libraryArchive)) {
+                    try (JarInputStream jarInput = new JarInputStream(new FileInputStream(libraryArchive.toFile()))) {
+                        JarEntry entry = jarInput.getNextJarEntry();
+                        while (entry != null) {
+                            String name = entry.getName();
+                            if (name.equals(fileOptions.getStandardLibrary() + "/" + importedModuleName + ".def")) {
+                                return new SourceFile(name);
+                            }
+                            
+                            entry = jarInput.getNextJarEntry();
+                        }
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+            
             throw new CompilationException(null, "File {0}.def (or .md) not found in {1} (resolved: {2}), imported by {3}", 
                     importedModuleName, fileOptions.getM2sourceDirs(), fileOptions.getM2sourceDirsAbsolute(), currentFile.getPath());
         }
@@ -82,7 +108,10 @@ public class SourceFileHelper {
      * Returns <tt>null</tt> if no IMPLEMENTATION (*.mod) is found
      */
     public static SourceFile lookupImplementation(SourceFile definition, FileOptions fileOptions) {
-        String defName = definition.getPath().getFileName().toString();
+        if (definition.getLibraryZipPath() != null)
+            return null; // This is a standard library definition. Implementation is in Java
+        
+        String defName = definition.getFileName();
         String baseName = null;
         for (String extension : DEFINITION_EXTENSIONS) {
             if (defName.endsWith(extension))

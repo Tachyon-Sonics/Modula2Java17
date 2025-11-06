@@ -13,7 +13,7 @@ dependencies {
 
 sourceSets {
 	main.java.srcDirs = ['src']
-	main.resources.srcDirs = ['src']
+	main.resources.srcDirs = ['src', 'modula-2']
 }
 
 java {

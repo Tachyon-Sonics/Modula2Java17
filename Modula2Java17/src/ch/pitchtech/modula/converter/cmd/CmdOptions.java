@@ -68,6 +68,18 @@ public class CmdOptions {
         
     };
     
+    public final static CmdOption STD_LIBRARY = new CmdOption("sl", "standard-library", OptionType.STRING,
+            "iso|mocka", "Standard library to use (default none)") {
+
+        @Override
+        public void apply(Object value, FileOptions fileOptions, CompilerOptions compilerOptions) {
+            String lib = (String) value;
+            fileOptions.setStandardLibrary(lib);
+            compilerOptions.setTargetPackageLib("ch.pitchtech.modula.library." + lib);
+        }
+        
+    };
+    
     public final static CmdOption TEXT_ENCODING = new CmdOption("te", "text-encoding", OptionType.STRING,
             "<encoding>", "Source files text encoding such as ISO-8859-1 (default UTF-8)") {
 
@@ -130,7 +142,7 @@ public class CmdOptions {
     };
     
     public final static List<CmdOption> getAllOptions() {
-        return List.of(SOURCE_DIR, TARGET_MAIN_DIR, TARGET_LIBRARY_DIR, TARGET_PACKAGE_MAIN, TARGET_PACKAGE_LIB,
+        return List.of(SOURCE_DIR, TARGET_MAIN_DIR, TARGET_PACKAGE_MAIN, STD_LIBRARY, TARGET_LIBRARY_DIR, TARGET_PACKAGE_LIB,
                 DATA_MODEL, LOOSE_UNSIGNED, VERBOSE);
     }
 

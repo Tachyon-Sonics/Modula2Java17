@@ -1,10 +1,16 @@
 package ch.pitchtech.modula.converter.compiler;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 
 import org.antlr.v4.runtime.CommonTokenStream;
 
@@ -33,6 +39,7 @@ public class SourceFile implements Comparable<SourceFile> {
     private static final AtomicLong counter = new AtomicLong();
     
     private final Path path;
+    private final String libraryZipPath; // For a zip entry in Modula2-Library.zip
     private final List<SourceFile> deps = new ArrayList<>(); // Both IMPORTS and .mod -> .def
     private final long id = counter.incrementAndGet();
     
@@ -43,12 +50,55 @@ public class SourceFile implements Comparable<SourceFile> {
     
     public SourceFile(Path path) {
         this.path = path;
+        this.libraryZipPath = null;
+    }
+    
+    public SourceFile(String libraryZipPath) {
+        this.path = null;
+        this.libraryZipPath = libraryZipPath;
     }
 
     public Path getPath() {
         return path;
     }
     
+    public String getLibraryZipPath() {
+        return libraryZipPath;
+    }
+    
+    public boolean isWritable() {
+        return path != null;
+    }
+    
+    public String getFileName() {
+        if (path != null) {
+            return path.getFileName().toString();
+        } else {
+            int lastSep = libraryZipPath.lastIndexOf('/');
+            return libraryZipPath.substring(lastSep + 1);
+        }
+    }
+    
+    public String readContent() throws IOException {
+        if (path != null) {
+            return Files.readString(path, CompilerOptions.get().getCharset());
+        } else {
+            FileOptions fileOptions = FileOptions.get();
+            try (JarInputStream jarInput = new JarInputStream(new FileInputStream(fileOptions.getLibraryArchive()))) {
+                JarEntry entry = jarInput.getNextJarEntry();
+                while (entry != null) {
+                    String name = entry.getName();
+                    if (name.equals(libraryZipPath)) {
+                        return new String(jarInput.readAllBytes(), StandardCharsets.UTF_8);
+                    }
+                    
+                    entry = jarInput.getNextJarEntry();
+                }
+            }
+            throw new CompilerException(this, "Cannot find standard library file {0} in {1}", libraryZipPath, fileOptions.getLibraryArchive());
+        }
+    }
+
     public List<SourceFile> getDeps() {
         return deps;
     }
@@ -79,7 +129,7 @@ public class SourceFile implements Comparable<SourceFile> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(path);
+        return Objects.hash(libraryZipPath, path);
     }
 
     @Override
@@ -91,7 +141,7 @@ public class SourceFile implements Comparable<SourceFile> {
         if (getClass() != obj.getClass())
             return false;
         SourceFile other = (SourceFile) obj;
-        return Objects.equals(path, other.path);
+        return Objects.equals(libraryZipPath, other.libraryZipPath) && Objects.equals(path, other.path);
     }
 
     @Override
@@ -125,7 +175,7 @@ public class SourceFile implements Comparable<SourceFile> {
 
     @Override
     public String toString() {
-        return "SourceFile [path=" + path + "]";
+        return "SourceFile " + (path != null ? "[path=" + path + "]" : "[libraryZipPath=" + libraryZipPath + "]");
     }
 
 }

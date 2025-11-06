@@ -17,10 +17,7 @@ import ch.pitchtech.modula.converter.utils.Logger;
 public class CompileChess {
 
     private final static String SOURCE_DIRECTORY_MAIN = "../../Modula2-Examples/Modula2Chess/src";
-    private final static String SOURCE_DIRECTORY_LIBRARY = "../../Modula2Java17/Modula2-Library/modula-2/mocka";
-    
     private final static String TARGET_DIRECTORY_MAIN = "../../Modula2-Examples/Modula2Chess/java";
-    private final static String TARGET_DIRECTORY_LIBRARY = "../../Modula2Java17/Modula2-Library/src";
 
     
     public static void main(String[] args) throws IOException {
@@ -29,9 +26,8 @@ public class CompileChess {
         
         FileOptions fileOptions = new FileOptions();
         fileOptions.addM2sourceDir(Path.of(SOURCE_DIRECTORY_MAIN));
-        fileOptions.addM2sourceDir(Path.of(SOURCE_DIRECTORY_LIBRARY));
         fileOptions.setTargetMainDir(Path.of(TARGET_DIRECTORY_MAIN));
-        fileOptions.setTargetLibraryDir(Path.of(TARGET_DIRECTORY_LIBRARY));
+        fileOptions.setStandardLibrary("mocka");
         
         CompilerOptions compilerOptions = new CompilerOptions();
         compilerOptions.setCharset(StandardCharsets.ISO_8859_1);

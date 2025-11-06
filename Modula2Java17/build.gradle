@@ -47,7 +47,7 @@ task executableJar(type: Jar) {
 }
 
 task release(type: Zip){
-    archiveFileName = "Modula2Java17-0.9.zip"
+    archiveFileName = "Modula2Java17-0.9.1.zip"
     destinationDirectory = file('build/')
     from (files(
     	'./build/libs',

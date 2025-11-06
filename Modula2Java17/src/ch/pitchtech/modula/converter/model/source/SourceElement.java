@@ -2,7 +2,6 @@ package ch.pitchtech.modula.converter.model.source;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -11,12 +10,13 @@ import java.util.Map;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import ch.pitchtech.modula.converter.compiler.SourceFile;
 import ch.pitchtech.modula.converter.model.INode;
 import ch.pitchtech.modula.converter.model.NodeList;
 
 public class SourceElement implements INode {
     
-    private final Path sourceFile;
+    private final SourceFile sourceFile;
     private final SourceLocation sourceLocation;
     private INode parent;
     private final List<INode> children = new ArrayList<>();
@@ -43,7 +43,7 @@ public class SourceElement implements INode {
         return new SourceLocation(0, 0, -1, -1);
     }
 
-    public Path getSourceFile() {
+    public SourceFile getSourceFile() {
         return sourceFile;
     }
     
@@ -129,7 +129,7 @@ public class SourceElement implements INode {
      */
     public String getSourceCode() {
         try {
-            String source = Files.readString(sourceFile);
+            String source = Files.readString(sourceFile.getPath());
             String[] lines = source.split("[\r]?\n");
             StringBuilder result = new StringBuilder();
             for (int lineNum = sourceLocation.startLine(); lineNum <= sourceLocation.stopLine(); lineNum++) {

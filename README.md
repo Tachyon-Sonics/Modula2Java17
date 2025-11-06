@@ -89,11 +89,12 @@ The compiler is provided a command-line tool only. It accepts zero or more optio
 
 - `-p` or `--package` &lt;package&gt;: name of the Java package to use for the generated Java source files. Default `org.modula2.generated`
 - `-o` or `--output` &lt;dir&gt;: target directory in which to generate Java code. Defaults to current directory. Note that the Java package structure will be created inside of that directory
-- `-pl` or `--package-library`: name of the Java package to use for the Java source files that are part of the "library" (Default `org.modula2.generated.library`)
-    - The "library" corresponds to any .def files that have no corresponding .mod files. The assumption is that the implementation will be done manually in Java for these definitions.
+- `-sl` or `--standard-library` &lt;name&gt;: name of the standard library implementation to use. Either `iso` or `mocka`. Default none. Note that the standard libraries are currently highly incomplete!
+- `-pl` or `--package-library`: name of the Java package to use for the Java source files that are part of the "custom library" (Default `org.modula2.generated.library`)
+    - The "custom library" corresponds to any .def files that have no corresponding .mod files. The assumption is that the implementation will be done manually in Java for these definitions.
     - If the Java files do not exist yet, the compiler will generate stub files (with method bodies that throw an `UnsupportedOperationException`) so that they can be completed manually.
     - If the Java files already exist, there are not modified.
-- `-ol` or `--output-library`: target directory for the Java files of the "library". Default to the same as `-o`, but another value can be specified, for instance if you want to put them in a different Java project.
+- `-ol` or `--output-library`: target directory for the Java files of the "custom library". Default to the same as `-o`, but another value can be specified, for instance if you want to put them in a different Java project.
 - `-s` or `--source` &lt;dir&gt;: specify an additional directory in which to look for Modula-2 source files. This options can be specified multiple times to add multiple source directories.
 - `-dm` or `--data-model` `16|32|s16|s32`: choose between 16-bit or 32-bit default or strict data model (size of the `INTEGER` Modula-2 type). Default 32-bit non-strict.
 - `-lu` or `--loose-unsigned` &lt;size&gt;\[,&lt;size&gt;...\]: treat unsigned variables of the given sizes (in bits) as signed. For example `-lu 32,64`.
@@ -127,10 +128,10 @@ The generated Java code may use helper classes from the `ch.pitchtech.modula.run
 
 #### Example 2:
 
-For this example, it is necessary to first decompress the `Modula2-Library-sources.jar` file into a directory named `Modula2-Library` (or any other directory - but you may then need to adjust the corresponding paths in the command line below).
+For this example, it is necessary to have the `Modula2-Library.jar` file in the current directory.
 
 ```
-java -jar Modula2Java17.jar -s "Modula2-Library/modula-2" -ol "Modula2-Library/src" -pl ch.pitchtech.modula.library.iso -p org.example MyModule.mod
+java -jar Modula2Java17.jar -sl iso -p org.example MyModule.mod
 ```
 
 This will compile `MyModule.mod` and all its dependencies, using the provided ISO standard library (that is *very incomplete*, basically just `InOut` and `Storage`). The generated Java files are placed in a package named `org.example`. The Java files will import classes of the standard library in the `ch.pitchtech.modula.library.iso` package; hence you must add `Modula2-Library.jar` to the Java classpath to compile the resulting Java code. As usual, `Modula2-Runtime.jar` is required as well.

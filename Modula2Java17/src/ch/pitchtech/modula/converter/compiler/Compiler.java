@@ -62,6 +62,7 @@ public class Compiler {
      */
     public void compile(SourceFile... mainModuleFiles) throws IOException {
         CompilerOptions.set(compilerOptions);
+        FileOptions.set(fileOptions);
         application = new Application(compilerOptions);
 
         try {
@@ -72,8 +73,8 @@ public class Compiler {
             // Abstract into a model
             Logger.log(1, "P2: Abstraction...");
             for (SourceFile sourceFile : sourceFiles) {
-                Logger.log(2, "  {0}", sourceFile.getPath().getFileName());
-                CurrentFile.setCurrentFile(sourceFile.getPath());
+                Logger.log(2, "  {0}", sourceFile.getFileName());
+                CurrentFile.setCurrentFile(sourceFile);
                 ICompilationUnit cu = createCompilationUnit(sourceFile.getCuContext());
                 sourceFile.setCompilationUnit(cu);
             }
@@ -81,9 +82,9 @@ public class Compiler {
             // Analyze + Transform
             Logger.log(1, "P3: Analyze & Transform...");
             for (SourceFile sourceFile : sourceFiles) {
-                CurrentFile.setCurrentFile(sourceFile.getPath());
+                CurrentFile.setCurrentFile(sourceFile);
                 ICompilationUnit compilationUnit = sourceFile.getCompilationUnit();
-                Logger.log(2, "  {0}", compilationUnit.getName());
+                Logger.log(2, "  {0}", sourceFile.getFileName());
                 Transforms.applyTransforms(compilationUnit, compilerOptions);
             }
             
@@ -93,14 +94,18 @@ public class Compiler {
             Path targetDirLibrary = fileOptions.getTargetLibraryDir();
             Path targetPackageDir = targetDirMain.resolve(compilerOptions.getTargetPackageMain().replace(".", File.separator));
             Files.createDirectories(targetPackageDir);
-            Path targetLibraryDir = targetDirLibrary.resolve(compilerOptions.getTargetPackageLib().replace(".", File.separator));
-            Files.createDirectories(targetLibraryDir);
+            Path targetLibraryDir = null;
+            if (targetDirLibrary != null) {
+                targetLibraryDir = targetDirLibrary.resolve(compilerOptions.getTargetPackageLib().replace(".", File.separator));
+                Files.createDirectories(targetLibraryDir);
+            }
             for (SourceFile sourceFile : sourceFiles) {
                 generateCode(sourceFile, targetPackageDir, targetLibraryDir);
             }
             
             Logger.log(1, "Done; {0} Modula-2 files compiled into {1}", sourceFiles.size(), targetPackageDir);
         } finally {
+            FileOptions.set(null);
             CompilerOptions.set(null);
             application = null;
         }
@@ -156,11 +161,10 @@ public class Compiler {
      * @param onDependency the callback to invoke when another file is imported
      */
     private CompilationUnitContext parse(SourceFile m2sourceFile, Consumer<String> onDependency) throws IOException {
-        Path path = m2sourceFile.getPath();
-        Logger.log(2, "  {0}", path);
+        Logger.log(2, "  {0}", m2sourceFile.getFileName());
 
-        CurrentFile.setCurrentFile(path);
-        String content = Files.readString(path, compilerOptions.getCharset());
+        CurrentFile.setCurrentFile(m2sourceFile);
+        String content = m2sourceFile.readContent();
         
         // Step 1: pre-processing
         content = preProcess(content);
@@ -249,24 +253,26 @@ public class Compiler {
      */
     private void generateCode(SourceFile sourceFile, Path targetPackageDir, Path targetLibraryDir) throws IOException {
         ICompilationUnit compilationUnit = sourceFile.getCompilationUnit();
-        Path m2sourceFile = sourceFile.getPath();
-        Logger.log(2, "  {0}", m2sourceFile);
-        CurrentFile.setCurrentFile(m2sourceFile);
+        Logger.log(2, "  {0}", sourceFile.getFileName());
+        CurrentFile.setCurrentFile(sourceFile);
         
         // Step 5: code generation
         ResultContext result = new ResultContext(application.getCompilerOptions(), sourceFile.getTokenStream());
         
         if (compilationUnit instanceof DefinitionModule definitionModule) {
-            Path m2implFile = m2sourceFile.resolveSibling(m2sourceFile.getFileName().toString().replace(".def", ".mod"));
-            if (!Files.isRegularFile(m2implFile)) {
-                // .def file (DEFINITION) has no corresponding .mod file (IMPLEMENTATION)
-                Path javaImplFile = targetLibraryDir.resolve(definitionModule.getName() + ".java");
-                if (!Files.isRegularFile(javaImplFile) || compilerOptions.isAlwaysOverrideStubs()) {
-                    // Stub implementation does not exist. Create it
-                    ResultContext stubImpl = new ResultContext(application.getCompilerOptions());
-                    new StubImplementationGenerator(definitionModule).generate(stubImpl);
-                    Files.writeString(javaImplFile, stubImpl.toString());
-                    Logger.log(2, "  --> {0}", javaImplFile);
+            if (sourceFile.getLibraryZipPath() == null) { // Not from the std library
+                Path m2sourceFile = sourceFile.getPath();
+                Path m2implFile = m2sourceFile.resolveSibling(m2sourceFile.getFileName().toString().replace(".def", ".mod"));
+                if (!Files.isRegularFile(m2implFile)) {
+                    // .def file (DEFINITION) has no corresponding .mod file (IMPLEMENTATION)
+                    Path javaImplFile = targetLibraryDir.resolve(definitionModule.getName() + ".java");
+                    if (!Files.isRegularFile(javaImplFile) || compilerOptions.isAlwaysOverrideStubs()) {
+                        // Stub implementation does not exist. Create it
+                        ResultContext stubImpl = new ResultContext(application.getCompilerOptions());
+                        new StubImplementationGenerator(definitionModule).generate(stubImpl);
+                        Files.writeString(javaImplFile, stubImpl.toString());
+                        Logger.log(2, "  --> {0}", javaImplFile);
+                    }
                 }
             }
         } else if (compilationUnit instanceof ImplementationModule implementationModule) {
