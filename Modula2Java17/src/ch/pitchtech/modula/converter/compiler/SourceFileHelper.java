@@ -77,6 +77,8 @@ public class SourceFileHelper {
                         throw new RuntimeException(ex);
                     }
                 }
+                throw new CompilationException(null, "{0}.def not found in standard library '{1}' in {2}", importedModuleName,
+                        fileOptions.getStandardLibrary(), fileOptions.getLibraryArchive());
             }
             
             throw new CompilationException(null, "File {0}.def (or .md) not found in {1} (resolved: {2}), imported by {3}", 

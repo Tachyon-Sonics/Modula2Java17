@@ -12,7 +12,7 @@ import ch.pitchtech.modula.converter.compiler.FileOptions;
 import ch.pitchtech.modula.converter.compiler.UnsignedType;
 import ch.pitchtech.modula.converter.utils.Logger;
 
-// TODO (1) option to use the standard library. Split into ISO and Mocka
+
 public class CmdOptions {
     
     public final static CmdOption SOURCE_DIR = new CmdOption("s", "source", OptionType.DIRECTORY,

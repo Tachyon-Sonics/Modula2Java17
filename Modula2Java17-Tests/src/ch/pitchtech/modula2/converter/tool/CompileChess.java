@@ -11,8 +11,9 @@ import ch.pitchtech.modula.converter.compiler.SourceFile;
 import ch.pitchtech.modula.converter.utils.Logger;
 
 /**
- * Compiles https://sourceforge.net/projects/modula2chess/files/
- * (The "src" folder must be renamed "modula-2")
+ * Notes:
+ * <li>The <tt>Modula2Chess</tt> project must be checked out from https://github.com/Tachyon-Sonics/Modula2-Examples
+ * <li>The <tt>Modula2-Library.jar</tt> file must be present in the root folder of this project
  */
 public class CompileChess {
 
@@ -32,7 +33,7 @@ public class CompileChess {
         CompilerOptions compilerOptions = new CompilerOptions();
         compilerOptions.setCharset(StandardCharsets.ISO_8859_1);
         compilerOptions.setTargetPackageMain("ch.pitchtech.modula.chess");
-        compilerOptions.setTargetPackageLib("ch.pitchtech.modula.library.mocka");
+        compilerOptions.setTargetPackageLib("ch.pitchtech.modula.library.mocka"); // TODO (4) this should be deduced from std library if specified
         compilerOptions.setDataModel(DataModelType.DM_32);
         Logger.setVerboseLevel(2);
         

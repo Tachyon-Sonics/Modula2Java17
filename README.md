@@ -13,6 +13,7 @@ There are four sub-projects (these are Eclipse projects, with gradle support):
 - **Modula2-Runtime**: a small runtime written in Java, that provides support for some Modula-2 constructs. Both the compiler and the produced Java code require it
 - **Modula2-Library**: a *very incomplete* set of standard Modula-2 libraries (both Modula-2 .def files and the corresponding Java implementations)
     - Only the minimum to run the tests is provided. This can be used as a starting point though.
+    - Currently, two *very incomplete* libraries are provided: `iso` and `mocka`.
 - **Modula2Java17-Tests**: automated tests (JUnit 4)
 
 
@@ -83,7 +84,7 @@ If you got the sources from github and are using gradle, the release .zip archiv
 
 If you got the sources from github and loaded them in a Java IDE, the main class to launch the compiler is `ch.pitchtech.modula.converter.Modula2JavaTranslator`.
 
-The compiler is provided a command-line tool only. It accepts zero or more options, and a Modula-2 source file. In general you provide only the main Modula-2 module (as a `.mod` or `.mi` file) and all dependences will be detected and compiled automatically. The compiler except the modules and implementation modules to use the `.mod` or `.mi` extension, and the definition modules to use the `.def` or `.md` extension.
+The compiler is provided as a command-line tool only. It accepts zero or more options, and a Modula-2 source file. In general you provide only the main Modula-2 module (as a `.mod` or `.mi` file) and all dependences will be detected and compiled automatically. The compiler except the modules and implementation modules to use the `.mod` or `.mi` extension, and the definition modules to use the `.def` or `.md` extension.
 
 ### Compiler options
 
@@ -147,11 +148,11 @@ java -jar Modula2Java17.jar -p org.example.app -s "./lib" -pl org.example.lib -o
 
 Assuming:
 - The `./app` directory contains the `.mod` and `.def` files of the Modula-2 app to compile, including the main module `MyModule.mod`, but excluding the standard library (or any non-portable modules)
-- The `./lib` directory contains the `.def` files for the standard library (or of non-portable modules), *without* the corresponding `.mod` files
+- The `./lib` directory contains the `.def` files for a custom library (with all non-portable modules), *without* the corresponding `.mod` files
 
 The above will:
 - Compile modula-2 files from the `./app` directory into the `./generated` directory, using the `org.example.app` package for the generated Java files
-- Create *stub java implementations* for the standard library (or non-portable modules) into the `./generated` directory, using the `org.example.lib` package
+- Create *stub java implementations* for the custom library (non-portable modules) into the `./generated` directory, using the `org.example.lib` package
     - The stub java implementations contain all methods, but without any implementation (just throwing an `UnsupportedOperationException`). The idea is that you can implement them in Java manually, starting from these generated stub implementations.
     - The stub java implementations are not generated again if they already exist. To generate one of them again, you must delete it and run the compilation again.
     
@@ -195,12 +196,12 @@ The 16-bit data model is enabled by passing `-dm 16` to the compiler. As a remin
 | Modula-2 size (16-bit) | 8        | 8         | 16      | 16       | 32      | 32       |
 | Java (16-bit) | int      | int       | int     | int      | long    | long     |
 
-Notice that any Modula-2 numeric type that is less than 4 bytes is mapped to Java 4-bytes type `int`.
+Notice that any Modula-2 numeric type that is less than 32 bits is mapped to Java 32-bits type `int`.
 
 There are multiple reasons for this:
 
-- This makes the Java code clearer, with less type casts. For instance, Modula-2 `a := b + c;` (where `a`, `b` and `c` are of a 2 bytes type) results in `a = b + c;` instead of `a = (short) (b + c)`. Indeed, Java only defines arithmetic operators on `int` and `long`, which means that a lot of type casts would be required if using `short` or `byte` instead of `int`.
-- The compiler assumes the code has no overflow. Hence if the code does not overflow with 1-byte or 2-byte integer types, it won't overflow when those are converted to 4 bytes.
+- This makes the Java code clearer, with less type casts. For instance, Modula-2 `a := b + c;` (where `a`, `b` and `c` are of a 16 bits type) results in `a = b + c;` instead of `a = (short) (b + c)`. Indeed, Java only defines arithmetic operators on `int` and `long`, which means that a lot of type casts would be required if using `short` or `byte` instead of `int`.
+- The compiler assumes the code has no overflow. Hence if the code does not overflow with 8 bits or 16 bits integer types, it won't overflow when those are converted to 32 bits.
 - Even if overflow is enabled (might be an option in a future version of the compiler), detecting overflow on `byte` and `short` can easily be done using `int`.
 
 The above table mentions `u-int` and `u-long`. These types do not exist is Java. This just means that `int` and `long` are used respectively, and that the compiler will generate code to properly simulate unsigned types; namely:
@@ -212,7 +213,7 @@ The above table mentions `u-int` and `u-long`. These types do not exist is Java.
 
 Notice that `LONGINT` and `LONGCARD` both use the Java `long` type in the 16-bit model, although `int` would be sufficient. The reason is that it allows the standard library to be the same for both memory models. Indeed, observe that the Java types for all numeric types are exactly the same in both data models.
 
-In the 16-bit data model, `CARDINAL`, which is 2 bytes, is mapped to `int` rather than `u-int`. Indeed, the Java `int` type already covers the range of an unsigned 2-bytes number, and hence the compiler does not need to use unsigned helper methods. This again assumes that the Modula-2 code is free from overflows.
+In the 16-bit data model, `CARDINAL`, which is 16 bits, is mapped to `int` rather than `u-int`. Indeed, the Java `int` type already covers the range of an unsigned 16 bits number, and hence the compiler does not need to use unsigned helper methods. This again assumes that the Modula-2 code is free from overflows.
 
 The values on the "Modula-2 size" rows in the above tables are only used:
 
@@ -283,7 +284,7 @@ In Modula-2, a nested procedure has access to all constants and variables of the
 
 ### Arguments by value (default) and by reference (using `VAR`)
 
-Java is only by-value. However, Modula-2 records are converted to Java objects, and Modula-2 arrays are converted to Java arrays. Those are both references in Java. Although a reference itself is passed by value in Java, it corresponds to the by-reference semantics of Modula-2 because the *content* is modifiable.
+Java is only by-value. However, Modula-2 records are converted to Java objects, and Modula-2 arrays are converted to Java arrays. Those are both references in Java. Although a reference itself is passed by value in Java, it corresponds to the by-reference semantics of Modula-2's `VAR` because the *content* is modifiable.
 
 If a record or array is passed by reference in Modula-2 (using `VAR`), the Java code is straightforward.
 
@@ -403,8 +404,10 @@ VAR
 ```
 
 - After pass 1, there is a "VAR" block, with two declaration lists. The first declaration list declares two variables "p1" and "p2" of type "Point", and the second list declares one variable "x" of type "INTEGER". "Point" is just an identifier at this stage, defined only by the `"Point"` string.
-    - The code is modelled by the antlr-generated classes of the `ch.pitchtech.modula.converter.antlr.m2` package. The model is close to the exact syntax of the original code. In particular it still contains all the tokens like the `VAR` keyword or the punctuations `,`, `:`, `;`, etc.
-- After pass 2, the structure of the original code is abstracted. For instance, the fact there was two declaration lists is lost. What remains is that the enclosing module or procedure has three local variables: "p1" of type "Point", "p2" of type "Point" and "x" of type "INTEGER". "Point" is still just an identifier at this stage. Modula-2 keywords and punctuations are no longer stored.
+    - The code is modelled by the antlr-generated classes of the `ch.pitchtech.modula.converter.antlr.m2` package. The model is close to the exact syntax of the original code. In particular it still contains all the tokens like the `VAR` keyword and the punctuations `,`, `:`, `;`, etc.
+- After pass 2, the structure of the original code is abstracted. For instance, the fact there was two declaration lists is lost. What remains is that the enclosing module or procedure has three local variables: "p1" of type "Point", "p2" of type "Point" and "x" of type "INTEGER". "Point" is still just a String at this stage. Modula-2 keywords and punctuations are no longer stored.
     - The code is now modelled by the classes of the `ch.pitchtech.modula.model` package and subpackages.
 - After the "Hidden pass" (scope resolution), the nature of the "Point" type is now known (for example a RECORD with all its fields - it depends on the remainder of the code that is not shown here). After this pass, for every occurrences of "p1", "p2" or "x" in the code, it is also known where these variables are declared and what their types are. This pass also resolves ambiguities (such as a field in a "WITH" statement having priority over a variable of the same name).
 - After pass 3, the compiler may for example know that a given procedure never reads "x", or never writes "p1", which can be used to optimize the generated code (such as "VAR" arguments, or nested procedures accessing variables of the enclosing one).
+- After pass 4, the Java code has been generated ;-)
+
