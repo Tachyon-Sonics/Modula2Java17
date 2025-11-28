@@ -80,11 +80,11 @@ public class DummyLibrary {
     }
 
 
+/*
+* Top-level comment, implementation
+ */
     // PROCEDURE
 
-    /*
-    * Top-level comment, implementation
-     */
     /* Dummy procedure */
     public void DummyProcedure(long arg) {
     }

@@ -75,6 +75,10 @@ public class ResultContext {
         }
     }
     
+    /**
+     * Initialize comments from a DEFINITION module
+     * @param tokenStream parse-tree of the definition module
+     */
     public void initializeDefinitionComments(CommonTokenStream tokenStream) {
         List<Comment> allComments = CommentExtractor.extractComments(tokenStream);
         defCommentsByLine = new TreeMap<>();
@@ -84,10 +88,12 @@ public class ResultContext {
         }
     }
     
-    public boolean isInDefinition() {
-        return inDefinition;
-    }
-    
+    /**
+     * Whether this context is currently generating code corresponding to a DEFINITION MODULE
+     * (and not an IMPLEMENTATION MODULE or MODULE).
+     * <p>
+     * This is only used to generate the corresponding comments
+     */
     public void setInDefinition(boolean inDefinition) {
         this.inDefinition = inDefinition;
     }
@@ -255,11 +261,7 @@ public class ResultContext {
      * @param location the source location of the code element
      */
     public void writeCommentsFor(SourceLocation location, boolean localOnly) {
-        writeCommentsFor(location, inDefinition, localOnly);
-    }
-    
-    public void writeCommentsFor(SourceLocation location, boolean definition, boolean localOnly) {
-        TreeMap<Integer, List<Comment>> commentsByLine = (definition ? defCommentsByLine : implCommentsByLine);
+        TreeMap<Integer, List<Comment>> commentsByLine = (inDefinition ? defCommentsByLine : implCommentsByLine);
         
         if (commentsByLine == null || location == null) {
             return;

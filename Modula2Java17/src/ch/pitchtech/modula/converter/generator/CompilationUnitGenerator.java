@@ -68,8 +68,7 @@ public abstract class CompilationUnitGenerator extends Generator {
             result.writeLine("// CONST");
             result.writeLn();
             for (ConstantDefinition constantDefinition : compilationUnit.getConstantDefinitions()) {
-                boolean definition = (constantDefinition.getParent() instanceof DefinitionModule);
-                result.writeCommentsFor(constantDefinition.getSourceLocation(), definition, true);
+                result.writeCommentsFor(constantDefinition.getSourceLocation(), true);
                 new ConstantDefinitionGenerator(constantDefinition, compilationUnit).generate(result);
             }
             result.writeLn();
@@ -82,8 +81,7 @@ public abstract class CompilationUnitGenerator extends Generator {
         if (!compilationUnit.getTypeDefinitions().isEmpty()) {
             for (TypeDefinition typeDefinition : compilationUnit.getTypeDefinitions()) {
                 ResultContext typeContext = result.subContext();
-                boolean definition = (typeDefinition.getParent() instanceof DefinitionModule);
-                typeContext.writeCommentsFor(typeDefinition.getSourceLocation(), definition, true);
+                typeContext.writeCommentsFor(typeDefinition.getSourceLocation(), true);
                 new TypeDefinitionGenerator(compilationUnit, typeDefinition).generate(typeContext);
                 if (!typeContext.toString().isBlank()) {
                     typeResult.write(typeContext);
@@ -104,8 +102,7 @@ public abstract class CompilationUnitGenerator extends Generator {
             result.writeLine("// VAR");
             result.writeLn();
             for (VariableDefinition variableDefinition : compilationUnit.getVariableDefinitions()) {
-                boolean definition = (variableDefinition.getParent() instanceof DefinitionModule);
-                result.writeCommentsFor(variableDefinition.getSourceLocation(), definition, true);
+                result.writeCommentsFor(variableDefinition.getSourceLocation(), true);
                 new VariableDefinitionGenerator(compilationUnit, variableDefinition).generate(result);
             }
             result.writeLn();
