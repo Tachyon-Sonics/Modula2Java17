@@ -1,5 +1,5 @@
 /*
-* Top-level comment, definition
+ * Top-level comment, definition
  */
 package generated.test.qualified;
 
@@ -81,7 +81,7 @@ public class DummyLibrary {
 
 
 /*
-* Top-level comment, implementation
+ * Top-level comment, implementation
  */
     // PROCEDURE
 

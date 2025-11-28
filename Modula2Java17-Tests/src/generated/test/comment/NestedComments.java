@@ -1,4 +1,4 @@
-package generated.test.test;
+package generated.test.comment;
 
 import ch.pitchtech.modula.runtime.HaltException;
 import ch.pitchtech.modula.runtime.Runtime;
@@ -34,6 +34,11 @@ public class NestedComments {
         x = x + 1;
         /* Comment with (* nested (* double nested *) *) still in comment */
         x = x * 2;
+        /*
+         * Multi-line
+         * comment
+         */
+        x = x / 4;
     }
 
     private void close() {

@@ -19,5 +19,11 @@ BEGIN
 
     (* Comment with (* nested (* double nested *) *) still in comment *)
     x := x * 2;
+    
+    (*
+     * Multi-line
+     * comment
+     *)
+     x := x / 4;
 
 END NestedComments.

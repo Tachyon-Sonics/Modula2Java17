@@ -1,4 +1,4 @@
-package generated.test.test;
+package generated.test.comment;
 
 import ch.pitchtech.modula.runtime.HaltException;
 import ch.pitchtech.modula.runtime.Runtime;

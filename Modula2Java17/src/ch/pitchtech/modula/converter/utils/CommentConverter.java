@@ -92,9 +92,14 @@ public class CommentConverter {
             StringBuilder result = new StringBuilder();
             for (int i = 0; i < lines.length; i++) {
                 String line = lines[i];
-                if (line.trim().isEmpty()) {
-                    result.append(line);
-                } else if (line.length() > minIndent) {
+                if (i > 0) {
+                    // Align subsequent "*" with "*" from "/*"
+                    result.append(" ");
+                }
+//                if (line.trim().isEmpty()) {
+//                    result.append(line);
+//                } else
+                if (line.length() > minIndent || (line.isBlank() && line.length() == minIndent)) {
                     result.append(line.substring(minIndent));
                 } else {
                     result.append(line);
