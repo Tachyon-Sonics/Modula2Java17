@@ -89,7 +89,7 @@ public class IfStatementGenerator extends Generator {
     private void generateSubStatements(List<IStatement> statements, ResultContext result) {
         result.incIndent();
         for (IStatement statement : statements)
-            Statements.getGenerator(scopeUnit, statement).generate(result);
+            Statements.generate(scopeUnit, statement, result);
         result.decIndent();
     }
 

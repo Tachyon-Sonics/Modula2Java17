@@ -87,7 +87,7 @@ public class CaseStatementGenerator extends Generator {
             result.incIndent();
             List<IStatement> statements = caseItem.statements();
             for (IStatement statement : statements)
-                Statements.getGenerator(scopeUnit, statement).generate(result);
+                Statements.generate(scopeUnit, statement, result);
             
             result.decIndent();
             result.writeLine("}");
@@ -100,7 +100,7 @@ public class CaseStatementGenerator extends Generator {
             
             result.incIndent();
             for (IStatement statement : caseStatement.getElseStatements())
-                Statements.getGenerator(scopeUnit, statement).generate(result);
+                Statements.generate(scopeUnit, statement, result);
             
             result.decIndent();
             result.writeLine("}");
@@ -149,7 +149,7 @@ public class CaseStatementGenerator extends Generator {
             ResultContext statementContext = result.subContext();
             List<IStatement> statements = caseItem.statements();
             for (IStatement statement : statements)
-                Statements.getGenerator(scopeUnit, statement).generate(statementContext);
+                Statements.generate(scopeUnit, statement, statementContext);
             result.write(statementContext.toString().trim());
             result.writeLn();
         }
@@ -160,7 +160,7 @@ public class CaseStatementGenerator extends Generator {
             
             ResultContext statementContext = result.subContext();
             for (IStatement statement : caseStatement.getElseStatements())
-                Statements.getGenerator(scopeUnit, statement).generate(statementContext);
+                Statements.generate(scopeUnit, statement, statementContext);
             result.write(statementContext.toString().trim());
             result.writeLn();
         } else {
@@ -208,7 +208,7 @@ public class CaseStatementGenerator extends Generator {
             result.incIndent();
             List<IStatement> statements = caseItem.statements();
             for (IStatement statement : statements)
-                Statements.getGenerator(scopeUnit, statement).generate(result);
+                Statements.generate(scopeUnit, statement, result);
             
             if (!isAlwaysReturning(statements))
                 result.writeLine("break;");
@@ -223,7 +223,7 @@ public class CaseStatementGenerator extends Generator {
             
             result.incIndent();
             for (IStatement statement : caseStatement.getElseStatements())
-                Statements.getGenerator(scopeUnit, statement).generate(result);
+                Statements.generate(scopeUnit, statement, result);
             
             result.decIndent();
             result.writeLine("}");

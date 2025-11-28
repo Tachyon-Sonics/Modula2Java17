@@ -73,7 +73,7 @@ public class WithStatementGenerator extends Generator {
             result.writeLine("// WITH " + exprResult.toString() + " {");
         result.pushScope(withStatement.getLocalScope());
         for (IStatement statement : withStatement.getStatements()) {
-            Statements.getGenerator(withStatement, statement).generate(result);
+            Statements.generate(withStatement, statement, result);
         }
         result.popScope();
         if (result.getCompilerOptions().isMarkSimplifiedWith())
@@ -94,7 +94,7 @@ public class WithStatementGenerator extends Generator {
         result.writeLine(typeResult.toString() + " " + variableName + " = " + exprResult.toString() + ";");
         result.pushScope(withStatement.getLocalScope());
         for (IStatement statement : withStatement.getStatements()) {
-            Statements.getGenerator(withStatement, statement).generate(result);
+            Statements.generate(withStatement, statement, result);
         }
         result.decIndent();
         result.popScope();

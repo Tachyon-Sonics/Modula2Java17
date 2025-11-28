@@ -188,10 +188,7 @@ public class ProcedureImplementationGenerator extends Generator {
         
         // Body
         for (IStatement statement : procedureImplementation.getStatements()) {
-            if (statement instanceof ch.pitchtech.modula.converter.model.source.SourceElement sourceElement) {
-                result.writeCommentsFor(sourceElement.getSourceLocation(), false);
-            }
-            Statements.getGenerator(procedureImplementation, statement).generate(result);
+            Statements.generate(procedureImplementation, statement, result);
         }
         
         result.popScope();

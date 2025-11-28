@@ -39,7 +39,7 @@ public class RepeatLoopGenerator extends Generator {
         result.writeLine("do {");
         result.incIndent();
         for (IStatement statement : repeatLoop.getStatements())
-            Statements.getGenerator(scopeUnit, statement).generate(result);
+            Statements.generate(scopeUnit, statement, result);
         result.decIndent();
         
         IExpression repeatCondition = repeatLoop.getCondition();

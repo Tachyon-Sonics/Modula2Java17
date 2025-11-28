@@ -22,7 +22,7 @@ public class LoopLoopGenerator extends Generator {
         result.writeLine("while (true) {");
         result.incIndent();
         for (IStatement statement : loopLoop.getStatements())
-            Statements.getGenerator(scopeUnit, statement).generate(result);
+            Statements.generate(scopeUnit, statement, result);
         result.decIndent();
         result.writeLine("}");
     }

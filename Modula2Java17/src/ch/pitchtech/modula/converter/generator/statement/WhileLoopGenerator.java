@@ -31,7 +31,7 @@ public class WhileLoopGenerator extends Generator {
         result.writeLine("while (" + condition.toString() + ") {");
         result.incIndent();
         for (IStatement statement : whileLoop.getStatements())
-            Statements.getGenerator(scopeUnit, statement).generate(result);
+            Statements.generate(scopeUnit, statement, result);
         result.decIndent();
         result.writeLine("}");
     }

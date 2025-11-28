@@ -178,7 +178,7 @@ public class ImplementationModuleGenerator extends CompilationUnitGenerator {
         result.writeLine("public void begin() {");
         result.incIndent();
         for (IStatement statement : implementationModule.getBeginStatements())
-            Statements.getGenerator(implementationModule, statement).generate(result);
+            Statements.generate(implementationModule, statement, result);
         result.decIndent();
         result.writeLine("}");
         result.writeLn();
@@ -186,7 +186,7 @@ public class ImplementationModuleGenerator extends CompilationUnitGenerator {
         result.writeLine("public void close() {");
         result.incIndent();
         for (IStatement statement : implementationModule.getCloseStatements())
-            Statements.getGenerator(implementationModule, statement).generate(result);
+            Statements.generate(implementationModule, statement, result);
         result.decIndent();
         result.writeLine("}");
         result.writeLn();

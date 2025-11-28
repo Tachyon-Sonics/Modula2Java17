@@ -108,7 +108,7 @@ public class ForLoopGenerator extends Generator {
         
         result.incIndent();
         for (IStatement statement : forLoop.getStatements())
-            Statements.getGenerator(scopeUnit, statement).generate(result);
+            Statements.generate(scopeUnit, statement, result);
         result.decIndent();
         result.writeLine("}");
     }
@@ -204,7 +204,7 @@ public class ForLoopGenerator extends Generator {
         result.writeLn();
         
         for (IStatement statement : forLoop.getStatements())
-            Statements.getGenerator(scopeUnit, statement).generate(result);
+            Statements.generate(scopeUnit, statement, result);
         result.decIndent();
         result.writeLine("}");
     }
