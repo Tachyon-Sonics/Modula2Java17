@@ -68,7 +68,7 @@ public abstract class CompilationUnitGenerator extends Generator {
             result.writeLine("// CONST");
             result.writeLn();
             for (ConstantDefinition constantDefinition : compilationUnit.getConstantDefinitions()) {
-                result.writeCommentsFor(constantDefinition.getSourceLocation());
+                result.writeCommentsFor(constantDefinition.getSourceLocation(), true);
                 new ConstantDefinitionGenerator(constantDefinition, compilationUnit).generate(result);
             }
             result.writeLn();
@@ -81,7 +81,7 @@ public abstract class CompilationUnitGenerator extends Generator {
         if (!compilationUnit.getTypeDefinitions().isEmpty()) {
             for (TypeDefinition typeDefinition : compilationUnit.getTypeDefinitions()) {
                 ResultContext typeContext = result.subContext();
-                typeContext.writeCommentsFor(typeDefinition.getSourceLocation());
+                typeContext.writeCommentsFor(typeDefinition.getSourceLocation(), true);
                 new TypeDefinitionGenerator(compilationUnit, typeDefinition).generate(typeContext);
                 if (!typeContext.toString().isBlank()) {
                     typeResult.write(typeContext);
@@ -102,7 +102,7 @@ public abstract class CompilationUnitGenerator extends Generator {
             result.writeLine("// VAR");
             result.writeLn();
             for (VariableDefinition variableDefinition : compilationUnit.getVariableDefinitions()) {
-                result.writeCommentsFor(variableDefinition.getSourceLocation());
+                result.writeCommentsFor(variableDefinition.getSourceLocation(), true);
                 new VariableDefinitionGenerator(compilationUnit, variableDefinition).generate(result);
             }
             result.writeLn();
@@ -119,7 +119,7 @@ public abstract class CompilationUnitGenerator extends Generator {
             result.writeLine("// PROCEDURE");
             result.writeLn();
             for (ProcedureImplementation procedure : procedures) {
-                result.writeCommentsFor(procedure.getSourceLocation());
+                result.writeCommentsFor(procedure.getSourceLocation(), true);
                 new ProcedureImplementationGenerator(compilationUnit, procedure).generate(result);
             }
             result.writeLn();

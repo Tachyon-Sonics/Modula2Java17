@@ -1,5 +1,6 @@
 package ch.pitchtech.modula.converter.generator;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -36,8 +37,7 @@ public class ResultContext {
     private Map<IExpression, IType> requestedTypes = new HashMap<>();
     
     // Comment management
-    private TreeMap<Integer, List<Comment>> commentsByLine;
-    private Set<Comment> emittedComments = new HashSet<>();
+    private TreeMap<Integer, List<Comment>> commentsByLine; // Comments are removed as they are emitted
     
     
     public ResultContext(CompilerOptions compilerOptions) {
@@ -69,9 +69,7 @@ public class ResultContext {
         commentsByLine = new TreeMap<>();
 
         for (Comment comment : allComments) {
-            commentsByLine
-                .computeIfAbsent(comment.line(), k -> new java.util.ArrayList<>())
-                .add(comment);
+            commentsByLine .computeIfAbsent(comment.line(), k -> new ArrayList<>()).add(comment);
         }
     }
     
@@ -182,7 +180,6 @@ public class ResultContext {
         result.requiredModuleInstances = this.requiredModuleInstances;
         result.allocatedNames = this.allocatedNames;
         result.commentsByLine = this.commentsByLine;
-        result.emittedComments = this.emittedComments;
         result.pushScope(getScope());
         return result;
     }
@@ -234,29 +231,24 @@ public class ResultContext {
      * Write comments that appear immediately before the given source location.
      * This method finds comments on the lines just before the element and emits them
      * with proper indentation.
-     *
      * @param location the source location of the code element
      */
-    public void writeCommentsFor(SourceLocation location) {
+    public void writeCommentsFor(SourceLocation location, boolean localOnly) {
         if (commentsByLine == null || location == null) {
             return;
         }
 
         int targetLine = location.startLine();
-
-        // Find comments that appear just before this element (within 10 lines) // TODO (1) review this hard coded '10'
-        // This handles both same-line comments and comments on preceding lines,
-        // including multi-line nested comments that may span several lines
-        for (int line = Math.max(1, targetLine - 10); line <= targetLine; line++) {
-            List<Comment> comments = commentsByLine.get(line);
-            if (comments != null) {
+        
+        // Emit and remove all comments before the given line
+        for (int commentLine : new TreeSet<>(commentsByLine.keySet())) {
+            if (commentLine > targetLine)
+                break;
+            if (!localOnly || commentLine >= targetLine - 10) {
+                List<Comment> comments = commentsByLine.remove(commentLine);
                 for (Comment comment : comments) {
-                    // Only emit each comment instance once
-                    if (!emittedComments.contains(comment)) {
-                        String javaComment = CommentConverter.convertToJavaComment(comment.text());
-                        writeMultiLineComment(javaComment);
-                        emittedComments.add(comment);
-                    }
+                    String javaComment = CommentConverter.convertToJavaComment(comment.text());
+                    writeMultiLineComment(javaComment);
                 }
             }
         }
@@ -264,7 +256,6 @@ public class ResultContext {
 
     /**
      * Write a potentially multi-line comment with proper indentation on each line.
-     *
      * @param comment the comment text (may contain newlines)
      */
     private void writeMultiLineComment(String comment) {
