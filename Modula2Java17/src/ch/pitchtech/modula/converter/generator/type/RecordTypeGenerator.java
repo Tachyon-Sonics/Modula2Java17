@@ -55,6 +55,7 @@ public class RecordTypeGenerator extends Generator implements ITypeDefinitionGen
                 else if (itemType instanceof PointerType)
                     result.writeLine("// POINTER");
             }
+            result.writeCommentsFor(variableDefinition.getSourceLocation(), true);
             new VariableDefinitionGenerator(scopeUnit, variableDefinition).generate(result);
         }
 
