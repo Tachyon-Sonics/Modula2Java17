@@ -276,6 +276,9 @@ public class Compiler {
                 }
             }
         } else if (compilationUnit instanceof ImplementationModule implementationModule) {
+            CommonTokenStream defStream = implementationModule.getDefinition().getSourceFile().getTokenStream();
+            result.initializeDefinitionComments(defStream);
+            
             new ImplementationModuleGenerator(implementationModule).generate(result);
             Path javaImplFile = targetPackageDir.resolve(implementationModule.getName() + ".java");
             Files.writeString(javaImplFile, result.toString());

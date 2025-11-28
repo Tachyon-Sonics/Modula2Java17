@@ -1,3 +1,6 @@
+/*
+* Top-level comment, definition
+ */
 package generated.test.qualified;
 
 public class DummyLibrary {
@@ -9,11 +12,13 @@ public class DummyLibrary {
 
     // CONST
 
+    /* Dummy const */
     public static final int DummyConst = 42;
 
 
     // TYPE
 
+    /* Dummy type */
     public static class DummyType { // RECORD
 
         public int x;
@@ -53,6 +58,7 @@ public class DummyLibrary {
 
     // VAR
 
+    /* Dummy variable */
     public int DummyVariable;
     public DummyType DummyTypeVariable = new DummyType();
 
@@ -76,13 +82,19 @@ public class DummyLibrary {
 
     // PROCEDURE
 
+    /*
+    * Top-level comment, implementation
+     */
+    /* Dummy procedure */
     public void DummyProcedure(long arg) {
     }
 
+    /* Dummy function */
     public long DummyFunction(long arg) {
         return arg;
     }
 
+    /* Test function */
     public DummyType TestFunction(/* var */ DummyType arg) {
         return arg;
     }

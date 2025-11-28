@@ -28,11 +28,13 @@ public class ImplementationModuleGenerator extends CompilationUnitGenerator {
 
     @Override
     public void generate(ResultContext result) {
+        result.setInDefinition(true);
         result.writeCommentsFor(implementationModule.getSourceLocation(), false); // Write any top-level (header) comments
         result.pushScope(definitionModule.getLocalScope());
         ResultContext definitionContent = result.subContext();
         generateDefinitionContent(definitionContent);
         result.popScope();
+        result.setInDefinition(false);
         result.pushScope(implementationModule.getLocalScope());
         ResultContext implementationContext = result.subContext();
         generateImplementationContent(implementationContext);

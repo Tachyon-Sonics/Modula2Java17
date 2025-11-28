@@ -1,14 +1,20 @@
-IMPLEMENTATION MODULE DummyLibrary;
+(*
+ * Top-level comment, implementation
+ *)
+ IMPLEMENTATION MODULE DummyLibrary;
 
+    (* Dummy procedure *) 
     PROCEDURE DummyProcedure(arg: LONGINT);
     BEGIN
     END DummyProcedure;
     
+    (* Dummy function *) 
     PROCEDURE DummyFunction(arg: LONGINT): LONGINT;
     BEGIN
         RETURN arg;
     END DummyFunction;
     
+    (* Test function *) 
     PROCEDURE TestFunction(VAR arg: DummyType): DummyType;
     BEGIN
         RETURN arg;

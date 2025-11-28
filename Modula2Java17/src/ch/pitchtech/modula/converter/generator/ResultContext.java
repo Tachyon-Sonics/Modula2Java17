@@ -33,11 +33,13 @@ public class ResultContext {
     private Set<String> requiredJavaImports = new TreeSet<>();
     private Set<String> requiredModuleInstances = new TreeSet<>();
     private Set<String> allocatedNames = new HashSet<>();
+    private boolean inDefinition; // true if generating stuff from a DEFINITION module
     private int indent;
     private Map<IExpression, IType> requestedTypes = new HashMap<>();
     
-    // Comment management
-    private TreeMap<Integer, List<Comment>> commentsByLine; // Comments are removed as they are emitted
+    // Comment management; comments are removed as they are emitted
+    private TreeMap<Integer, List<Comment>> defCommentsByLine; // DEFINITION
+    private TreeMap<Integer, List<Comment>> implCommentsByLine; // IMPLEMENTATION
     
     
     public ResultContext(CompilerOptions compilerOptions) {
@@ -66,13 +68,30 @@ public class ResultContext {
      */
     private void initializeComments(CommonTokenStream tokenStream) {
         List<Comment> allComments = CommentExtractor.extractComments(tokenStream);
-        commentsByLine = new TreeMap<>();
+        implCommentsByLine = new TreeMap<>();
 
         for (Comment comment : allComments) {
-            commentsByLine .computeIfAbsent(comment.line(), k -> new ArrayList<>()).add(comment);
+            implCommentsByLine .computeIfAbsent(comment.line(), k -> new ArrayList<>()).add(comment);
         }
     }
     
+    public void initializeDefinitionComments(CommonTokenStream tokenStream) {
+        List<Comment> allComments = CommentExtractor.extractComments(tokenStream);
+        defCommentsByLine = new TreeMap<>();
+
+        for (Comment comment : allComments) {
+            defCommentsByLine .computeIfAbsent(comment.line(), k -> new ArrayList<>()).add(comment);
+        }
+    }
+    
+    public boolean isInDefinition() {
+        return inDefinition;
+    }
+    
+    public void setInDefinition(boolean inDefinition) {
+        this.inDefinition = inDefinition;
+    }
+
     public CompilerOptions getCompilerOptions() {
         return compilerOptions;
     }
@@ -179,7 +198,9 @@ public class ResultContext {
         result.requiredJavaImports = this.requiredJavaImports;
         result.requiredModuleInstances = this.requiredModuleInstances;
         result.allocatedNames = this.allocatedNames;
-        result.commentsByLine = this.commentsByLine;
+        result.implCommentsByLine = this.implCommentsByLine;
+        result.defCommentsByLine = this.defCommentsByLine;
+        result.inDefinition = this.inDefinition;
         result.pushScope(getScope());
         return result;
     }
@@ -234,6 +255,12 @@ public class ResultContext {
      * @param location the source location of the code element
      */
     public void writeCommentsFor(SourceLocation location, boolean localOnly) {
+        writeCommentsFor(location, inDefinition, localOnly);
+    }
+    
+    public void writeCommentsFor(SourceLocation location, boolean definition, boolean localOnly) {
+        TreeMap<Integer, List<Comment>> commentsByLine = (definition ? defCommentsByLine : implCommentsByLine);
+        
         if (commentsByLine == null || location == null) {
             return;
         }
