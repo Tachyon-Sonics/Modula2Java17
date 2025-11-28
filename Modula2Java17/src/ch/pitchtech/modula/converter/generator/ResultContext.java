@@ -259,6 +259,7 @@ public class ResultContext {
      * This method finds comments on the lines just before the element and emits them
      * with proper indentation.
      * @param location the source location of the code element
+     * TODO review 'localOnly' handling
      */
     public void writeCommentsFor(SourceLocation location, boolean localOnly) {
         TreeMap<Integer, List<Comment>> commentsByLine = (inDefinition ? defCommentsByLine : implCommentsByLine);
