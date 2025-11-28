@@ -14,7 +14,7 @@ import ch.pitchtech.modula.converter.model.Comment;
  * Comments are sent to the HIDDEN channel during lexing and can be retrieved
  * for conversion to Java comment syntax.
  */
-public class CommentExtractor { // TODO (2) also extract and preserve comments from DEFINITION MODULES
+public class CommentExtractor {
 
     /**
      * Extracts all comments from the given token stream.
