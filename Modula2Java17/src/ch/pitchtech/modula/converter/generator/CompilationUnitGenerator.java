@@ -17,6 +17,7 @@ import ch.pitchtech.modula.converter.model.block.ProcedureDefinition;
 import ch.pitchtech.modula.converter.model.block.ProcedureImplementation;
 import ch.pitchtech.modula.converter.model.block.VariableDefinition;
 import ch.pitchtech.modula.converter.model.source.SourceElement;
+import ch.pitchtech.modula.converter.model.source.SourceLocation;
 import ch.pitchtech.modula.converter.model.type.TypeDefinition;
 
 public abstract class CompilationUnitGenerator extends Generator {
@@ -132,7 +133,16 @@ public abstract class CompilationUnitGenerator extends Generator {
                      */
                     if (procedureDefinition != null) {
                         result.setInDefinition(true);
-                        result.writeCommentsFor(procedureDefinition.getSourceLocation(), true);
+                        SourceLocation defLoc = procedureDefinition.getSourceLocation();
+                        /*
+                         * In a definition module, it is a common pattern to put the comment
+                         * just after the procedure definition...
+                         */
+                        defLoc = new SourceLocation(defLoc.startLine() + 1,
+                                defLoc.startColumn(),
+                                defLoc.stopLine(),
+                                defLoc.stopColumn());
+                        result.writeCommentsFor(defLoc, true);
                         result.setInDefinition(false);
                     }
                 }
