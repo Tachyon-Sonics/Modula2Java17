@@ -40,9 +40,6 @@ public class CommentConverter {
         if (content.length() > 0 && content.charAt(0) == '*') {
             content = " " + content.substring(1);
         }
-//        for (int i = 0; i < content.length() && content.charAt(i) == '*'; i++) {
-//            content = content.substring(0, i) + " " + content.substring(i + 1);
-//        }
 
         // Nested (* and *) delimiters are kept as-is since they don't conflict
         // with Java's /* */ comment syntax
