@@ -29,15 +29,22 @@ public class ImplementationModuleGenerator extends CompilationUnitGenerator {
     @Override
     public void generate(ResultContext result) {
         result.setInDefinition(true);
+        // Top-level comment in definition becomes top-level in Java
+        result.writeCommentsFor(definitionModule.getSourceLocation(), false);
+        
         result.pushScope(definitionModule.getLocalScope());
         ResultContext definitionContent = result.subContext();
-        result.writeCommentsFor(definitionModule.getSourceLocation(), false); // Write any top-level (header) comments
         generateDefinitionContent(definitionContent);
         result.popScope();
         result.setInDefinition(false);
         result.pushScope(implementationModule.getLocalScope());
         ResultContext implementationContext = result.subContext();
-        implementationContext.writeCommentsFor(implementationModule.getSourceLocation(), false); // Write any top-level (header) comments
+        
+        // Top-level comment in implementation is written after definition stuff
+        implementationContext.incIndent();
+        implementationContext.writeCommentsFor(implementationModule.getSourceLocation(), false);
+        implementationContext.decIndent();
+        
         generateImplementationContent(implementationContext);
         ResultContext beginEndContext = result.subContext();
         generateBeginEnd(beginEndContext);

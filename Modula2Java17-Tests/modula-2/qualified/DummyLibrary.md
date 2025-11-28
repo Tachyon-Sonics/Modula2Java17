@@ -15,10 +15,10 @@ DEFINITION MODULE DummyLibrary;
         DummyVariable : INTEGER;
         DummyTypeVariable : DummyType;
        
-    (* Dummy procedure *) 
+    (* Dummy procedure definition *) 
     PROCEDURE DummyProcedure(arg: LONGINT);
     
-    (* Dummy function *) 
+    (* Dummy function definition *) 
     PROCEDURE DummyFunction(arg: LONGINT): LONGINT;
     
     PROCEDURE TestFunction(VAR arg: DummyType): DummyType;

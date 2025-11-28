@@ -10,8 +10,10 @@ import ch.pitchtech.modula.converter.generator.procedure.ProcedureImplementation
 import ch.pitchtech.modula.converter.generator.type.TypeDefinitionGenerator;
 import ch.pitchtech.modula.converter.model.DefinitionModule;
 import ch.pitchtech.modula.converter.model.ICompilationUnit;
+import ch.pitchtech.modula.converter.model.ImplementationModule;
 import ch.pitchtech.modula.converter.model.Import;
 import ch.pitchtech.modula.converter.model.block.ConstantDefinition;
+import ch.pitchtech.modula.converter.model.block.ProcedureDefinition;
 import ch.pitchtech.modula.converter.model.block.ProcedureImplementation;
 import ch.pitchtech.modula.converter.model.block.VariableDefinition;
 import ch.pitchtech.modula.converter.model.source.SourceElement;
@@ -119,6 +121,21 @@ public abstract class CompilationUnitGenerator extends Generator {
             result.writeLine("// PROCEDURE");
             result.writeLn();
             for (ProcedureImplementation procedure : procedures) {
+                if (compilationUnit instanceof ImplementationModule) {
+                    ProcedureDefinition procedureDefinition = procedure.findDefinition();
+                    /*
+                     * Not sure how to do it in an elegant way. If the same PROCEDURE is commented
+                     * both in the DEFINITION and the IMPLEMENTATION module, this will result in
+                     * both comments written one after the other.
+                     * 
+                     * Indeed, the resulting Java code defines the procedure only once.
+                     */
+                    if (procedureDefinition != null) {
+                        result.setInDefinition(true);
+                        result.writeCommentsFor(procedureDefinition.getSourceLocation(), true);
+                        result.setInDefinition(false);
+                    }
+                }
                 result.writeCommentsFor(procedure.getSourceLocation(), true);
                 new ProcedureImplementationGenerator(compilationUnit, procedure).generate(result);
             }

@@ -80,21 +80,22 @@ public class DummyLibrary {
     }
 
 
-/*
- * Top-level comment, implementation
- */
+    /*
+     * Top-level comment, implementation
+     */
     // PROCEDURE
 
-    /* Dummy procedure */
+    /* Dummy procedure definition */
+    /* Dummy procedure implementation */
     public void DummyProcedure(long arg) {
     }
 
-    /* Dummy function */
+    /* Dummy function definition */
     public long DummyFunction(long arg) {
         return arg;
     }
 
-    /* Test function */
+    /* Test function implementation */
     public DummyType TestFunction(/* var */ DummyType arg) {
         return arg;
     }
